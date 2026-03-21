@@ -1,16 +1,16 @@
 import { Suspense } from "react";
-import { LoginForm } from "../../login/login-form";
+import { StaffLoginForm } from "@/components/auth/staff-login-form";
 
 export default function StaffLoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-primary text-primary-foreground">
-          Loading…
+        <div className="flex min-h-screen items-center justify-center bg-muted text-primary font-bold tracking-widest uppercase">
+          Loading...
         </div>
       }
     >
-      <LoginForm variant="staff" />
+      <StaffLoginForm />
     </Suspense>
   );
 }
