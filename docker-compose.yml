@@ -1,0 +1,20 @@
+# Local PostgreSQL for development (optional)
+# Run: docker compose up -d
+# Then set DATABASE_URL in .env to the URL below (match user/password/db).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: konik-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: konik
+      POSTGRES_PASSWORD: konik_dev_password
+      POSTGRES_DB: konik
+    volumes:
+      - konik_pgdata:/var/lib/postgresql/data
+
+volumes:
+  konik_pgdata:
