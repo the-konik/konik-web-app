@@ -110,11 +110,11 @@ export function UserRegisterForm() {
             </Link>
           </div>
           
-          <div className="mb-8 text-center">
-            <h2 className="font-atmospheric text-2xl tracking-wide text-[#121212] mb-2 uppercase whitespace-nowrap">
+          <div className="mb-8 text-center px-4 sm:px-0">
+            <h2 className="font-atmospheric text-xl sm:text-2xl tracking-wide text-[#121212] mb-3 uppercase">
               Become a Member
             </h2>
-            <p className="text-sm text-[#4B5563] font-normal whitespace-nowrap">
+            <p className="text-sm text-[#4B5563] font-normal leading-relaxed">
               Create your profile to start building your legacy.
             </p>
           </div>
