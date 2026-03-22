@@ -174,27 +174,29 @@ export function PublicHeader() {
           opacity: scrolled ? 0 : 1
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="md:hidden bg-[#F8F8F8] py-1.5 px-4 text-center overflow-hidden"
+        className="md:hidden bg-[#F8F8F8] text-center overflow-hidden"
         style={{ borderBottomWidth: scrolled ? 0 : 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
       >
-        <div 
-          className="h-4 relative overflow-hidden w-full"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={ANNOUNCEMENTS[msgIndex]}
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -20, opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              whileHover={{ scale: 1.02 }}
-              className="absolute left-1/2 -translate-x-1/2 top-0 text-[10px] sm:text-[11px] font-medium text-[#4B5563] uppercase tracking-wide whitespace-nowrap"
-            >
-              {ANNOUNCEMENTS[msgIndex]}
-            </motion.div>
-          </AnimatePresence>
+        <div className="py-1.5 px-4 w-full">
+          <div 
+            className="h-4 relative overflow-hidden w-full"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={ANNOUNCEMENTS[msgIndex]}
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -20, opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                whileHover={{ scale: 1.02 }}
+                className="absolute left-1/2 -translate-x-1/2 top-0 text-[10px] sm:text-[11px] font-medium text-[#4B5563] uppercase tracking-wide whitespace-nowrap"
+              >
+                {ANNOUNCEMENTS[msgIndex]}
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </motion.div>
 
@@ -249,7 +251,7 @@ export function PublicHeader() {
           </nav>
 
           {/* Right side — search + icons */}
-          <div className={`flex items-center gap-3 sm:gap-4 md:gap-5 justify-end ${headerTextColor}`}>
+          <div className={`col-start-3 flex items-center gap-2 sm:gap-4 md:gap-5 justify-end ${headerTextColor}`}>
             {/* Desktop search */}
             <div className={`hidden lg:flex relative items-center max-w-[200px] xl:max-w-xs group`}>
               <div className={`absolute left-0 h-10 w-10 flex border items-center justify-center rounded-l-full transition-colors ${
@@ -271,23 +273,23 @@ export function PublicHeader() {
             </div>
 
             {/* Mobile search */}
-            <button className={`lg:hidden p-1.5 rounded-full transition-colors ${
+            <button className={`lg:hidden p-1.5 rounded-full flex items-center justify-center transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
               <Search className="w-5 h-5" color={iconColor} strokeWidth={1.5} />
             </button>
 
-            <button className={`hidden sm:block p-1.5 rounded-full transition-colors ${
+            <button className={`flex p-1.5 flex items-center justify-center rounded-full transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
               <Heart className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
             </button>
 
-            <Link href="/cart" className={`p-1.5 rounded-full transition-colors relative ${
+            <Link href="/cart" className={`p-1.5 rounded-full flex items-center justify-center transition-colors relative ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
               <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
-              <span className="absolute -top-1 -right-1 bg-[#B8860B] text-[#FFFFFF] text-[9px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold border-2 border-white">
+              <span className="absolute -top-1 -right-1 bg-[#B8860B] text-[#FFFFFF] text-[9px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold">
                 0
               </span>
             </Link>
@@ -295,7 +297,7 @@ export function PublicHeader() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setOpen(true)}
-              className={`lg:hidden p-1.5 rounded-full transition-colors ml-0.5 ${
+              className={`lg:hidden p-1.5 rounded-full flex items-center justify-center transition-colors ${
                 isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
               }`}
             >
@@ -397,7 +399,7 @@ export function PublicHeader() {
 
       {/* Drawer panel */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-[60] w-full max-w-[380px] bg-[#121212] transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
+        className={`fixed top-0 right-0 bottom-0 z-[60] w-[75vw] bg-[#121212] transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -411,14 +413,14 @@ export function PublicHeader() {
           </button>
         </div>
 
-        <div className="flex flex-col flex-1 overflow-y-auto px-10 pb-10">
+        <div className="flex flex-col flex-1 overflow-y-auto px-8 sm:px-10 pb-10">
           {/* Main links */}
-          <nav className="space-y-7 mb-12">
+          <nav className="space-y-7 mb-10">
             {MAIN_NAV.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
-                className={`block text-[20px] font-bold tracking-widest uppercase font-atmospheric transition-colors ${
+                className={`block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric transition-colors ${
                   pathname === href || pathname.startsWith(href + "/")
                     ? "text-[#B8860B]"
                     : "text-[#FFFFFF] hover:text-[#FFFFFF]/70"
@@ -431,10 +433,31 @@ export function PublicHeader() {
           </nav>
 
           {/* Secondary */}
-          <div className="border-t border-[#FFFFFF]/10 pt-8 mb-10 space-y-5">
+          <div className="border-t border-[#FFFFFF]/10 pt-8 mb-8 space-y-5">
+            <Link
+              href="/plans"
+              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              Start My Legacy
+            </Link>
+            <Link
+              href="/about"
+              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              About Konik
+            </Link>
+            <Link
+              href="/feedback"
+              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              Feedback
+            </Link>
             <Link
               href="/help"
-              className="block text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Help

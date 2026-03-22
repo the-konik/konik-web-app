@@ -99,7 +99,7 @@ export function HeroCarousel() {
       </AnimatePresence>
 
       {/* Bottom-left aligned content (Carnage style) */}
-      <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-16 sm:pb-20 lg:pb-24">
+      <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-32 sm:pb-20 lg:pb-24">
         <div className="max-w-[1440px] mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
@@ -109,7 +109,7 @@ export function HeroCarousel() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
             >
-              <h1 className="font-atmospheric text-4xl sm:text-5xl md:text-6xl lg:text-[72px] text-[#FFFFFF] tracking-tighter leading-[0.95] mb-4">
+              <h1 className="font-atmospheric text-2xl sm:text-3xl md:text-4xl lg:text-[50px] text-[#FFFFFF] tracking-tighter leading-[0.95] mb-4">
                 {slide.headline}
               </h1>
               <p className="max-w-lg text-sm sm:text-base text-[#FFFFFF]/75 font-light leading-relaxed mb-8">
@@ -118,13 +118,13 @@ export function HeroCarousel() {
               <div className="flex flex-wrap gap-3 sm:gap-4">
                 <Link
                   href={slide.cta1.href}
-                  className="bg-[#FFFFFF] text-[#121212] px-7 sm:px-9 py-3 sm:py-3.5 text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.15em] hover:bg-[#F8F8F8] transition-colors"
+                  className="bg-[#FFFFFF] text-[#121212] px-5 sm:px-5 py-5 sm:py-5 text-[10px] sm:text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-[#F8F8F8] transition-colors"
                 >
                   {slide.cta1.label}
                 </Link>
                 <Link
                   href={slide.cta2.href}
-                  className="border-2 border-[#FFFFFF] text-[#FFFFFF] px-7 sm:px-9 py-3 sm:py-3.5 text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.15em] hover:bg-[#FFFFFF]/10 transition-colors"
+                  className="border-2 border-[#FFFFFF] text-[#FFFFFF] px-5 sm:px-5 py-5 sm:py-5 text-[10px] sm:text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-[#FFFFFF]/10 transition-colors"
                 >
                   {slide.cta2.label}
                 </Link>
