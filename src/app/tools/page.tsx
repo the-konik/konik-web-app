@@ -16,7 +16,7 @@ export default async function PublicToolsPage() {
     <div className="flex min-h-screen flex-col bg-muted">
       <PublicHeader />
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10 pt-32 sm:pt-36">
         <h1 className="text-2xl font-bold text-primary">Digital tools</h1>
         <p className="mt-2 text-muted-foreground">
           Add tools to your cart and pay once with clothing in a single Stripe

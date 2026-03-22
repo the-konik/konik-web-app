@@ -6,7 +6,7 @@ export default function CartPage() {
   return (
     <div className="flex min-h-screen flex-col bg-muted">
       <PublicHeader />
-      <div className="flex-1">
+      <div className="flex-1 pt-28 sm:pt-32">
         <CartPageClient />
       </div>
       <SiteFooter />

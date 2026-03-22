@@ -9,7 +9,7 @@ export default function CheckoutSuccessPage() {
       <PublicHeader />
       <Suspense
         fallback={
-          <p className="py-20 text-center text-muted-foreground">Loading…</p>
+          <p className="py-20 pt-32 text-center text-muted-foreground">Loading…</p>
         }
       >
         <CheckoutSuccessInner />

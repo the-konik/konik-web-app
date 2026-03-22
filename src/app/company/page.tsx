@@ -31,7 +31,7 @@ export default function CompanyPage() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="border-b border-border bg-primary px-4 py-16 text-primary-foreground sm:px-6 sm:py-24 lg:py-28">
+        <section className="border-b border-border bg-primary px-4 py-16 pt-32 sm:pt-36 text-primary-foreground sm:px-6 sm:py-24 lg:py-28">
           <div className="mx-auto max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
               Company

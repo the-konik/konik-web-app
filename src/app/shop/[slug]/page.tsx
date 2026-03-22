@@ -24,7 +24,7 @@ export default async function ProductDetailPage({ params }: Props) {
     <div className="flex min-h-screen flex-col bg-muted">
       <PublicHeader />
 
-      <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-10">
+      <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 pt-32 sm:px-6 sm:py-10 sm:pt-36">
         <Link
           href="/shop"
           className="mb-6 inline-block text-sm font-medium text-accent hover:underline"

@@ -19,7 +19,7 @@ export default async function PlansPage() {
     <div className="flex min-h-screen flex-col bg-muted">
       <PublicHeader />
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12 pt-32 sm:pt-36">
         <h1 className="text-center text-3xl font-bold text-primary">
           Membership plans
         </h1>

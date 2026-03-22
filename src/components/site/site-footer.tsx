@@ -1,42 +1,88 @@
 import Link from "next/link";
+import Image from "next/image";
 
-const FOOTER_NAV = [
-  { href: "/shop", label: "Shop" },
-  { href: "/tools", label: "Tools" },
-  { href: "/plans", label: "Plans" },
-  { href: "/company", label: "Company" },
+const COL_1 = [
+  { href: "/shop", label: "The Collection" },
+  { href: "/tools", label: "The Systems" },
+  { href: "/plans", label: "The Path" },
+] as const;
+
+const COL_2 = [
   { href: "/cart", label: "Cart" },
-  { href: "/auth/login", label: "Account" },
+  { href: "/auth/login", label: "Command Center" },
+  { href: "/help", label: "Support The Pursuit" },
+  { href: "/auth/register", label: "Join The Legacy" },
 ] as const;
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 bg-primary text-primary-foreground">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-          <div>
-            <p className="text-lg font-bold tracking-tight">KONIK</p>
-            <p className="mt-2 max-w-xs text-sm text-primary-foreground/70">
-              Clothing & digital tools for men building a deliberate life.
+    <footer className="bg-[#121212] text-[#FFFFFF]">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          {/* Brand block */}
+          <div className="sm:col-span-2 lg:col-span-2">
+            <div className="flex items-center gap-3 mb-6">
+              <Image
+                src="/KONIK%20NEW%20-%20WHITE.png"
+                alt="KONIK Logo"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
+              <span className="font-atmospheric text-lg tracking-wider">KONIK</span>
+            </div>
+            <p className="text-[#FFFFFF]/50 text-sm leading-relaxed max-w-sm mb-8">
+              Clothing &amp; digital tools for men building a deliberate life.
+              We provide the uniform and the systems. You provide the discipline.
+            </p>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-[#FFFFFF]/30 font-bold">
+              The Legacy Continues.
             </p>
           </div>
-          <nav
-            className="grid grid-cols-2 gap-x-10 gap-y-2 sm:grid-cols-3"
-            aria-label="Footer"
-          >
-            {FOOTER_NAV.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="text-sm text-primary-foreground/80 hover:text-accent transition"
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
+
+          {/* Nav col 1 */}
+          <div>
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B8860B] mb-6">
+              Explore
+            </h4>
+            <nav className="flex flex-col gap-3" aria-label="Footer explore">
+              {COL_1.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-sm text-[#FFFFFF]/60 hover:text-[#FFFFFF] transition-colors"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Nav col 2 */}
+          <div>
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B8860B] mb-6">
+              Account
+            </h4>
+            <nav className="flex flex-col gap-3" aria-label="Footer account">
+              {COL_2.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-sm text-[#FFFFFF]/60 hover:text-[#FFFFFF] transition-colors"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
         </div>
-        <div className="mt-12 border-t border-white/10 pt-8 text-center text-xs text-primary-foreground/50 sm:text-left">
-          © {new Date().getFullYear()} KONIK. All rights reserved.
+
+        {/* Bottom */}
+        <div className="mt-16 pt-8 border-t border-[#FFFFFF]/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#FFFFFF]/30">
+          <span>© {new Date().getFullYear()} KONIK. All rights reserved.</span>
+          <span className="uppercase tracking-[0.2em] font-bold">
+            Average Is A Choice.
+          </span>
         </div>
       </div>
     </footer>
