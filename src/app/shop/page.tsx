@@ -64,7 +64,7 @@ export default async function ShopPage({
     <div className="flex min-h-screen flex-col bg-muted">
       <PublicHeader />
 
-      <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-10">
+      <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-10 pt-32 sm:pt-36">
         <h1 className="text-3xl font-bold text-primary">Shop</h1>
         <p className="mt-1 text-muted-foreground">
           Clothing — filter by category, price, and size.
