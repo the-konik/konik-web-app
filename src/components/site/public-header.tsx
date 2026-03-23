@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import { Search, Heart, ShoppingBag, Menu, X, User as UserIcon, LogOut, LayoutDashboard, Package, CreditCard, User, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -94,6 +94,14 @@ const ANNOUNCEMENTS = [
 ] as const;
 
 export function PublicHeader() {
+  return (
+    <Suspense>
+      <PublicHeaderContent />
+    </Suspense>
+  );
+}
+
+function PublicHeaderContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category");
