@@ -1,47 +1,84 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Search, Heart, ShoppingBag, Menu, X, User as UserIcon, LogOut, LayoutDashboard, Package, CreditCard, User } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X, User as UserIcon, LogOut, LayoutDashboard, Package, CreditCard, User, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MiniCart } from "@/components/cart/mini-cart";
 import { useSession, signOut } from "next-auth/react";
 
-const MEGA_MENU: Record<string, { featured: string[]; explore: string[]; images: { src: string; label: string; href: string }[] }> = {
-  "/shop": {
-    featured: ["New Arrivals", "Best Sellers", "Athleisure Collection", "Essentials", "Seamless Collection"],
-    explore: ["T-Shirts", "Hoodies & Jackets", "Joggers & Pants", "Shorts", "Accessories", "Limited Editions"],
+type MegaMenuColumn = {
+  title: string;
+  items: string[];
+};
+
+type MegaMenuData = {
+  columns: MegaMenuColumn[];
+  images: { src: string; label: string; href: string }[];
+};
+
+const MEGA_MENU: Record<string, MegaMenuData> = {
+  "/shop?category=APPAREL": {
+    columns: [
+      { title: "Just for You: Essentials", items: ["Regular T-Shirts", "Premium Polos", "Minimalist Hoodies", "Oversized Tees", "Compression Tees"] },
+      { title: "Bottom Wear", items: ["Premium Denims", "Tailored Pants", "Gym Shorts", "Joggers"] },
+      { title: "Performance Wear", items: ["Sweat-wicking Gym Shirts", "Compression Wear", "Training Sets", "Lightweight Training Jackets"] },
+      { title: "Outerwear", items: ["Minimalist Jackets", "Bomber Jackets", "Windbreakers"] },
+      { title: "Recovery Gear", items: ["Minimal Sleepwear", "Recovery Hoodies"] },
+    ],
     images: [
-      { src: "/discipline-uniform.png", label: "RECOMMENDED FOR YOU", href: "/shop" },
-      { src: "/hero-legacy.png", label: "NEW ARRIVALS", href: "/shop" },
-      { src: "/hero-mustang.png", label: "ACCESSORIES", href: "/shop" },
+      { src: "/discipline-uniform.png", label: "THE UNIFORM", href: "/shop?category=APPAREL" },
+      { src: "/hero-legacy.png", label: "ELITE PERFORMANCE", href: "/shop?category=APPAREL" },
+      { src: "/hero-training.png", label: "DISCIPLINE GEAR", href: "/shop?category=APPAREL" },
+    ],
+  },
+  "/shop?category=FOOTWEAR": {
+    columns: [
+      { title: "Just for You: Daily", items: ["White Sneakers", "Minimal Black Sneakers"] },
+      { title: "Smart Casual", items: ["Loafers", "Leather Slip-ons"] },
+      { title: "Performance", items: ["Training Shoes", "Running Shoes", "Gym Shoes (Flat Sole)"] },
+      { title: "Lifestyle Edge", items: ["High-top Sneakers", "Streetwear Sneakers"] },
+    ],
+    images: [
+      { src: "/hero-footwear.png", label: "THE ROTATION", href: "/shop?category=FOOTWEAR" },
+      { src: "/sneakers-minimal.png", label: "DAILY PRESENCE", href: "/shop?category=FOOTWEAR" },
+      { src: "/shoes-gym.png", label: "TECHNICAL MOVEMENT", href: "/shop?category=FOOTWEAR" },
+    ],
+  },
+  "/shop?category=ACCESSORIES": {
+    columns: [
+      { title: "Just for You: Wearables", items: ["Caps (Minimal Logo)", "Rings", "Chains / Necklaces", "Bracelets"] },
+      { title: "Functional Daily Carry", items: ["Wallets", "Card Holders", "Premium Belts", "Crossbody Bags", "Backpacks"] },
+      { title: "Lifestyle Gear", items: ["Water Bottles", "Gym Towels", "Grip Straps"] },
+      { title: "Grooming", items: ["Beard Kits", "Skincare Basics", "Signature Perfume"] },
+    ],
+    images: [
+      { src: "/hero-accessories.png", label: "THE DETAILS", href: "/shop?category=ACCESSORIES" },
+      { src: "/accessories-jewelry.png", label: "MASCULINE IDENTITY", href: "/shop?category=ACCESSORIES" },
+      { src: "/grooming-kit.png", label: "ELITE GROOMING", href: "/shop?category=ACCESSORIES" },
     ],
   },
   "/tools": {
-    featured: ["Habit Engine", "Goal Architect", "Legacy Planner", "Mind Forge"],
-    explore: ["Productivity", "Focus Sessions", "Daily Trackers", "Weekly Reviews", "Journaling"],
-    images: [
-      { src: "/hero-tools.png", label: "POPULAR SYSTEMS", href: "/tools" },
-      { src: "/hero-levelup.png", label: "START A SYSTEM", href: "/tools" },
+    columns: [
+      { title: "Just for You: Best System", items: ["Legacy Life Builder", "Budget Planner"] },
+      { title: "Build Legacy Life", items: ["Habit Architect", "Goal Engine"] },
+      { title: "Plan Legacy Budget", items: ["Wealth Control", "Focus Sessions"] },
     ],
-  },
-  "/plans": {
-    featured: ["Free Tier", "Legacy Pro", "VIP Membership"],
-    explore: ["Compare Plans", "Upgrade", "Benefits", "Community"],
     images: [
-      { src: "/hero-levelup.png", label: "CHOOSE YOUR PATH", href: "/plans" },
-      { src: "/hero-mustang.png", label: "VIP LIFESTYLE", href: "/plans" },
-      { src: "/hero-tools.png", label: "UNLOCK SYSTEMS", href: "/plans" },
+      { src: "/system-legacy.png", label: "BEST SYSTEM", href: "/tools" },
+      { src: "/hero-levelup.png", label: "BUILD LEGACY LIFE", href: "/tools" },
+      { src: "/hero-tools.png", label: "PLAN LEGACY BUDGET", href: "/tools" },
     ],
   },
 };
 
 const MAIN_NAV = [
-  { href: "/shop", label: "The Collections" },
-  { href: "/tools", label: "The Systems" },
-  { href: "/plans", label: "The Paths" },
+  { href: "/shop?category=APPAREL", label: "APPAREL" },
+  { href: "/shop?category=FOOTWEAR", label: "FOOTWEAR" },
+  { href: "/shop?category=ACCESSORIES", label: "ACCESSORIES" },
+  { href: "/tools", label: "SYSTEMS" },
 ] as const;
 
 const TOP_NAV = [
@@ -60,8 +97,11 @@ const ANNOUNCEMENTS = [
 
 export function PublicHeader() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentCategory = searchParams.get("category");
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [mobileActiveCategory, setMobileActiveCategory] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [msgIndex, setMsgIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -71,6 +111,15 @@ export function PublicHeader() {
   const profileTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isHomePage = pathname === "/";
+
+  const isLinkActive = (href: string) => {
+    if (activeMenu === href) return true;
+    const [path, query] = href.split('?');
+    if (pathname !== path) return false;
+    if (!query) return true;
+    const category = new URLSearchParams(query).get("category");
+    return currentCategory === category;
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -121,7 +170,10 @@ export function PublicHeader() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full">
+    <header 
+      className="fixed top-0 left-0 right-0 z-50 w-full"
+      onMouseLeave={() => setActiveMenu(null)}
+    >
       {/* ── Tier 1: Top Utility Bar ── */}
       <motion.div 
         initial={false}
@@ -145,11 +197,10 @@ export function PublicHeader() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={ANNOUNCEMENTS[msgIndex]}
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                whileHover={{ scale: 1.02 }}
                 className="absolute left-1/2 -translate-x-1/2 top-0 text-[11px] font-medium text-[#4B5563] tracking-wide uppercase whitespace-nowrap cursor-default"
               >
                 {ANNOUNCEMENTS[msgIndex]}
@@ -205,11 +256,10 @@ export function PublicHeader() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={ANNOUNCEMENTS[msgIndex]}
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                whileHover={{ scale: 1.02 }}
                 className="absolute left-1/2 -translate-x-1/2 top-0 text-[10px] sm:text-[11px] font-medium text-[#4B5563] uppercase tracking-wide whitespace-nowrap"
               >
                 {ANNOUNCEMENTS[msgIndex]}
@@ -247,24 +297,19 @@ export function PublicHeader() {
             {MAIN_NAV.map(({ href, label }) => (
               <div
                 key={href}
-                className="relative py-2"
-                onMouseEnter={() => handleMenuEnter(href)}
-                onMouseLeave={handleMenuLeave}
+                className="relative"
+                onMouseEnter={() => setActiveMenu(href)}
               >
                 <Link
                   href={href}
-                  className={`text-[12px] font-bold tracking-tight transition-colors duration-200 whitespace-nowrap ${navHoverColor} ${
-                    pathname === href || pathname.startsWith(href + "/") || activeMenu === href
+                  className={`text-[12px] font-bold tracking-tight transition-colors duration-200 whitespace-nowrap block py-4 ${navHoverColor} ${
+                    isLinkActive(href)
                     ? (isTransparent && activeMenu !== href ? "text-[#FFFFFF] underline underline-offset-8 decoration-2" : "text-[#121212] underline underline-offset-8 decoration-2")
                     : headerTextColor
                   }`}
                 >
                   {label}
                 </Link>
-                {/* Invisible bridge to connect nav item to dropdown */}
-                {activeMenu === href && (
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full w-[200px] h-6" />
-                )}
               </div>
             ))}
           </nav>
@@ -400,76 +445,67 @@ export function PublicHeader() {
         {activeMenu && MEGA_MENU[activeMenu] && (
           <motion.div
             key={activeMenu}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="hidden lg:block absolute left-0 right-0 bg-[#FFFFFF] border-b border-[#E5E7EB] shadow-lg z-[48] overflow-hidden"
-            onMouseEnter={handleDropdownEnter}
-            onMouseLeave={handleDropdownLeave}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="hidden lg:block absolute top-full left-0 right-0 bg-[#FFFFFF] border-b border-[#E5E7EB] shadow-2xl z-50 overflow-hidden"
+            onMouseEnter={() => setActiveMenu(activeMenu)}
           >
-            <div className="mx-auto max-w-[1440px] px-12 py-10 flex gap-16">
-              {/* Left Columns: Featured + Explore */}
-              <div className="flex gap-14 min-w-[280px] shrink-0">
-                <div>
-                  <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#121212] mb-5">
-                    Featured
-                  </h4>
-                  <ul className="space-y-3">
-                    {MEGA_MENU[activeMenu].featured.map((item) => (
-                      <li key={item}>
-                        <Link
-                          href={activeMenu}
-                          className="text-[13px] text-[#4B5563] hover:text-[#121212] transition-colors duration-200 block"
-                          onClick={() => setActiveMenu(null)}
-                        >
-                          {item}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#121212] mb-5">
-                    Explore
-                  </h4>
-                  <ul className="space-y-3">
-                    {MEGA_MENU[activeMenu].explore.map((item) => (
-                      <li key={item}>
-                        <Link
-                          href={activeMenu}
-                          className="text-[13px] text-[#4B5563] hover:text-[#121212] transition-colors duration-200 block"
-                          onClick={() => setActiveMenu(null)}
-                        >
-                          {item}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+            <div className="mx-auto max-w-[1920px] px-6 lg:px-12 py-14">
+              <div className="grid grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-12 gap-y-12 items-start">
+                {/* Left Columns: Dynamic categories */}
+                {MEGA_MENU[activeMenu].columns.map((col) => {
+                  const isSpecial = col.title.includes("Just for You");
+                  return (
+                    <div key={col.title} className="flex flex-col">
+                      <h4 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#121212] mb-8 font-poppins flex items-center gap-2 min-h-[32px]">
+                        {isSpecial && <Sparkles className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />}
+                        <span className={isSpecial ? "text-[#B8860B]" : ""}>
+                          {col.title.replace("Just for You: ", "")}
+                        </span>
+                      </h4>
+                      <ul className="space-y-4">
+                        {col.items.map((item) => (
+                          <li key={item}>
+                            <Link
+                              href={activeMenu}
+                              className="text-[13px] text-[#4B5563] hover:text-[#B8860B] transition-colors duration-200 block font-poppins whitespace-nowrap"
+                              onClick={() => setActiveMenu(null)}
+                            >
+                              {item}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
 
-              {/* Right: Image Cards */}
-              <div className="flex-1 grid grid-cols-3 gap-4">
-                {MEGA_MENU[activeMenu].images.map((img) => (
-                  <Link
-                    key={img.label}
-                    href={img.href}
-                    className="relative aspect-[4/3] overflow-hidden group"
-                    onClick={() => setActiveMenu(null)}
-                  >
-                    <Image
-                      src={img.src}
-                      alt={img.label}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-[#121212]/40 group-hover:bg-[#121212]/50 transition-colors" />
-                    <span className="absolute bottom-4 left-4 text-[11px] font-bold tracking-[0.15em] uppercase text-[#FFFFFF]">
-                      {img.label}
-                    </span>
-                  </Link>
-                ))}
+                {/* Right: Image Cards */}
+                <div className="col-span-full xl:col-span-3 grid grid-cols-3 gap-4 h-full">
+                  {MEGA_MENU[activeMenu].images.map((img) => (
+                    <Link
+                      key={img.label}
+                      href={img.href}
+                      className="relative aspect-[3/4] xl:aspect-[4/5] overflow-hidden group rounded-sm shadow-sm"
+                      onClick={() => setActiveMenu(null)}
+                    >
+                      <Image
+                        src={img.src}
+                        alt={img.label}
+                        fill
+                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/90 via-[#121212]/20 to-transparent opacity-40 group-hover:opacity-60 transition-opacity" />
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#FFFFFF] font-poppins drop-shadow-lg block leading-tight">
+                          {img.label}
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
@@ -510,20 +546,69 @@ export function PublicHeader() {
           )}
 
           {/* Main links */}
-          <nav className="space-y-7 mb-10">
+          <nav className="space-y-4 mb-10 overflow-x-hidden">
             {MAIN_NAV.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className={`block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric transition-colors ${
-                  pathname === href || pathname.startsWith(href + "/")
-                    ? "text-[#B8860B]"
-                    : "text-[#FFFFFF] hover:text-[#FFFFFF]/70"
-                }`}
-                onClick={() => setOpen(false)}
-              >
-                {label}
-              </Link>
+              <div key={href} className="border-b border-[#FFFFFF]/5 pb-4">
+                <button
+                  onClick={() => setMobileActiveCategory(mobileActiveCategory === href ? null : href)}
+                  className={`flex items-center justify-between w-full text-left text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric transition-colors ${
+                    isLinkActive(href) || mobileActiveCategory === href
+                      ? "text-[#B8860B]"
+                      : "text-[#FFFFFF]"
+                  }`}
+                >
+                  <span>{label}</span>
+                  <motion.span
+                    animate={{ rotate: mobileActiveCategory === href ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-4 h-4 opacity-30" />
+                  </motion.span>
+                </button>
+                
+                <AnimatePresence>
+                  {mobileActiveCategory === href && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-6 space-y-8 pl-4 border-l border-[#B8860B]/20 ml-2">
+                        {MEGA_MENU[href].columns.map(col => (
+                          <div key={col.title}>
+                            <h5 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8860B] mb-3">
+                              {col.title}
+                            </h5>
+                            <ul className="space-y-3">
+                              {col.items.map(item => (
+                                <li key={item}>
+                                  <Link
+                                    href={href}
+                                    onClick={() => setOpen(false)}
+                                    className="text-[13px] font-medium text-[#FFFFFF]/50 hover:text-[#FFFFFF] block"
+                                  >
+                                    {item}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                        
+                        {/* Mobile Category Action */}
+                        <Link
+                          href={href}
+                          onClick={() => setOpen(false)}
+                          className="inline-block pt-4 text-[10px] font-bold uppercase tracking-widest text-[#B8860B] border-b border-[#B8860B]/30 pb-1"
+                        >
+                          View Full Collection
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ))}
           </nav>
 

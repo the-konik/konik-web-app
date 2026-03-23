@@ -49,7 +49,7 @@ export default function ShippingInfoPage() {
       <main className="flex-1">
         {/* Hero */}
         <section className="bg-[#121212] px-6 sm:px-8 lg:px-12 py-20 pt-32 sm:pt-36 lg:pt-40">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-[1920px] mx-auto">
             <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-[#B8860B] mb-4 block">
               Shipping
             </span>
@@ -67,7 +67,7 @@ export default function ShippingInfoPage() {
 
         {/* Shipping options */}
         <section className="px-6 sm:px-8 lg:px-12 py-16 sm:py-20">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-[1920px] mx-auto">
             <h2 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#121212] mb-8">
               Shipping Options
             </h2>
@@ -107,7 +107,7 @@ export default function ShippingInfoPage() {
 
         {/* Additional info */}
         <section className="bg-[#F8F8F8] border-t border-[#E5E7EB] px-6 sm:px-8 lg:px-12 py-16 sm:py-20">
-          <div className="max-w-3xl mx-auto space-y-10">
+          <div className="max-w-[1440px] mx-auto space-y-10">
             <div>
               <h2 className="text-base font-semibold text-[#121212] mb-3">
                 Order Processing

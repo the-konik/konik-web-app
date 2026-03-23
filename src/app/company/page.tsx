@@ -33,7 +33,7 @@ export default function CompanyPage() {
         {/* Hero */}
         <section className="bg-[#121212] px-6 py-24 pt-40 sm:pt-48 text-[#FFFFFF] sm:px-8 lg:px-12 lg:py-32 overflow-hidden relative">
           <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-[#B8860B]/10 rounded-full blur-3xl" />
-          <div className="mx-auto max-w-[1440px] relative z-10">
+          <div className="mx-auto max-w-[1920px] relative z-10">
             <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-[#B8860B] mb-6">
               THE KONIK NARRATIVE
             </p>
@@ -49,7 +49,7 @@ export default function CompanyPage() {
         </section>
 
         {/* About */}
-        <section className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-12 py-20 lg:py-32 grid lg:grid-cols-2 gap-16 items-center">
+        <section className="mx-auto max-w-[1920px] px-6 sm:px-8 lg:px-12 py-20 lg:py-32 grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <h2 className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#4B5563]">
               ABOUT KONIK
@@ -83,7 +83,7 @@ export default function CompanyPage() {
         </section>
 
         {/* Vision Section */}
-        <section className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-12 py-20 lg:py-32 grid lg:grid-cols-2 gap-16 items-start">
+        <section className="mx-auto max-w-[1920px] px-6 sm:px-8 lg:px-12 py-20 lg:py-32 grid lg:grid-cols-2 gap-16 items-start">
            <div className="aspect-video lg:aspect-square bg-[#121212] rounded-2xl flex flex-col justify-end p-10 relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-8">
                  <div className="w-12 h-12 border border-[#B8860B]/30 rounded-full flex items-center justify-center text-[#B8860B] font-bold">V</div>

@@ -79,7 +79,7 @@ export default function HomePage() {
             SECTION 4: THE LEGACY STORY
         ═══════════════════════════════════════════════════════════════════ */}
         <section className="bg-[#FFFFFF] py-20 sm:py-28 lg:py-36 px-6 sm:px-8 lg:px-12">
-          <div className="max-w-[1440px] mx-auto">
+          <div className="max-w-[1920px] mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
               {/* Image */}
               <div className="relative aspect-[4/5] sm:aspect-[3/4] overflow-hidden order-2 lg:order-1">

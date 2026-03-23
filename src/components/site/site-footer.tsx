@@ -2,11 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 
 const COL_1 = [
-  { href: "/shop", label: "The Collection" },
-  { href: "/tools", label: "The Systems" },
-  { href: "/plans", label: "The Path" },
-  { href: "/company", label: "About The Legacy" },
-  { href: "/search", label: "Search" },
+  { href: "/shop?category=APPAREL", label: "Apparel" },
+  { href: "/shop?category=FOOTWEAR", label: "Footwear" },
+  { href: "/shop?category=ACCESSORIES", label: "Accessories" },
+  { href: "/tools", label: "Systems" },
+  { href: "/plans", label: "Membership" },
+  { href: "/company", label: "Our Story" },
 ] as const;
 
 const COL_2 = [
@@ -27,7 +28,7 @@ const COL_3 = [
 export function SiteFooter() {
   return (
     <footer className="bg-[#121212] text-[#FFFFFF]">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-[1920px] px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand block */}
           <div className="sm:col-span-2 lg:col-span-2">

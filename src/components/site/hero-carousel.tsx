@@ -100,7 +100,7 @@ export function HeroCarousel() {
 
       {/* Bottom-left aligned content (Carnage style) */}
       <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-32 sm:pb-20 lg:pb-24">
-        <div className="max-w-[1440px] mx-auto">
+        <div className="max-w-[1920px] mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}

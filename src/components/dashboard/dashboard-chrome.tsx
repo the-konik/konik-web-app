@@ -80,7 +80,7 @@ export function DashboardChrome({ session, hints, children }: Props) {
         <PublicHeader />
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1440px] flex-1 gap-6 px-4 py-6 sm:px-6 lg:px-12 pt-[140px] sm:pt-[160px]">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-1 gap-6 px-4 py-6 sm:px-6 lg:px-12 pt-[140px] sm:pt-[160px]">
         <aside className="hidden w-52 shrink-0 md:block lg:w-64">
           <nav className="sticky top-40 space-y-2">
             <div className="mb-6 px-3">

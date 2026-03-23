@@ -125,7 +125,7 @@ export function CartPageClient() {
     preview.length > 0 && preview.every((r) => r.available) && lines.length > 0;
 
   return (
-    <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-12 py-10 pt-32 sm:pt-36 min-h-[60vh]">
+    <div className="mx-auto max-w-[1920px] px-6 sm:px-8 lg:px-12 py-10 pt-32 sm:pt-36 min-h-[60vh]">
       <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 className="font-atmospheric text-4xl sm:text-5xl text-[#121212] tracking-tight">CART</h1>

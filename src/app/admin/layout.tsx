@@ -34,7 +34,7 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-muted">
       <header className="sticky top-0 z-30 border-b border-border bg-primary text-primary-foreground shadow-sm">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-3 lg:px-6">
+        <div className="mx-auto flex max-w-[1920px] items-center justify-between gap-4 px-4 py-3 lg:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <Link href="/admin/admin" className="truncate text-lg font-bold">
               KONIK
@@ -61,7 +61,7 @@ export default async function AdminLayout({
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-[1600px] gap-6 px-4 py-6 lg:gap-8 lg:px-6">
+      <div className="mx-auto flex max-w-[1920px] gap-6 px-4 py-6 lg:gap-8 lg:px-6">
         <aside className="hidden w-52 shrink-0 lg:block xl:w-56">
           <nav className="sticky top-24 space-y-0.5 rounded-xl border border-border bg-white p-2 shadow-sm">
             {navItems.map((item) => (

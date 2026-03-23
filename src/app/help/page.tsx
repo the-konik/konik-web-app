@@ -63,7 +63,7 @@ export default function HelpPage() {
       <main className="flex-1">
         {/* Hero */}
         <section className="bg-[#121212] px-6 sm:px-8 lg:px-12 py-20 pt-32 sm:pt-36 lg:pt-40">
-          <div className="max-w-3xl mx-auto text-center">
+          <div className="max-w-[1920px] mx-auto text-center">
             <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-[#B8860B] mb-4 block">
               Support
             </span>
@@ -79,7 +79,7 @@ export default function HelpPage() {
 
         {/* Quick topics */}
         <section className="px-6 sm:px-8 lg:px-12 py-12 border-b border-[#E5E7EB]">
-          <div className="max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="max-w-[1920px] mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4">
             {TOPICS.map((topic) => {
               const Icon = topic.icon;
               return (
@@ -100,7 +100,7 @@ export default function HelpPage() {
 
         {/* FAQs */}
         <section className="px-6 sm:px-8 lg:px-12 py-16 sm:py-20">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-[1920px] mx-auto">
             <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#B8860B] mb-4 block">
               Frequently Asked Questions
             </span>
@@ -127,7 +127,7 @@ export default function HelpPage() {
 
         {/* Contact */}
         <section className="bg-[#F8F8F8] border-t border-[#E5E7EB] px-6 sm:px-8 lg:px-12 py-16 sm:py-20">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-[1920px] mx-auto">
             <div className="text-center mb-12">
               <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#B8860B] mb-4 block">
                 Get In Touch

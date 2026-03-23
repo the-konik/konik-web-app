@@ -14,7 +14,7 @@ export default function PrivacyPage() {
       <PublicHeader />
 
       <main className="flex-1 pt-28 sm:pt-32">
-        <article className="mx-auto max-w-3xl px-6 sm:px-8 py-12 sm:py-16">
+        <article className="mx-auto max-w-5xl px-6 sm:px-8 py-12 sm:py-16">
           <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-[#B8860B] mb-4 block">
             Legal
           </span>

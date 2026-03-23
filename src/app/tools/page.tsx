@@ -16,7 +16,7 @@ export default async function PublicToolsPage() {
     <div className="flex min-h-screen flex-col bg-[#F8F8F8]">
       <PublicHeader />
 
-      <main className="mx-auto w-full max-w-[1440px] flex-1 px-6 sm:px-8 lg:px-12 py-10 pt-32 sm:pt-40 lg:pt-48 pb-24">
+      <main className="mx-auto w-full max-w-[1920px] flex-1 px-6 sm:px-8 lg:px-12 py-10 pt-32 sm:pt-40 lg:pt-48 pb-24">
         <div className="max-w-3xl mb-12">
           <h1 className="font-atmospheric text-4xl sm:text-5xl text-[#121212] tracking-tight">DIGITAL TOOLS</h1>
           <p className="mt-4 text-sm sm:text-base text-[#4B5563] leading-relaxed">

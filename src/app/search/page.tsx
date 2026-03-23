@@ -57,7 +57,7 @@ export default async function SearchPage({
       <PublicHeader />
 
       <main className="flex-1 pt-28 sm:pt-32">
-        <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-12 py-10">
+        <div className="mx-auto max-w-[1920px] px-6 sm:px-8 lg:px-12 py-10">
           {/* Search header */}
           <div className="mb-10">
             <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#B8860B] mb-3 block">

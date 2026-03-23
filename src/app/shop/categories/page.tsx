@@ -52,7 +52,7 @@ export default function CategoriesPage() {
       <main className="flex-1">
         {/* Hero */}
         <section className="bg-[#121212] px-6 sm:px-8 lg:px-12 py-20 pt-32 sm:pt-36 lg:pt-40">
-          <div className="max-w-[1440px] mx-auto">
+          <div className="max-w-[1920px] mx-auto">
             <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-[#B8860B] mb-4 block">
               The Collections
             </span>

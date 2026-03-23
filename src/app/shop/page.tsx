@@ -18,7 +18,7 @@ function parseCategory(v: string | undefined): ProductCategory | undefined {
   if (
     !v ||
     v === "all" ||
-    !["T_SHIRT", "HOODIE", "JACKET", "PANTS", "ACCESSORIES"].includes(v)
+    !["APPAREL", "FOOTWEAR", "ACCESSORIES"].includes(v)
   ) {
     return undefined;
   }
@@ -64,7 +64,7 @@ export default async function ShopPage({
     <div className="flex min-h-screen flex-col bg-[#F8F8F8]">
       <PublicHeader />
 
-      <div className="mx-auto w-full max-w-[1440px] flex-1 px-6 sm:px-8 lg:px-12 py-10 pt-32 sm:pt-36">
+      <div className="mx-auto w-full max-w-[1920px] flex-1 px-6 sm:px-8 lg:px-12 py-10 pt-32 sm:pt-36">
         <h1 className="font-atmospheric text-4xl sm:text-5xl text-[#121212] tracking-tight">SHOP</h1>
         <p className="mt-2 text-sm text-[#4B5563]">
           Complete your uniform. Filter by category, price, and size.
