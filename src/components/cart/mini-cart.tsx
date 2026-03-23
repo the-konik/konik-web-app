@@ -134,7 +134,7 @@ export function MiniCart({
               <Link
                 href="/shop"
                 onClick={() => setOpen(false)}
-                className="bg-[#121212] text-[#FFFFFF] px-8 py-3 text-xs font-bold uppercase tracking-[0.15em] hover:bg-[#121212]/90 transition-colors"
+                className="bg-[#121212] text-[#FFFFFF] px-8 py-3 rounded-full text-xs font-bold uppercase tracking-[0.15em] hover:bg-[#121212]/90 transition-colors"
               >
                 Continue Shopping
               </Link>
@@ -209,13 +209,13 @@ export function MiniCart({
             <Link
               href="/cart"
               onClick={() => setOpen(false)}
-              className="block w-full bg-[#121212] text-[#FFFFFF] py-3.5 text-center text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#121212]/90 transition-colors"
+              className="block w-full bg-[#121212] text-[#FFFFFF] py-4 rounded-full text-center text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#121212]/90 transition-all duration-300"
             >
               View Cart &amp; Checkout
             </Link>
             <button
               onClick={() => setOpen(false)}
-              className="block w-full border-2 border-[#121212] text-[#121212] py-3 text-center text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors"
+              className="block w-full border-2 border-[#121212] text-[#121212] py-4 rounded-full text-center text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-300"
             >
               Continue Shopping
             </button>

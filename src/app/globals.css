@@ -34,3 +34,10 @@ body {
 *::-webkit-scrollbar {
   display: none; /* Chrome/Safari/Opera */
 }
+
+@layer utilities {
+  .btn-pill {
+    @apply rounded-full px-8 py-4 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300;
+  }
+}
+

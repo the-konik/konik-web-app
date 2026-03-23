@@ -29,9 +29,9 @@ const MEGA_MENU: Record<string, MegaMenuData> = {
       { title: "Recovery Gear", items: ["Minimal Sleepwear", "Recovery Hoodies"] },
     ],
     images: [
-      { src: "/discipline-uniform.png", label: "THE UNIFORM", href: "/shop?category=APPAREL" },
-      { src: "/hero-legacy.png", label: "ELITE PERFORMANCE", href: "/shop?category=APPAREL" },
-      { src: "/hero-training.png", label: "DISCIPLINE GEAR", href: "/shop?category=APPAREL" },
+      { src: "/discipline-uniform.png", label: "The Uniform", href: "/shop?category=APPAREL" },
+      { src: "/hero-legacy.png", label: "Elite Performance", href: "/shop?category=APPAREL" },
+      { src: "/hero-training.png", label: "Discipline Gear", href: "/shop?category=APPAREL" },
     ],
   },
   "/shop?category=FOOTWEAR": {
@@ -42,22 +42,22 @@ const MEGA_MENU: Record<string, MegaMenuData> = {
       { title: "Lifestyle Edge", items: ["High-top Sneakers", "Streetwear Sneakers"] },
     ],
     images: [
-      { src: "/hero-footwear.png", label: "THE ROTATION", href: "/shop?category=FOOTWEAR" },
-      { src: "/sneakers-minimal.png", label: "DAILY PRESENCE", href: "/shop?category=FOOTWEAR" },
-      { src: "/shoes-gym.png", label: "TECHNICAL MOVEMENT", href: "/shop?category=FOOTWEAR" },
+      { src: "/hero-footwear.png", label: "The Rotation", href: "/shop?category=FOOTWEAR" },
+      { src: "/sneakers-minimal.png", label: "Daily Presence", href: "/shop?category=FOOTWEAR" },
+      { src: "/shoes-gym.png", label: "Technical Movement", href: "/shop?category=FOOTWEAR" },
     ],
   },
   "/shop?category=ACCESSORIES": {
     columns: [
-      { title: "Just for You: Wearables", items: ["Caps (Minimal Logo)", "Rings", "Chains / Necklaces", "Bracelets"] },
+      { title: "Just for You: Wearables", items: ["Caps", "Rings", "Chains / Necklaces", "Bracelets"] },
       { title: "Functional Daily Carry", items: ["Wallets", "Card Holders", "Premium Belts", "Crossbody Bags", "Backpacks"] },
       { title: "Lifestyle Gear", items: ["Water Bottles", "Gym Towels", "Grip Straps"] },
       { title: "Grooming", items: ["Beard Kits", "Skincare Basics", "Signature Perfume"] },
     ],
     images: [
-      { src: "/hero-accessories.png", label: "THE DETAILS", href: "/shop?category=ACCESSORIES" },
-      { src: "/accessories-jewelry.png", label: "MASCULINE IDENTITY", href: "/shop?category=ACCESSORIES" },
-      { src: "/grooming-kit.png", label: "ELITE GROOMING", href: "/shop?category=ACCESSORIES" },
+      { src: "/hero-accessories.png", label: "The Details", href: "/shop?category=ACCESSORIES" },
+      { src: "/accessories-jewelry.png", label: "Masculine Identity", href: "/shop?category=ACCESSORIES" },
+      { src: "/grooming-kit.png", label: "Elite Grooming", href: "/shop?category=ACCESSORIES" },
     ],
   },
   "/tools": {
@@ -67,32 +67,30 @@ const MEGA_MENU: Record<string, MegaMenuData> = {
       { title: "Plan Legacy Budget", items: ["Wealth Control", "Focus Sessions"] },
     ],
     images: [
-      { src: "/system-legacy.png", label: "BEST SYSTEM", href: "/tools" },
-      { src: "/hero-levelup.png", label: "BUILD LEGACY LIFE", href: "/tools" },
-      { src: "/hero-tools.png", label: "PLAN LEGACY BUDGET", href: "/tools" },
+      { src: "/system-legacy.png", label: "Best System", href: "/tools" },
+      { src: "/hero-levelup.png", label: "Build Legacy Life", href: "/tools" },
+      { src: "/hero-tools.png", label: "Plan Legacy Budget", href: "/tools" },
     ],
   },
 };
 
 const MAIN_NAV = [
-  { href: "/shop?category=APPAREL", label: "APPAREL" },
-  { href: "/shop?category=FOOTWEAR", label: "FOOTWEAR" },
-  { href: "/shop?category=ACCESSORIES", label: "ACCESSORIES" },
-  { href: "/tools", label: "SYSTEMS" },
+  { href: "/shop?category=APPAREL", label: "Apparel" },
+  { href: "/shop?category=FOOTWEAR", label: "Footwear" },
+  { href: "/shop?category=ACCESSORIES", label: "Accessories" },
+  { href: "/tools", label: "Systems" },
 ] as const;
 
 const TOP_NAV = [
   { href: "/auth/register", label: "Start My Legacy" },
-  { href: "/company#about", label: "ABOUT KONIK" },
-  { href: "/help", label: "FEEDBACK" },
-  { href: "/auth/login", label: "LOG IN" },
+  { href: "/company#about", label: "About KONIK" },
+  { href: "/auth/login", label: "Log In" },
 ] as const;
 
 const ANNOUNCEMENTS = [
   "Make It Happen — No Excuses",
-  "Build Your Legacy",
-  "Standard Shipping — Free",
-  "Elite Performance — No Shortcuts"
+  "Build Your Legacy With KONIK",
+  "Shipping Free Over LKR 10 000",
 ] as const;
 
 export function PublicHeader() {
@@ -100,12 +98,31 @@ export function PublicHeader() {
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category");
   const { data: session } = useSession();
+
   const [open, setOpen] = useState(false);
   const [mobileActiveCategory, setMobileActiveCategory] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [msgIndex, setMsgIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [dynamicAnnouncements, setDynamicAnnouncements] = useState<{ text: string; href: string }[]>([]);
+
+  // Fetch announcements
+  useEffect(() => {
+    fetch("/api/settings/announcements")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDynamicAnnouncements(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const announcementsToDisplay = dynamicAnnouncements.length > 0 
+    ? dynamicAnnouncements 
+    : ANNOUNCEMENTS.map(text => ({ text, href: "/shop" }));
   const [profileOpen, setProfileOpen] = useState(false);
   const menuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const profileTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -131,10 +148,10 @@ export function PublicHeader() {
   useEffect(() => {
     if (isHovered) return;
     const interval = setInterval(() => {
-      setMsgIndex((prev) => (prev + 1) % ANNOUNCEMENTS.length);
-    }, 3000);
+      setMsgIndex((prev) => (prev + 1) % announcementsToDisplay.length);
+    }, 4500); // 4.5s for smoother reading
     return () => clearInterval(interval);
-  }, [isHovered]);
+  }, [isHovered, announcementsToDisplay.length]);
 
   // Lock body scroll when mobile drawer is open
   useEffect(() => {
@@ -185,25 +202,29 @@ export function PublicHeader() {
         className="hidden md:block bg-[#F8F8F8] overflow-hidden whitespace-nowrap"
         style={{ borderBottomWidth: scrolled ? 0 : 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
       >
-        <div className="mx-auto flex max-w-[1920px] items-center justify-between px-6 lg:px-12 py-2 text-[11px] font-bold tracking-tight text-[#121212] grid grid-cols-3">
+        <div className="mx-auto flex max-w-[1920px] items-center justify-between px-6 lg:px-12 py-1 text-[12px] font-bold tracking-tight text-[#121212] grid grid-cols-3">
           <div className="flex-1" />
           
           {/* Announcement Carousel */}
           <div 
-            className="text-center font-poppins flex-1 col-start-2 h-4 relative overflow-hidden"
+            className="text-center font-poppins flex-1 col-start-2 h-5 relative overflow-hidden"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
             <AnimatePresence mode="wait">
+              <Link 
+                href={announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.href || "/shop"} 
+                className="absolute inset-0 z-10" 
+              />
               <motion.div
-                key={ANNOUNCEMENTS[msgIndex]}
+                key={announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="absolute left-1/2 -translate-x-1/2 top-0 text-[11px] font-medium text-[#4B5563] tracking-wide uppercase whitespace-nowrap cursor-default"
+                className="absolute left-1/2 underline -translate-x-1/2 top-1/2 -translate-y-1/2 text-[9px] font-medium text-[#555] tracking-wide whitespace-nowrap cursor-pointer hover:text-[#222] transition-colors"
               >
-                {ANNOUNCEMENTS[msgIndex]}
+                {announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -211,14 +232,14 @@ export function PublicHeader() {
           <div className="flex flex-1 items-center justify-end gap-5">
             {session ? (
               <>
-                <Link href="/dashboard/dashboard" className="hover:text-[#B8860B] transition-colors uppercase whitespace-nowrap">
-                   COMMAND CENTER
+                <Link href="/dashboard/dashboard" className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap">
+                   Command Center
                 </Link>
                 <button 
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="hover:text-[#EF4444] transition-colors uppercase whitespace-nowrap text-[10px]"
+                  className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap text-[13px]"
                 >
-                  LOG OUT
+                  Log Out
                 </button>
               </>
             ) : (
@@ -226,7 +247,7 @@ export function PublicHeader() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="hover:text-[#B8860B] transition-colors uppercase whitespace-nowrap"
+                  className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap"
                 >
                   {link.label}
                 </Link>
@@ -247,22 +268,26 @@ export function PublicHeader() {
         className="md:hidden bg-[#F8F8F8] text-center overflow-hidden"
         style={{ borderBottomWidth: scrolled ? 0 : 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
       >
-        <div className="py-1.5 px-4 w-full">
+        <div className="py-1 px-4 w-full">
           <div 
-            className="h-4 relative overflow-hidden w-full"
+            className="h-5 relative overflow-hidden w-full"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
             <AnimatePresence mode="wait">
+              <Link 
+                href={announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.href || "/shop"} 
+                className="absolute inset-0 z-10" 
+              />
               <motion.div
-                key={ANNOUNCEMENTS[msgIndex]}
+                key={announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="absolute left-1/2 -translate-x-1/2 top-0 text-[10px] sm:text-[11px] font-medium text-[#4B5563] uppercase tracking-wide whitespace-nowrap"
+                className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-[8px] sm:text-[9px] font-medium text-[#4B5563] tracking-wide whitespace-nowrap"
               >
-                {ANNOUNCEMENTS[msgIndex]}
+                {announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -273,8 +298,8 @@ export function PublicHeader() {
       <div
         className={`transition-all duration-300 border-b ${
           isTransparent 
-            ? "bg-transparent border-transparent py-4 md:py-6" 
-            : "bg-[#FFFFFF] border-[#E5E7EB] py-2 md:py-3 shadow-sm"
+            ? "bg-transparent border-transparent py-3 md:py-4" 
+            : "bg-[#FFFFFF] border-[#E5E7EB] py-0 md:py-0 shadow-sm"
         }`}
       >
         <div className="mx-auto flex max-w-[1920px] items-center justify-between px-4 sm:px-6 lg:px-12 gap-4 lg:gap-8 grid grid-cols-3">
@@ -302,7 +327,7 @@ export function PublicHeader() {
               >
                 <Link
                   href={href}
-                  className={`text-[12px] font-bold tracking-tight transition-colors duration-200 whitespace-nowrap block py-4 ${navHoverColor} ${
+                  className={`text-[14px] font-bold tracking-tight transition-colors duration-200 whitespace-nowrap block py-4 ${navHoverColor} ${
                     isLinkActive(href)
                     ? (isTransparent && activeMenu !== href ? "text-[#FFFFFF] underline underline-offset-8 decoration-2" : "text-[#121212] underline underline-offset-8 decoration-2")
                     : headerTextColor
@@ -453,58 +478,62 @@ export function PublicHeader() {
             onMouseEnter={() => setActiveMenu(activeMenu)}
           >
             <div className="mx-auto max-w-[1920px] px-6 lg:px-12 py-14">
-              <div className="grid grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-12 gap-y-12 items-start">
-                {/* Left Columns: Dynamic categories */}
-                {MEGA_MENU[activeMenu].columns.map((col) => {
-                  const isSpecial = col.title.includes("Just for You");
-                  return (
-                    <div key={col.title} className="flex flex-col">
-                      <h4 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#121212] mb-8 font-poppins flex items-center gap-2 min-h-[32px]">
-                        {isSpecial && <Sparkles className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />}
-                        <span className={isSpecial ? "text-[#B8860B]" : ""}>
-                          {col.title.replace("Just for You: ", "")}
-                        </span>
-                      </h4>
-                      <ul className="space-y-4">
-                        {col.items.map((item) => (
-                          <li key={item}>
-                            <Link
-                              href={activeMenu}
-                              className="text-[13px] text-[#4B5563] hover:text-[#B8860B] transition-colors duration-200 block font-poppins whitespace-nowrap"
-                              onClick={() => setActiveMenu(null)}
-                            >
-                              {item}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })}
+              <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 items-start">
+                {/* Left: Categories Grid */}
+                <div className="flex-1 flex flex-wrap gap-x-16 xl:gap-x-20 gap-y-12">
+                  {MEGA_MENU[activeMenu].columns.map((col) => {
+                    const isSpecial = col.title.includes("Just for You");
+                    return (
+                      <div key={col.title} className="flex flex-col min-w-0">
+                        <h4 className="text-[11px] font-bold tracking-normal text-[#121212] mb-8 font-poppins flex items-center gap-2 min-h-[20px] whitespace-nowrap">
+                          {isSpecial && <Sparkles className="w-3 h-3 text-[#B8860B] shrink-0" />}
+                          <span className={isSpecial ? "text-[#B8860B]" : ""}>
+                            {col.title.replace("Just for You: ", "")}
+                          </span>
+                        </h4>
+                        <ul className="space-y-4">
+                          {col.items.map((item) => (
+                            <li key={item}>
+                              <Link
+                                href={activeMenu}
+                                className="text-[11px] text-[#4B5563] hover:text-[#B8860B] transition-colors duration-200 block font-poppins whitespace-nowrap"
+                                onClick={() => setActiveMenu(null)}
+                              >
+                                {item}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
 
                 {/* Right: Image Cards */}
-                <div className="col-span-full xl:col-span-3 grid grid-cols-3 gap-4 h-full">
-                  {MEGA_MENU[activeMenu].images.map((img) => (
-                    <Link
-                      key={img.label}
-                      href={img.href}
-                      className="relative aspect-[3/4] xl:aspect-[4/5] overflow-hidden group rounded-sm shadow-sm"
-                      onClick={() => setActiveMenu(null)}
-                    >
-                      <Image
-                        src={img.src}
-                        alt={img.label}
-                        fill
-                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/90 via-[#121212]/20 to-transparent opacity-40 group-hover:opacity-60 transition-opacity" />
-                      <div className="absolute bottom-6 left-6 right-6">
-                        <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#FFFFFF] font-poppins drop-shadow-lg block leading-tight">
-                          {img.label}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
+                <div className="w-full lg:w-[320px] xl:w-[450px] shrink-0">
+                  <div className="grid grid-cols-3 gap-4 h-full">
+                    {MEGA_MENU[activeMenu].images.map((img) => (
+                      <Link
+                        key={img.label}
+                        href={img.href}
+                        className="relative aspect-[3/4] xl:aspect-[4/5] overflow-hidden group rounded-sm shadow-sm"
+                        onClick={() => setActiveMenu(null)}
+                      >
+                        <Image
+                          src={img.src}
+                          alt={img.label}
+                          fill
+                          className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/90 via-[#121212]/20 to-transparent opacity-40 group-hover:opacity-60 transition-opacity" />
+                        <div className="absolute bottom-6 left-6 right-6">
+                          <span className="text-[9px] font-bold tracking-normal text-[#FFFFFF] font-poppins drop-shadow-lg block leading-tight truncate">
+                            {img.label}
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -551,7 +580,7 @@ export function PublicHeader() {
               <div key={href} className="border-b border-[#FFFFFF]/5 pb-4">
                 <button
                   onClick={() => setMobileActiveCategory(mobileActiveCategory === href ? null : href)}
-                  className={`flex items-center justify-between w-full text-left text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric transition-colors ${
+                  className={`flex items-center justify-between w-full text-left text-[16px] sm:text-[20px] font-bold tracking-widest font-atmospheric transition-colors ${
                     isLinkActive(href) || mobileActiveCategory === href
                       ? "text-[#B8860B]"
                       : "text-[#FFFFFF]"
@@ -577,7 +606,7 @@ export function PublicHeader() {
                       <div className="pt-6 space-y-8 pl-4 border-l border-[#B8860B]/20 ml-2">
                         {MEGA_MENU[href].columns.map(col => (
                           <div key={col.title}>
-                            <h5 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8860B] mb-3">
+                            <h5 className="text-[11px] font-bold tracking-normal text-[#B8860B] mb-3 font-poppins truncate">
                               {col.title}
                             </h5>
                             <ul className="space-y-3">
@@ -586,7 +615,7 @@ export function PublicHeader() {
                                   <Link
                                     href={href}
                                     onClick={() => setOpen(false)}
-                                    className="text-[13px] font-medium text-[#FFFFFF]/50 hover:text-[#FFFFFF] block"
+                                    className="text-[12px] font-medium text-[#FFFFFF]/50 hover:text-[#FFFFFF] block"
                                   >
                                     {item}
                                   </Link>
@@ -600,7 +629,7 @@ export function PublicHeader() {
                         <Link
                           href={href}
                           onClick={() => setOpen(false)}
-                          className="inline-block pt-4 text-[10px] font-bold uppercase tracking-widest text-[#B8860B] border-b border-[#B8860B]/30 pb-1"
+                          className="inline-block pt-4 text-[10px] font-bold tracking-widest text-[#B8860B] border-b border-[#B8860B]/30 pb-1"
                         >
                           View Full Collection
                         </Link>
@@ -624,7 +653,7 @@ export function PublicHeader() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block text-[14px] font-bold text-[#FFFFFF]/60 hover:text-[#B8860B] tracking-widest uppercase transition-colors"
+                    className="block text-[14px] font-bold text-[#FFFFFF]/60 hover:text-[#B8860B] tracking-widest transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     {item.label}
@@ -637,21 +666,21 @@ export function PublicHeader() {
           <div className="pt-2 mb-8 space-y-5">
             <Link
               href="/plans"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[16px] sm:text-[20px] font-bold tracking-widest font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Start My Legacy
             </Link>
             <Link
               href="/company"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[16px] sm:text-[20px] font-bold tracking-widest font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               About Konik
             </Link>
             <Link
               href="/feedback"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[16px] sm:text-[20px] font-bold tracking-widest font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Feedback
@@ -678,26 +707,26 @@ export function PublicHeader() {
                 <Link
                   href="/auth/register"
                   onClick={() => setOpen(false)}
-                   className="w-full bg-[#FFFFFF] text-[#121212] py-4 text-center text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors"
+                   className="w-full bg-[#FFFFFF] text-[#121212] py-4 rounded-full text-center text-[12px] font-bold tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors"
                 >
                   Join the Legacy
                 </Link>
                 <Link
                   href="/auth/login"
                   onClick={() => setOpen(false)}
-                  className="w-full border border-[#FFFFFF] text-[#FFFFFF] py-4 text-center text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-[#FFFFFF]/10 transition-colors"
+                  className="w-full border border-[#FFFFFF] text-[#FFFFFF] py-4 rounded-full text-center text-[12px] font-bold tracking-[0.2em] hover:bg-[#FFFFFF]/10 transition-colors"
                 >
                   Log In
                 </Link>
               </>
             )}
             {session && (
-              <button
+               <button
                 onClick={() => {
                   setOpen(false);
                   signOut({ callbackUrl: "/" });
                 }}
-                className="w-full border border-[#EF4444] text-[#EF4444] py-4 text-center text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-red-500/10 transition-colors"
+                className="w-full border border-[#EF4444] text-[#EF4444] py-4 rounded-full text-center text-[12px] font-bold tracking-[0.2em] hover:bg-red-500/10 transition-colors"
               >
                 Log Out
               </button>

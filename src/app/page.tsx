@@ -41,7 +41,7 @@ export default function HomePage() {
                 </h3>
                 <Link
                   href="/shop"
-                  className="inline-flex items-center justify-center bg-[#FFFFFF] text-[#121212] px-8 sm:px-10 py-3.5 sm:py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors"
+                  className="inline-flex items-center justify-center bg-[#FFFFFF] text-[#121212] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-300 hover:scale-[1.02]"
                 >
                   Shop
                 </Link>
@@ -66,7 +66,7 @@ export default function HomePage() {
                 </h3>
                 <Link
                   href="/tools"
-                  className="inline-flex items-center justify-center bg-[#FFFFFF] text-[#121212] px-8 sm:px-10 py-3.5 sm:py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors"
+                  className="inline-flex items-center justify-center bg-[#FFFFFF] text-[#121212] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-300 hover:scale-[1.02]"
                 >
                   Shop
                 </Link>
@@ -110,7 +110,7 @@ export default function HomePage() {
                 </p>
                 <Link
                   href="/company"
-                  className="inline-flex items-center gap-3 bg-[#121212] text-[#FFFFFF] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#121212]/90 transition-colors"
+                  className="inline-flex items-center gap-3 bg-[#121212] text-[#FFFFFF] px-10 py-4 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#121212]/90 transition-all duration-300 hover:scale-[1.02]"
                 >
                   Our Story <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -138,13 +138,13 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/auth/register"
-                className="bg-[#FFFFFF] text-[#121212] px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors"
+                className="bg-[#FFFFFF] text-[#121212] px-10 py-4 rounded-full text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-300 hover:scale-[1.02]"
               >
                 Join The Legacy
               </Link>
               <Link
                 href="/plans"
-                className="border-2 border-[#FFFFFF]/30 text-[#FFFFFF] px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] hover:border-[#FFFFFF] transition-colors"
+                className="border-2 border-[#FFFFFF]/30 text-[#FFFFFF] px-10 py-4 rounded-full text-sm font-bold uppercase tracking-[0.2em] hover:border-[#FFFFFF] transition-all duration-300 hover:scale-[1.02]"
               >
                 View The Path
               </Link>

@@ -5,6 +5,7 @@ import { getProviders, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { X } from "lucide-react";
 import { DEFAULT_USER_HOME } from "@/lib/auth-redirect";
 
 export function UserRegisterForm() {
@@ -96,6 +97,14 @@ export function UserRegisterForm() {
 
       {/* Form Panel (Right) */}
       <div className="flex w-full flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 relative">
+        {/* Back Button */}
+        <Link 
+          href="/" 
+          className="absolute top-6 right-6 sm:top-8 sm:right-8 text-[#4B5563] hover:text-[#121212] transition-colors p-2 z-20"
+          aria-label="Back to home"
+        >
+          <X className="w-5 h-5 sm:w-6 sm:h-6" />
+        </Link>
         <div className="w-full max-w-md mx-auto">
           <div className="lg:hidden mb-10 flex justify-center">
             <Link href="/">
