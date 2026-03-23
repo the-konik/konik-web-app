@@ -232,12 +232,15 @@ export function PublicHeader() {
           <div className="flex flex-1 items-center justify-end gap-5">
             {session ? (
               <>
-                <Link href="/dashboard/dashboard" className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap">
-                   Command Center
+                <Link href="/auth/register" className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap">
+                   Start My Legacy
+                </Link>
+                <Link href="/company#about" className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap">
+                   About KONIK
                 </Link>
                 <button 
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap text-[13px]"
+                  className="hover:text-[#EF4444] text-[#EF4444] font-bold font-poppins transition-colors whitespace-nowrap"
                 >
                   Log Out
                 </button>
@@ -261,12 +264,12 @@ export function PublicHeader() {
       <motion.div 
         initial={false}
         animate={{ 
-          height: scrolled ? 0 : "auto",
-          opacity: scrolled ? 0 : 1
+          height: "auto",
+          opacity: 1
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="md:hidden bg-[#F8F8F8] text-center overflow-hidden"
-        style={{ borderBottomWidth: scrolled ? 0 : 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
+        style={{ borderBottomWidth: 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
       >
         <div className="py-1 px-4 w-full">
           <div 
@@ -298,8 +301,8 @@ export function PublicHeader() {
       <div
         className={`transition-all duration-300 border-b ${
           isTransparent 
-            ? "bg-transparent border-transparent py-3 md:py-4" 
-            : "bg-[#FFFFFF] border-[#E5E7EB] py-0 md:py-0 shadow-sm"
+            ? "bg-transparent border-transparent py-3 md:py-2.5" 
+            : "bg-[#FFFFFF] border-[#E5E7EB] py-2 md:py-1.5 shadow-sm"
         }`}
       >
         <div className="mx-auto flex max-w-[1920px] items-center justify-between px-4 sm:px-6 lg:px-12 gap-4 lg:gap-8 grid grid-cols-3">
@@ -311,7 +314,7 @@ export function PublicHeader() {
                 alt="KONIK Logo"
                 width={25}
                 height={25}
-                className="object-contain transition-all duration-300"
+                className="object-contain transition-all duration-300 w-[35px] h-[35px]"
                 priority
               />
             </Link>
@@ -362,16 +365,16 @@ export function PublicHeader() {
             </div>
 
             {/* Mobile search */}
-            <button className={`lg:hidden p-1.5 rounded-full flex items-center justify-center transition-colors ${
+            <button className={`lg:hidden p-2.5 rounded-full flex items-center justify-center transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
-              <Search className="w-5 h-5" color={iconColor} strokeWidth={1.5} />
+              <Search className="w-7 h-7" color={iconColor} strokeWidth={1.5} />
             </button>
 
-            <button className={`flex p-1.5 flex items-center justify-center rounded-full transition-colors ${
+            <button className={`flex p-2.5 items-center justify-center rounded-full transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
-              <Heart className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
+              <Heart className="w-7 h-7 sm:w-8 sm:h-8" color={iconColor} strokeWidth={1.5} />
             </button>
 
             <MiniCart 
@@ -379,10 +382,10 @@ export function PublicHeader() {
               iconColor={iconColor} 
             />
 
-            {/* User Profile Dropdown (Desktop) */}
+            {/* User Profile Dropdown (Desktop & Mobile) */}
             {session && (
               <div 
-                className="relative hidden lg:block"
+                className="relative"
                 onMouseEnter={() => {
                   if (profileTimeout.current) clearTimeout(profileTimeout.current);
                   setProfileOpen(true);
@@ -392,11 +395,12 @@ export function PublicHeader() {
                 }}
               >
                 <button 
-                  className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className={`p-2 rounded-full flex items-center justify-center transition-colors ${
                     isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
                   }`}
                 >
-                  <UserIcon className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
+                  <UserIcon className="w-7 h-7 sm:w-8 sm:h-8" color={iconColor} strokeWidth={1.5} />
                 </button>
                 
                 <AnimatePresence>
@@ -405,45 +409,31 @@ export function PublicHeader() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 top-full pt-4 w-72 z-[100]"
+                      className="absolute right-0 top-full pt-2 w-64 z-[100]"
                     >
-                      <div className="bg-[#FFFFFF] border border-[#E5E7EB] shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden py-5 backdrop-blur-xl">
-                         {/* User Info */}
-                         <div className="px-6 pb-5 mb-5 border-b border-[#F8F8F8]">
-                            <span className="inline-block px-2 py-0.5 rounded-full bg-[#B8860B]/5 text-[9px] font-bold uppercase tracking-widest text-[#B8860B] mb-2 font-atmospheric">AUTHENTICATED</span>
-                            <p className="text-md font-bold text-[#121212] truncate uppercase tracking-tight">{session.user?.name || session.user?.email}</p>
-                            <p className="text-[10px] text-[#4B5563] font-bold uppercase tracking-widest mt-0.5 opacity-60">Professional Profile</p>
+                      <div className="bg-[#FFFFFF] border border-[#E5E7EB] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-xl overflow-hidden backdrop-blur-xl">
+                         {/* User Info - Ultra Minimal */}
+                         <div className="px-4 py-3 border-b border-[#F3F4F6]">
+                            <p className="text-[11px] font-bold text-[#121212] truncate uppercase tracking-tight font-poppins">{session.user?.name || session.user?.email}</p>
                          </div>
                          
-                         {/* Links */}
-                         <div className="px-3 space-y-1">
+                         {/* Links - Text Only */}
+                         <div className="p-1.5 space-y-0.5">
                             {[
-                              { href: "/dashboard/dashboard", label: "Command Center", icon: LayoutDashboard },
-                              { href: "/dashboard/dashboard/orders", label: "My Orders", icon: Package },
-                              { href: "/dashboard/dashboard/subscription", label: "Membership", icon: CreditCard },
-                              { href: "/dashboard/dashboard/profile", label: "Personalization", icon: UserIcon },
+                              { href: "/dashboard/dashboard", label: "Dashboard" },
+                              { href: "/dashboard/dashboard/orders", label: "Orders" },
+                              { href: "/dashboard/dashboard/subscription", label: "Membership" },
+                              { href: "/dashboard/dashboard/profile", label: "Profile" },
                             ].map(item => (
                               <Link
                                 key={item.href}
                                 href={item.href}
-                                className="flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.1em] text-[#4B5563] hover:bg-[#F8F8F8] hover:text-[#121212] transition-all group"
+                                className="block px-3 py-2 rounded-lg text-[10px] font-bold uppercase tracking-[0.1em] text-[#4B5563] hover:bg-[#F8F8F8] hover:text-[#121212] transition-colors font-poppins"
                                 onClick={() => setProfileOpen(false)}
                               >
-                                <item.icon className="w-4 h-4 text-[#4B5563] group-hover:text-[#B8860B] transition-colors" strokeWidth={2} />
                                 {item.label}
                               </Link>
                             ))}
-                         </div>
-                         
-                         {/* Logout */}
-                         <div className="mt-5 pt-5 px-3 border-t border-[#F8F8F8]">
-                           <button
-                             onClick={() => signOut({ callbackUrl: "/" })}
-                             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.1em] text-[#EF4444] hover:bg-red-50 transition-all border border-transparent hover:border-red-100"
-                           >
-                             <LogOut className="w-4 h-4" strokeWidth={2} />
-                             Log Out
-                           </button>
                          </div>
                       </div>
                     </motion.div>
@@ -455,11 +445,11 @@ export function PublicHeader() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setOpen(true)}
-              className={`lg:hidden p-1.5 rounded-full flex items-center justify-center transition-colors ${
+              className={`lg:hidden p-2.5 rounded-full flex items-center justify-center transition-colors ${
                 isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
               }`}
             >
-              <Menu className="w-6 h-6" color={iconColor} strokeWidth={1.5} />
+              <Menu className="w-8 h-8" color={iconColor} strokeWidth={1.5} />
             </button>
           </div>
         </div>
@@ -562,7 +552,7 @@ export function PublicHeader() {
             onClick={() => setOpen(false)}
             className="text-[#FFFFFF] p-2 hover:bg-[#FFFFFF]/10 rounded-full transition-colors"
           >
-            <X className="w-7 h-7" strokeWidth={1.5} />
+            <X className="w-8 h-8" strokeWidth={1.5} />
           </button>
         </div>
 
@@ -570,7 +560,7 @@ export function PublicHeader() {
           {session && (
             <div className="mb-10 pb-10 border-b border-[#FFFFFF]/5">
                <span className="inline-block px-2 py-0.5 rounded-full bg-[#B8860B]/10 text-[9px] font-bold uppercase tracking-widest text-[#B8860B] mb-3 font-atmospheric">ACCOUNT ACTIVE</span>
-               <p className="text-xl font-bold text-[#FFFFFF] font-atmospheric leading-tight truncate uppercase tracking-tight">{session.user?.name || session.user?.email}</p>
+               <p className="text-lg font-bold text-[#FFFFFF] font-poppins leading-tight truncate uppercase tracking-tight">{session.user?.name || session.user?.email}</p>
             </div>
           )}
 
@@ -580,7 +570,7 @@ export function PublicHeader() {
               <div key={href} className="border-b border-[#FFFFFF]/5 pb-4">
                 <button
                   onClick={() => setMobileActiveCategory(mobileActiveCategory === href ? null : href)}
-                  className={`flex items-center justify-between w-full text-left text-[16px] sm:text-[20px] font-bold tracking-widest font-atmospheric transition-colors ${
+                  className={`flex items-center justify-between w-full text-left text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins transition-colors uppercase ${
                     isLinkActive(href) || mobileActiveCategory === href
                       ? "text-[#B8860B]"
                       : "text-[#FFFFFF]"
@@ -666,28 +656,28 @@ export function PublicHeader() {
           <div className="pt-2 mb-8 space-y-5">
             <Link
               href="/plans"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins uppercase text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Start My Legacy
             </Link>
             <Link
               href="/company"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins uppercase text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               About Konik
             </Link>
             <Link
               href="/feedback"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins uppercase text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Feedback
             </Link>
             <Link
               href="/help"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[14px] sm:text-[16px] font-bold tracking-widest uppercase font-poppins text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Help
@@ -707,14 +697,14 @@ export function PublicHeader() {
                 <Link
                   href="/auth/register"
                   onClick={() => setOpen(false)}
-                   className="w-full bg-[#FFFFFF] text-[#121212] py-4 rounded-full text-center text-[12px] font-bold tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors"
+                   className="w-full bg-[#FFFFFF] text-[#121212] py-4 rounded-full text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors font-poppins"
                 >
                   Join the Legacy
                 </Link>
                 <Link
                   href="/auth/login"
                   onClick={() => setOpen(false)}
-                  className="w-full border border-[#FFFFFF] text-[#FFFFFF] py-4 rounded-full text-center text-[12px] font-bold tracking-[0.2em] hover:bg-[#FFFFFF]/10 transition-colors"
+                  className="w-full border border-[#FFFFFF] text-[#FFFFFF] py-4 rounded-full text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#FFFFFF]/10 transition-colors font-poppins"
                 >
                   Log In
                 </Link>
@@ -726,12 +716,13 @@ export function PublicHeader() {
                   setOpen(false);
                   signOut({ callbackUrl: "/" });
                 }}
-                className="w-full border border-[#EF4444] text-[#EF4444] py-4 rounded-full text-center text-[12px] font-bold tracking-[0.2em] hover:bg-red-500/10 transition-colors"
+                className="w-full border border-[#EF4444] text-[#EF4444] py-4 rounded-full text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-red-500/10 transition-colors font-poppins"
               >
                 Log Out
               </button>
             )}
           </div>
+
         </div>
       </div>
     </header>

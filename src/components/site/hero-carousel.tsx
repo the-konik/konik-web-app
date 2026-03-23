@@ -93,7 +93,7 @@ export function HeroCarousel() {
             src={slide.image}
             alt={slide.headline}
             fill
-            className="object-cover"
+            className="object-cover object-right sm:object-center"
             priority
             quality={100}
           />
@@ -101,42 +101,42 @@ export function HeroCarousel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Dynamic content alignment - Reduced prominence */}
-      <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-32 sm:pb-20 lg:pb-24">
+      {/* Dynamic content alignment - Compressed for mobile */}
+      <div className="relative z-10 w-full px-5 sm:px-10 lg:px-16 pb-20 sm:pb-24 lg:pb-32">
         <div className="max-w-[1920px] mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 0.9, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
-              className={`max-w-2xl flex flex-col ${
+              className={`max-w-2xl flex flex-col items-center text-center ${
                 slide.align === "center" 
-                  ? "mx-auto items-center text-center" 
+                  ? "md:mx-auto md:items-center md:text-center" 
                   : slide.align === "right" 
-                    ? "ml-auto items-end text-right" 
-                    : "items-start text-left"
+                    ? "md:ml-auto md:items-end md:text-right" 
+                    : "md:items-start md:text-left"
               }`}
             >
-              <h1 className="font-atmospheric text-xl sm:text-2xl md:text-3xl lg:text-4xl text-[#FFFFFF] tracking-[0.1em] leading-tight mb-4 uppercase">
+              <h1 className="font-atmospheric text-base sm:text-2xl md:text-3xl lg:text-4xl text-[#FFFFFF] tracking-[0.1em] leading-tight mb-2 sm:mb-4 uppercase">
                 {slide.headline}
               </h1>
-              <p className={`max-w-md text-xs sm:text-[13px] text-[#FFFFFF]/60 font-light leading-relaxed mb-10 tracking-wide uppercase ${
-                slide.align === "center" ? "mx-auto" : ""
+              <p className={`max-w-[280px] sm:max-w-md text-[10px] sm:text-[13px] text-[#FFFFFF]/60 font-light leading-relaxed mb-6 sm:mb-10 tracking-wide uppercase ${
+                slide.align === "center" ? "md:mx-auto" : ""
               }`}>
                 {slide.subtext}
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
                 <Link
                   href={slide.cta1.href}
-                  className="bg-[#FFFFFF] text-[#121212] px-8 py-4 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                  className="bg-[#FFFFFF] text-[#121212] px-6 sm:px-8 py-3 sm:py-4 rounded-full text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto text-center"
                 >
                   {slide.cta1.label}
                 </Link>
                 <Link
                   href={slide.cta2.href}
-                  className="border border-[#FFFFFF]/30 text-[#FFFFFF] px-8 py-4 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-[#FFFFFF] hover:text-[#121212] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                  className="border border-[#FFFFFF]/30 text-[#FFFFFF] px-6 sm:px-8 py-3 sm:py-4 rounded-full text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-[#FFFFFF] hover:text-[#121212] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto text-center"
                 >
                   {slide.cta2.label}
                 </Link>
@@ -146,8 +146,8 @@ export function HeroCarousel() {
         </div>
       </div>
 
-      {/* Nike-style controls — bottom right */}
-      <div className="absolute bottom-6 sm:bottom-8 right-6 sm:right-10 lg:right-16 z-20 flex items-center gap-2">
+      {/* Nike-style controls — hidden on mobile */}
+      <div className="absolute bottom-6 sm:bottom-8 right-6 sm:right-10 lg:right-16 z-20 hidden md:flex items-center gap-2">
         <button
           onClick={() => setIsPaused((p) => !p)}
           className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-[#FFFFFF]/40 flex items-center justify-center text-[#FFFFFF] hover:border-[#FFFFFF] hover:bg-[#FFFFFF]/10 transition-all"
@@ -172,6 +172,7 @@ export function HeroCarousel() {
           <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       </div>
+
     </section>
   );
 }

@@ -71,14 +71,14 @@ export function MiniCart({
       {/* Trigger button (replaces old bag icon in header) */}
       <button
         onClick={() => { refresh(); setOpen(true); }}
-        className={`p-1.5 rounded-full flex items-center justify-center transition-colors relative ${
+        className={`p-2 rounded-full flex items-center justify-center transition-colors relative ${
           isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
         }`}
         aria-label="Open cart"
       >
-        <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
+        <ShoppingBag className="w-6 h-6 sm:w-7 sm:h-7" color={iconColor} strokeWidth={1.5} />
         {totalQty > 0 && (
-          <span className="absolute -top-1 -right-1 bg-[#B8860B] text-[#FFFFFF] text-[9px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold">
+          <span className="absolute -top-1 -right-1 bg-[#B8860B] text-[#FFFFFF] text-[10px] w-[20px] h-[20px] rounded-full flex items-center justify-center font-bold">
             {totalQty > 9 ? "9+" : totalQty}
           </span>
         )}
