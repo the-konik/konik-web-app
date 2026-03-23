@@ -16,64 +16,85 @@ export default async function PlansPage() {
   });
 
   return (
-    <div className="flex min-h-screen flex-col bg-muted">
+    <div className="flex min-h-screen flex-col bg-[#F8F8F8]">
       <PublicHeader />
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12 pt-32 sm:pt-36">
-        <h1 className="text-center text-3xl font-bold text-primary">
-          Membership plans
-        </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-muted-foreground">
-          Subscribe for recurring access. Your role becomes SUBSCRIBER, PREMIUM,
-          or VIP to match the plan tier, and tools attached to the plan unlock
-          automatically.
-        </p>
+      <main className="mx-auto w-full max-w-[1920px] flex-1 px-6 sm:px-8 lg:px-12 py-12 pt-32 sm:pt-40 lg:pt-48 pb-24">
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <h1 className="font-atmospheric text-4xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight">
+            MEMBERSHIP PLANS
+          </h1>
+          <p className="mt-6 text-sm sm:text-base text-[#4B5563] leading-relaxed max-w-2xl mx-auto">
+            Choose your tier of commitment. Your account automatically unlocks tools and content 
+            exclusive to your membership level—instantly synced to your dashboard.
+          </p>
+        </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className="flex flex-col rounded-xl border border-border bg-white p-6 shadow-sm"
+              className="flex flex-col rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-8 shadow-sm hover:border-[#B8860B]/30 transition-all duration-500 group relative overflow-hidden"
             >
-              <div className="flex items-center justify-between gap-2">
-                <h2 className="text-lg font-semibold text-primary">
-                  {plan.name}
-                </h2>
-                <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
-                  {plan.tier}
-                </span>
+              {plan.tier === "VIP" && (
+                <div className="absolute top-0 right-0 py-1.5 px-6 bg-[#B8860B] text-[#FFFFFF] text-[9px] font-bold uppercase tracking-[0.2em] transform rotate-45 translate-x-[25px] translate-y-[10px] shadow-sm">
+                  MOST POPULAR
+                </div>
+              )}
+              
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="font-atmospheric text-2xl text-[#121212]">
+                    {plan.name.toUpperCase()}
+                  </h2>
+                  <span className="bg-[#F8F8F8] border border-[#E5E7EB] px-2 py-1 text-[9px] font-bold text-[#4B5563] tracking-widest uppercase">
+                    {plan.tier}
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-[#B8860B] tracking-tight">
+                    {formatPrice(plan.price.toString())}
+                  </span>
+                  <span className="text-xs font-bold text-[#4B5563] uppercase tracking-widest">
+                    /{plan.interval}
+                  </span>
+                </div>
               </div>
-              <p className="mt-3 text-3xl font-bold text-accent">
-                {formatPrice(plan.price.toString())}
-                <span className="text-sm font-normal text-muted-foreground">
-                  /{plan.interval}
-                </span>
-              </p>
-              <p className="mt-3 flex-1 text-sm text-muted-foreground">
-                {plan.description}
-              </p>
-              <div className="mt-4">
-                <p className="text-xs font-medium uppercase text-muted-foreground">
-                  Included tools
+
+              <div className="flex-1">
+                <p className="text-sm text-[#4B5563] font-medium leading-relaxed mb-8">
+                  {plan.description}
                 </p>
-                <ul className="mt-2 space-y-1 text-sm text-primary">
-                  {plan.tools.map((pt) => (
-                    <li key={pt.toolId}>{pt.tool.name}</li>
-                  ))}
-                  {plan.tools.length === 0 && (
-                    <li className="text-muted-foreground">—</li>
-                  )}
-                </ul>
-              </div>
-              <div className="mt-6">
-                {plan.stripePriceId ? (
-                  <SubscribePlanButton planId={plan.id} />
-                ) : (
-                  <p className="text-center text-xs text-muted-foreground">
-                    Checkout not configured (add{" "}
-                    <code className="rounded bg-muted px-1">stripePriceId</code>{" "}
-                    in admin/DB).
+                
+                <div className="space-y-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#121212]">
+                    Included in {plan.name}
                   </p>
+                  <ul className="space-y-3">
+                    {plan.tools.map((pt) => (
+                      <li key={pt.toolId} className="flex items-center gap-3 text-sm text-[#4B5563] font-medium">
+                        <div className="w-1.5 h-1.5 bg-[#B8860B] rounded-full" />
+                        {pt.tool.name}
+                      </li>
+                    ))}
+                    {plan.tools.length === 0 && (
+                      <li className="text-[#4B5563]/50 italic text-sm">No specific tools included</li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-10">
+                {plan.stripePriceId ? (
+                  <div className="group/btn">
+                    <SubscribePlanButton planId={plan.id} />
+                  </div>
+                ) : (
+                  <div className="rounded-lg bg-[#F8F8F8] p-4 border border-[#E5E7EB] text-center">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#4B5563]">
+                      Coming Soon
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -81,9 +102,11 @@ export default async function PlansPage() {
         </div>
 
         {plans.length === 0 && (
-          <p className="mt-12 text-center text-muted-foreground">
-            No plans available yet.
-          </p>
+          <div className="mt-12 p-16 text-center border border-dashed border-[#E5E7EB] rounded-2xl bg-[#FFFFFF]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#4B5563]">
+              No membership plans are currently available.
+            </p>
+          </div>
         )}
       </main>
 

@@ -1,8 +1,3 @@
-// =============================================================================
-// KONIK — PostgreSQL schema (Prisma)
-// E-commerce (clothing) + digital tools + subscriptions + future AI hooks.
-// =============================================================================
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,10 +6,6 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// NEXTAUTH — OAuth / magic-link session storage (required by Prisma adapter)
-// ─────────────────────────────────────────────────────────────────────────────
 
 /// Linked OAuth provider account (Google, GitHub, etc.) for a User.
 model Account {
@@ -28,15 +19,14 @@ model Account {
   provider          String
   /// Provider’s unique id for this account.
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -48,8 +38,7 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -63,233 +52,146 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// USERS & ROLES
-// ─────────────────────────────────────────────────────────────────────────────
-
-/// Access / monetization tier. SUBSCRIBER · PREMIUM · VIP should stay in sync with
-/// `Subscription` + Stripe webhooks; ADMIN is staff-only; GUEST for lightweight identities.
-enum UserRole {
-  GUEST
-  USER
-  SUBSCRIBER
-  PREMIUM
-  VIP
-  ADMIN
-}
-
-/// KONIK admin panel / operations role (orthogonal to customer `UserRole`).
-enum StaffRole {
-  SUPER_ADMIN
-  ADMIN
-  SALES
-  SHIPPING
-  MARKETING
-}
-
 /// Registered person (or elevated guest row). Central actor for orders, tools, subscriptions.
 model User {
   /// Internal id (cuid).
-  id            String    @id @default(cuid())
+  id               String           @id @default(cuid())
   /// Display name.
-  name          String?
+  name             String?
   /// Login identifier; unique when set.
-  email         String?   @unique
+  email            String?          @unique
   /// When the email was verified (NextAuth / app flow).
-  emailVerified DateTime?
+  emailVerified    DateTime?
   /// Avatar URL (OAuth or uploaded).
-  image         String?
+  image            String?
   /// Bcrypt hash for credentials provider; null for OAuth-only users.
-  password      String?
-  /// Role / tier for authorization and UX (see `UserRole`).
-  role          UserRole  @default(USER)
-  /// Admin panel permissions. Null = not staff (`UserRole.ADMIN` still treated as SUPER_ADMIN for legacy accounts).
-  staffRole     StaffRole?
+  password         String?
   /// Record creation time.
-  createdAt     DateTime  @default(now())
+  createdAt        DateTime         @default(now())
   /// Last update time.
-  updatedAt     DateTime  @updatedAt
-
-  accounts      Account[]
-  sessions      Session[]
-  orders        Order[]
-  subscriptions Subscription[]
-  toolAccess    UserToolAccess[]
-
+  updatedAt        DateTime         @updatedAt
   /// Stripe Customer id for checkout, subscriptions, and portal.
-  stripeCustomerId String? @unique
-
-  /// Arbitrary JSON: marketing consent, locale, feature flags, A/B buckets.
-  metadata Json?
-
+  stripeCustomerId String?          @unique
   /// Structured preferences for recommendations / UX (not for secrets).
   /// Future: sync with ML feature store or embedding service ids.
-  aiPreferences Json?
-
+  aiPreferences    Json?
   /// Opaque reference to an external vector / RAG store document (e.g. Pinecone id).
   /// Keeps DB small; actual vectors live in the AI service.
-  aiProfileRef String? @db.VarChar(255)
+  aiProfileRef     String?          @db.VarChar(255)
+  /// Arbitrary JSON: marketing consent, locale, feature flags, A/B buckets.
+  metadata         Json?
+  /// Admin panel permissions. Null = not staff (`UserRole.ADMIN` still treated as SUPER_ADMIN for legacy accounts).
+  staffRole        StaffRole?
+  /// Role / tier for authorization and UX (see `UserRole`).
+  role             UserRole         @default(USER)
+  accounts         Account[]
+  orders           Order[]
+  sessions         Session[]
+  subscriptions    Subscription[]
+  toolAccess       UserToolAccess[]
 
   @@index([role])
   @@index([staffRole])
   @@index([createdAt])
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PRODUCTS (PHYSICAL / CLOTHING)
-// ─────────────────────────────────────────────────────────────────────────────
-
-enum ProductCategory {
-  T_SHIRT
-  HOODIE
-  JACKET
-  PANTS
-  ACCESSORIES
-}
-
 /// Sellable clothing SKU; inventory and merchandising.
 model Product {
-  id          String          @id @default(cuid())
+  id              String          @id @default(cuid())
   /// Display name.
-  name        String
+  name            String
   /// URL segment; unique for SEO and routing.
-  slug        String          @unique
+  slug            String          @unique
   /// Long description (HTML or markdown from CMS later).
-  description String          @db.Text
+  description     String
   /// Unit price in major currency units (e.g. USD).
-  price       Decimal         @db.Decimal(10, 2)
-  category    ProductCategory
+  price           Decimal         @db.Decimal(10, 2)
+  category        ProductCategory
   /// Cloudinary (or CDN) URLs, ordered gallery.
-  images      String[]
+  images          String[]
   /// Available sizes (e.g. "S", "M", "L").
-  sizes       String[]
+  sizes           String[]
   /// Available color labels or codes.
-  colors      String[]
+  colors          String[]
   /// Stock on hand (simple model; multi-warehouse can split later).
-  stock       Int             @default(0)
+  stock           Int             @default(0)
   /// Homepage / collection highlights.
-  featured    Boolean         @default(false)
+  featured        Boolean         @default(false)
   /// Visible in catalog when true (live listing).
-  published   Boolean         @default(false)
+  published       Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  stripeProductId String?         @unique
+  stripePriceId   String?         @unique
   /// Hidden from storefront; kept for history / admin (soft lifecycle).
-  archived    Boolean         @default(false)
-  /// Optional merchant SKU / barcode.
-  sku         String?         @unique
-  /// Shipping weight (grams); nullable until fulfillment integration.
-  weightGrams Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  orderItems OrderItem[]
-
-  stripeProductId String? @unique
-  stripePriceId   String? @unique
-
+  archived        Boolean         @default(false)
   /// Tags, season, material JSON — useful for search and future AI catalog understanding.
-  metadata Json?
+  metadata        Json?
+  /// Optional merchant SKU / barcode.
+  sku             String?         @unique
+  /// Shipping weight (grams); nullable until fulfillment integration.
+  weightGrams     Int?
+  orderItems      OrderItem[]
 
   @@index([category, published, archived])
   @@index([featured, published, archived])
   @@index([published, archived, createdAt])
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TOOLS (DIGITAL PRODUCTS)
-// ─────────────────────────────────────────────────────────────────────────────
-
-/// How the customer obtains ongoing access to a tool.
-enum ToolAccessType {
-  /// Lifetime / single purchase unlock.
-  ONE_TIME
-  /// Access while a qualifying subscription is active.
-  SUBSCRIPTION
-}
-
 /// Digital product: self-improvement app, calculator, course shell, etc.
 model Tool {
-  id          String         @id @default(cuid())
-  name        String
-  slug        String         @unique
-  description String         @db.Text
-  price       Decimal        @db.Decimal(10, 2)
-  accessType  ToolAccessType
+  id              String                 @id @default(cuid())
+  name            String
+  slug            String                 @unique
+  description     String
+  price           Decimal                @db.Decimal(10, 2)
+  accessType      ToolAccessType
   /// Icon URL or Lucide name key.
-  icon        String?
-  published   Boolean        @default(false)
-  featured    Boolean        @default(false)
+  icon            String?
+  published       Boolean                @default(false)
+  featured        Boolean                @default(false)
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  stripeProductId String?                @unique
+  stripePriceId   String?                @unique
   /// In-dashboard route or external app URL for iframe/deep link.
-  appPath     String?        @db.VarChar(512)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  orderItems OrderItem[]
-  userAccess UserToolAccess[]
-  plans      SubscriptionPlanTool[]
-
-  stripeProductId String? @unique
-  stripePriceId   String? @unique
-
+  appPath         String?                @db.VarChar(512)
   /// Tool capabilities, API version, feature flags for AI agents.
-  metadata Json?
+  metadata        Json?
+  orderItems      OrderItem[]
+  plans           SubscriptionPlanTool[]
+  userAccess      UserToolAccess[]
 
   @@index([published, accessType])
   @@index([featured, published])
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ORDERS (MIXED CART: PHYSICAL + DIGITAL)
-// ─────────────────────────────────────────────────────────────────────────────
-
-enum OrderStatus {
-  PENDING
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
-}
-
-enum PaymentStatus {
-  PENDING
-  PAID
-  FAILED
-  REFUNDED
-}
-
 /// Checkout / fulfillment header. Supports registered users and guest checkout.
 model Order {
-  id     String @id @default(cuid())
+  id                      String           @id @default(cuid())
   /// Registered buyer; null for pure guest orders.
-  userId String?
+  userId                  String?
   /// Lifecycle for physical fulfillment; digital items may skip to DELIVERED in app logic.
-  status        OrderStatus   @default(PENDING)
-  paymentStatus PaymentStatus @default(PENDING)
+  status                  OrderStatus      @default(PENDING)
+  paymentStatus           PaymentStatus    @default(PENDING)
   /// Grand total charged (sum of line items + tax/shipping when you add them).
-  totalAmount   Decimal       @db.Decimal(10, 2)
-
+  totalAmount             Decimal          @db.Decimal(10, 2)
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  stripePaymentIntentId   String?          @unique
   /// Guest contact when `userId` is null.
-  guestEmail String?
-  guestName  String?
-
-  /// Shipping snapshot (JSON: address lines, country, phone) for physical lines.
-  shippingAddress Json?
+  guestEmail              String?
+  guestName               String?
   /// Idempotent payment retries / Stripe idempotency key.
-  idempotencyKey String? @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user  User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-  items OrderItem[]
-
-  stripePaymentIntentId String? @unique
-  stripeCheckoutSessionId String? @unique
-
+  idempotencyKey          String?          @unique
   /// Raw webhook payload ids, discount codes, AI-assisted order notes (future).
-  metadata Json?
-
-  toolAccessGrants UserToolAccess[]
+  metadata                Json?
+  /// Shipping snapshot (JSON: address lines, country, phone) for physical lines.
+  shippingAddress         Json?
+  stripeCheckoutSessionId String?          @unique
+  user                    User?            @relation(fields: [userId], references: [id])
+  items                   OrderItem[]
+  toolAccessGrants        UserToolAccess[]
 
   @@index([userId, createdAt])
   @@index([status, paymentStatus])
@@ -297,16 +199,11 @@ model Order {
   @@index([guestEmail])
 }
 
-enum OrderItemType {
-  PRODUCT
-  TOOL
-}
-
 /// Single line in an order (either a physical variant or a digital tool).
 model OrderItem {
-  id      String        @id @default(cuid())
-  orderId String
-  type    OrderItemType
+  id        String        @id @default(cuid())
+  orderId   String
+  type      OrderItemType
   productId String?
   toolId    String?
   quantity  Int           @default(1)
@@ -314,64 +211,39 @@ model OrderItem {
   price     Decimal       @db.Decimal(10, 2)
   size      String?
   color     String?
-
-  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-  tool    Tool?    @relation(fields: [toolId], references: [id], onDelete: SetNull)
-
   /// Per-line metadata: bundle id, personalization text, AI-generated SKUs, etc.
-  metadata Json?
+  metadata  Json?
+  order     Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product?      @relation(fields: [productId], references: [id])
+  tool      Tool?         @relation(fields: [toolId], references: [id])
 
   @@index([orderId])
   @@index([productId])
   @@index([toolId])
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SUBSCRIPTIONS (STRIPE-ALIGNED)
-// ─────────────────────────────────────────────────────────────────────────────
-
-enum SubscriptionStatus {
-  ACTIVE
-  PAST_DUE
-  CANCELLED
-  EXPIRED
-  TRIALING
-}
-
-/// Commercial plan tier label — aligns with UserRole SUBSCRIBER / PREMIUM / VIP for UX.
-enum SubscriptionPlanTier {
-  SUBSCRIBER
-  PREMIUM
-  VIP
-}
-
 /// Sellable recurring plan (e.g. “KONIK Premium”).
 model SubscriptionPlan {
-  id          String               @id @default(cuid())
+  id              String                 @id @default(cuid())
   /// Unique plan code / display name.
-  name        String               @unique
-  description String               @db.Text
-  price       Decimal              @db.Decimal(10, 2)
+  name            String                 @unique
+  description     String
+  price           Decimal                @db.Decimal(10, 2)
   /// Billing interval: "month" | "year" (Stripe price interval).
-  interval    String               @default("month")
-  /// Maps to app tier for role upgrades and analytics.
-  tier        SubscriptionPlanTier @default(SUBSCRIBER)
-  /// Sort order on pricing page.
-  sortOrder   Int                  @default(0)
+  interval        String                 @default("month")
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  stripeProductId String?                @unique
+  stripePriceId   String?                @unique
   /// Whether new purchases are allowed (grandfather existing subs).
-  active      Boolean              @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  subscriptions Subscription[]
-  tools         SubscriptionPlanTool[]
-
-  stripeProductId String? @unique
-  stripePriceId   String? @unique
-
-  metadata Json?
+  active          Boolean                @default(true)
+  metadata        Json?
+  /// Sort order on pricing page.
+  sortOrder       Int                    @default(0)
+  /// Maps to app tier for role upgrades and analytics.
+  tier            SubscriptionPlanTier   @default(SUBSCRIBER)
+  subscriptions   Subscription[]
+  tools           SubscriptionPlanTool[]
 
   @@index([tier, active])
   @@index([active, sortOrder])
@@ -381,9 +253,8 @@ model SubscriptionPlan {
 model SubscriptionPlanTool {
   planId String
   toolId String
-
-  plan SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
-  tool Tool             @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  plan   SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  tool   Tool             @relation(fields: [toolId], references: [id], onDelete: Cascade)
 
   @@id([planId, toolId])
   @@index([toolId])
@@ -391,65 +262,43 @@ model SubscriptionPlanTool {
 
 /// User’s subscription instance (Stripe subscription). Multiple rows per user = history or add-ons.
 model Subscription {
-  id     String             @id @default(cuid())
-  userId String
-  planId String
-  status SubscriptionStatus @default(ACTIVE)
-
-  startDate DateTime  @default(now())
-  endDate   DateTime?
+  id                   String             @id @default(cuid())
+  userId               String
+  planId               String
+  status               SubscriptionStatus @default(ACTIVE)
+  startDate            DateTime           @default(now())
+  endDate              DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  stripeSubscriptionId String?            @unique
+  cancelAtPeriodEnd    Boolean            @default(false)
   /// Stripe current_period_end mirror for access checks.
-  currentPeriodEnd DateTime?
-  cancelAtPeriodEnd Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan SubscriptionPlan @relation(fields: [planId], references: [id])
-
-  stripeSubscriptionId String? @unique
-
-  metadata Json?
+  currentPeriodEnd     DateTime?
+  metadata             Json?
+  plan                 SubscriptionPlan   @relation(fields: [planId], references: [id])
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, status])
   @@index([planId])
   @@index([status, currentPeriodEnd])
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TOOL ACCESS CONTROL
-// ─────────────────────────────────────────────────────────────────────────────
-
-/// Why this user has access (audit + different expiry rules).
-enum ToolAccessSource {
-  /// Bought as ONE_TIME or completed checkout for tool line item.
-  PURCHASE
-  /// Included in an active subscription plan.
-  SUBSCRIPTION_PLAN
-  /// Admin / support manual grant.
-  MANUAL_GRANT
-  /// Time-limited promo or beta.
-  TRIAL
-}
-
 /// Effective entitlement: purchased, granted, or via plan. App checks this + active Subscription.
 model UserToolAccess {
-  id     String @id @default(cuid())
-  userId String
-  toolId String
-  /// Origin of access for support and revocation.
-  source ToolAccessSource @default(PURCHASE)
+  id        String           @id @default(cuid())
+  userId    String
+  toolId    String
   /// When access was granted.
-  grantedAt DateTime @default(now())
+  grantedAt DateTime         @default(now())
   /// Null = no expiry (lifetime / until revoked). Subscriptions may set aligned expiry.
   expiresAt DateTime?
   /// Optional link to the order that unlocked this tool.
-  orderId String?
-  order   Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tool Tool @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  orderId   String?
+  /// Origin of access for support and revocation.
+  source    ToolAccessSource @default(PURCHASE)
+  order     Order?           @relation(fields: [orderId], references: [id])
+  tool      Tool             @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, toolId])
   @@index([userId, expiresAt])
@@ -457,10 +306,6 @@ model UserToolAccess {
   @@index([source])
   @@index([orderId])
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ADMIN: MARKETING & APP SETTINGS
-// ─────────────────────────────────────────────────────────────────────────────
 
 model DiscountCode {
   id             String    @id @default(cuid())
@@ -483,7 +328,7 @@ model MarketingCampaign {
   id          String    @id @default(cuid())
   name        String
   slug        String    @unique
-  description String?   @db.Text
+  description String?
   active      Boolean   @default(true)
   startsAt    DateTime?
   endsAt      DateTime?
@@ -497,4 +342,95 @@ model AppSetting {
   key       String   @unique
   value     Json
   updatedAt DateTime @updatedAt
+}
+
+/// Access / monetization tier. SUBSCRIBER · PREMIUM · VIP should stay in sync with
+/// `Subscription` + Stripe webhooks; ADMIN is staff-only; GUEST for lightweight identities.
+enum UserRole {
+  GUEST
+  USER
+  SUBSCRIBER
+  PREMIUM
+  VIP
+  ADMIN
+}
+
+/// KONIK admin panel / operations role (orthogonal to customer `UserRole`).
+enum StaffRole {
+  SUPER_ADMIN
+  ADMIN
+  SALES
+  SHIPPING
+  MARKETING
+}
+
+enum ProductCategory {
+  T_SHIRT
+  HOODIE
+  JACKET
+  PANTS
+  ACCESSORIES
+  APPAREL
+  FOOTWEAR
+}
+
+/// How the customer obtains ongoing access to a tool.
+enum ToolAccessType {
+  /// Lifetime / single purchase unlock.
+  ONE_TIME
+  /// Access while a qualifying subscription is active.
+  SUBSCRIPTION
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum OrderItemType {
+  PRODUCT
+  TOOL
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+  TRIALING
+}
+
+/// Commercial plan tier label — aligns with UserRole SUBSCRIBER / PREMIUM / VIP for UX.
+enum SubscriptionPlanTier {
+  SUBSCRIBER
+  PREMIUM
+  VIP
+}
+
+/// Why this user has access (audit + different expiry rules).
+enum ToolAccessSource {
+  /// Bought as ONE_TIME or completed checkout for tool line item.
+  PURCHASE
+  /// Included in an active subscription plan.
+  SUBSCRIPTION_PLAN
+  /// Admin / support manual grant.
+  MANUAL_GRANT
+  /// Time-limited promo or beta.
+  TRIAL
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
 }

@@ -14,6 +14,8 @@ import {
 import { signOut } from "next-auth/react";
 import type { DashboardRoleContextValue } from "@/components/dashboard/dashboard-role-context";
 import { cn } from "@/lib/utils";
+import { PublicHeader } from "@/components/site/public-header";
+import { SiteFooter } from "@/components/site/site-footer";
 
 const desktopNav = [
   { href: "/dashboard/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -73,78 +75,100 @@ export function DashboardChrome({ session, hints, children }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-muted pb-24 md:pb-8">
-      <header className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <div className="flex min-w-0 items-center gap-3">
-            <Link href="/" className="shrink-0 text-lg font-bold text-primary">
-              KONIK
-            </Link>
-            <span
-              className={cn(
-                "hidden rounded-full border px-2 py-0.5 text-xs font-semibold sm:inline-block",
-                roleBadgeClass(role)
-              )}
-              title="Membership tier from subscription or admin"
-            >
-              {role}
-            </span>
-          </div>
-          <div className="flex shrink-0 items-center gap-3">
-            <span className="hidden max-w-[160px] truncate text-sm text-muted-foreground sm:inline">
-              {session.user?.name || session.user?.email}
-            </span>
+    <div className="flex min-h-screen flex-col bg-[#F8F8F8]">
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <PublicHeader />
+      </div>
+
+      <div className="mx-auto flex w-full max-w-[1920px] flex-1 gap-6 px-4 py-6 sm:px-6 lg:px-12 pt-[140px] sm:pt-[160px]">
+        <aside className="hidden w-52 shrink-0 md:block lg:w-64">
+          <nav className="sticky top-40 space-y-2">
+            <div className="mb-6 px-3">
+              <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#B8860B] block mb-2">
+                Account
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="max-w-[160px] truncate text-sm font-semibold text-[#121212]">
+                  {session.user?.name || session.user?.email?.split('@')[0]}
+                </span>
+                <span
+                  className={cn(
+                    "rounded border px-1.5 py-0.5 text-[10px] font-bold tracking-widest uppercase",
+                    roleBadgeClass(role)
+                  )}
+                  title="Membership tier"
+                >
+                  {role}
+                </span>
+              </div>
+            </div>
+
+            {desktopNav.map(({ href, label, icon: Icon }) => {
+              const active = isActive(href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 group relative",
+                    active
+                      ? "bg-[#121212] text-[#FFFFFF] shadow-md font-bold"
+                      : "text-[#4B5563] font-medium hover:bg-[#FFFFFF] hover:shadow-sm hover:text-[#121212]"
+                  )}
+                >
+                  <Icon 
+                    className={cn(
+                      "h-[18px] w-[18px] shrink-0 transition-colors", 
+                      active ? "text-[#B8860B]" : "text-[#4B5563] group-hover:text-[#B8860B]"
+                    )} 
+                    aria-hidden 
+                  />
+                  {label}
+                  {active && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#B8860B] rounded-r-full" />
+                  )}
+                </Link>
+              );
+            })}
+            
             <button
               type="button"
               onClick={() => void signOut({ callbackUrl: "/" })}
-              className="text-sm text-muted-foreground hover:text-primary"
+              className="mt-4 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-[#EF4444] transition-all hover:bg-red-50"
             >
               Sign out
             </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 sm:px-6">
-        <aside className="hidden w-52 shrink-0 md:block lg:w-56">
-          <nav className="sticky top-24 space-y-1 rounded-xl border border-border bg-white p-2">
-            {desktopNav.map(({ href, label, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition",
-                  isActive(href)
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:bg-muted hover:text-primary"
-                )}
-              >
-                <Icon className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
-                {label}
-              </Link>
-            ))}
           </nav>
-          {hints.isPremiumOrAbove && (
-            <p className="mt-4 px-2 text-xs text-muted-foreground">
-              You have premium-tier benefits. Explore locked tools for VIP
-              add-ons.
-            </p>
-          )}
-          {hints.isVipOrAbove && (
-            <p className="mt-2 px-2 text-xs font-medium text-amber-800">
-              VIP — full catalog access where included in your plan.
-            </p>
-          )}
+          
+          <div className="sticky top-[480px] mt-8">
+            {hints.isPremiumOrAbove && (
+              <div className="rounded-xl border border-[#B8860B]/20 bg-[#B8860B]/5 p-4 mx-2">
+                <p className="text-xs text-[#121212] leading-relaxed font-medium">
+                  Premium Tier Active. <span className="text-[#4B5563] font-normal">Explore locked tools for VIP add-ons.</span>
+                </p>
+              </div>
+            )}
+            {hints.isVipOrAbove && (
+              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 mx-2 mt-3">
+                <p className="text-xs font-bold text-amber-900 uppercase tracking-wide">
+                  VIP Access
+                </p>
+                <p className="text-[11px] text-amber-800/80 mt-1">Full catalog access enabled.</p>
+              </div>
+            )}
+          </div>
         </aside>
 
-        <main className="min-w-0 flex-1">{children}</main>
+        <main className="min-w-0 flex-1 bg-[#FFFFFF] rounded-2xl border border-[#E5E7EB] p-6 sm:p-8 shadow-sm">
+          {children}
+        </main>
       </div>
 
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-[60] border-t border-[#E5E7EB] bg-[#FFFFFF]/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
         aria-label="Dashboard"
       >
-        <div className="mx-auto flex max-w-lg justify-around px-1 pt-1">
+        <div className="mx-auto flex max-w-lg justify-around px-2 py-2">
           {mobileNav.map(({ href, label, icon: Icon }) => {
             const active = isActive(href);
             return (
@@ -152,20 +176,24 @@ export function DashboardChrome({ session, hints, children }: Props) {
                 key={href}
                 href={href}
                 className={cn(
-                  "flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-lg px-1 py-2 text-[10px] font-medium sm:text-xs",
-                  active ? "text-primary" : "text-muted-foreground"
+                  "flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors",
+                  active ? "text-[#121212]" : "text-[#4B5563] hover:text-[#121212]"
                 )}
               >
-                <Icon
-                  className={cn("h-5 w-5", active && "text-accent")}
-                  aria-hidden
-                />
+                <div className={cn(
+                  "flex h-8 w-8 items-center justify-center rounded-full mb-0.5 transition-colors",
+                  active ? "bg-[#B8860B] text-[#FFFFFF]" : "bg-transparent"
+                )}>
+                  <Icon className="h-4 w-4" aria-hidden />
+                </div>
                 <span className="truncate">{label}</span>
               </Link>
             );
           })}
         </div>
       </nav>
+
+      <SiteFooter />
     </div>
   );
 }

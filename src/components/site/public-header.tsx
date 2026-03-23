@@ -1,71 +1,150 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
-import { Search, Heart, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X, User as UserIcon, LogOut, LayoutDashboard, Package, CreditCard, User, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { MiniCart } from "@/components/cart/mini-cart";
+import { useSession, signOut } from "next-auth/react";
 
-const MEGA_MENU: Record<string, { featured: string[]; explore: string[]; images: { src: string; label: string; href: string }[] }> = {
-  "/shop": {
-    featured: ["New Arrivals", "Best Sellers", "Athleisure Collection", "Essentials", "Seamless Collection"],
-    explore: ["T-Shirts", "Hoodies & Jackets", "Joggers & Pants", "Shorts", "Accessories", "Limited Editions"],
+type MegaMenuColumn = {
+  title: string;
+  items: string[];
+};
+
+type MegaMenuData = {
+  columns: MegaMenuColumn[];
+  images: { src: string; label: string; href: string }[];
+};
+
+const MEGA_MENU: Record<string, MegaMenuData> = {
+  "/shop?category=APPAREL": {
+    columns: [
+      { title: "Just for You: Essentials", items: ["Regular T-Shirts", "Premium Polos", "Minimalist Hoodies", "Oversized Tees", "Compression Tees"] },
+      { title: "Bottom Wear", items: ["Premium Denims", "Tailored Pants", "Gym Shorts", "Joggers"] },
+      { title: "Performance Wear", items: ["Sweat-wicking Gym Shirts", "Compression Wear", "Training Sets", "Lightweight Training Jackets"] },
+      { title: "Outerwear", items: ["Minimalist Jackets", "Bomber Jackets", "Windbreakers"] },
+      { title: "Recovery Gear", items: ["Minimal Sleepwear", "Recovery Hoodies"] },
+    ],
     images: [
-      { src: "/discipline-uniform.png", label: "RECOMMENDED FOR YOU", href: "/shop" },
-      { src: "/hero-legacy.png", label: "NEW ARRIVALS", href: "/shop" },
-      { src: "/hero-mustang.png", label: "ACCESSORIES", href: "/shop" },
+      { src: "/discipline-uniform.png", label: "The Uniform", href: "/shop?category=APPAREL" },
+      { src: "/hero-legacy.png", label: "Elite Performance", href: "/shop?category=APPAREL" },
+      { src: "/hero-training.png", label: "Discipline Gear", href: "/shop?category=APPAREL" },
+    ],
+  },
+  "/shop?category=FOOTWEAR": {
+    columns: [
+      { title: "Just for You: Daily", items: ["White Sneakers", "Minimal Black Sneakers"] },
+      { title: "Smart Casual", items: ["Loafers", "Leather Slip-ons"] },
+      { title: "Performance", items: ["Training Shoes", "Running Shoes", "Gym Shoes (Flat Sole)"] },
+      { title: "Lifestyle Edge", items: ["High-top Sneakers", "Streetwear Sneakers"] },
+    ],
+    images: [
+      { src: "/hero-footwear.png", label: "The Rotation", href: "/shop?category=FOOTWEAR" },
+      { src: "/sneakers-minimal.png", label: "Daily Presence", href: "/shop?category=FOOTWEAR" },
+      { src: "/shoes-gym.png", label: "Technical Movement", href: "/shop?category=FOOTWEAR" },
+    ],
+  },
+  "/shop?category=ACCESSORIES": {
+    columns: [
+      { title: "Just for You: Wearables", items: ["Caps", "Rings", "Chains / Necklaces", "Bracelets"] },
+      { title: "Functional Daily Carry", items: ["Wallets", "Card Holders", "Premium Belts", "Crossbody Bags", "Backpacks"] },
+      { title: "Lifestyle Gear", items: ["Water Bottles", "Gym Towels", "Grip Straps"] },
+      { title: "Grooming", items: ["Beard Kits", "Skincare Basics", "Signature Perfume"] },
+    ],
+    images: [
+      { src: "/hero-accessories.png", label: "The Details", href: "/shop?category=ACCESSORIES" },
+      { src: "/accessories-jewelry.png", label: "Masculine Identity", href: "/shop?category=ACCESSORIES" },
+      { src: "/grooming-kit.png", label: "Elite Grooming", href: "/shop?category=ACCESSORIES" },
     ],
   },
   "/tools": {
-    featured: ["Habit Engine", "Goal Architect", "Legacy Planner", "Mind Forge"],
-    explore: ["Productivity", "Focus Sessions", "Daily Trackers", "Weekly Reviews", "Journaling"],
-    images: [
-      { src: "/hero-tools.png", label: "POPULAR SYSTEMS", href: "/tools" },
-      { src: "/hero-levelup.png", label: "START A SYSTEM", href: "/tools" },
+    columns: [
+      { title: "Just for You: Best System", items: ["Legacy Life Builder", "Budget Planner"] },
+      { title: "Build Legacy Life", items: ["Habit Architect", "Goal Engine"] },
+      { title: "Plan Legacy Budget", items: ["Wealth Control", "Focus Sessions"] },
     ],
-  },
-  "/plans": {
-    featured: ["Free Tier", "Legacy Pro", "VIP Membership"],
-    explore: ["Compare Plans", "Upgrade", "Benefits", "Community"],
     images: [
-      { src: "/hero-levelup.png", label: "CHOOSE YOUR PATH", href: "/plans" },
-      { src: "/hero-mustang.png", label: "VIP LIFESTYLE", href: "/plans" },
-      { src: "/hero-tools.png", label: "UNLOCK SYSTEMS", href: "/plans" },
+      { src: "/system-legacy.png", label: "Best System", href: "/tools" },
+      { src: "/hero-levelup.png", label: "Build Legacy Life", href: "/tools" },
+      { src: "/hero-tools.png", label: "Plan Legacy Budget", href: "/tools" },
     ],
   },
 };
 
 const MAIN_NAV = [
-  { href: "/shop", label: "The Collections" },
-  { href: "/tools", label: "The Systems" },
-  { href: "/plans", label: "The Paths" },
+  { href: "/shop?category=APPAREL", label: "Apparel" },
+  { href: "/shop?category=FOOTWEAR", label: "Footwear" },
+  { href: "/shop?category=ACCESSORIES", label: "Accessories" },
+  { href: "/tools", label: "Systems" },
 ] as const;
 
 const TOP_NAV = [
   { href: "/auth/register", label: "Start My Legacy" },
-  { href: "/company#about", label: "ABOUT KONIK" },
-  { href: "/help", label: "FEEDBACK" },
-  { href: "/auth/login", label: "LOG IN" },
+  { href: "/company#about", label: "About KONIK" },
+  { href: "/auth/login", label: "Log In" },
 ] as const;
 
 const ANNOUNCEMENTS = [
   "Make It Happen — No Excuses",
-  "Build Your Legacy",
-  "Standard Shipping — Free",
-  "Elite Performance — No Shortcuts"
+  "Build Your Legacy With KONIK",
+  "Shipping Free Over LKR 10 000",
 ] as const;
 
 export function PublicHeader() {
+  return (
+    <Suspense>
+      <PublicHeaderContent />
+    </Suspense>
+  );
+}
+
+function PublicHeaderContent() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentCategory = searchParams.get("category");
+  const { data: session } = useSession();
+
   const [open, setOpen] = useState(false);
+  const [mobileActiveCategory, setMobileActiveCategory] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [msgIndex, setMsgIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [dynamicAnnouncements, setDynamicAnnouncements] = useState<{ text: string; href: string }[]>([]);
+
+  // Fetch announcements
+  useEffect(() => {
+    fetch("/api/settings/announcements")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDynamicAnnouncements(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const announcementsToDisplay = dynamicAnnouncements.length > 0 
+    ? dynamicAnnouncements 
+    : ANNOUNCEMENTS.map(text => ({ text, href: "/shop" }));
+  const [profileOpen, setProfileOpen] = useState(false);
   const menuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const profileTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isHomePage = pathname === "/";
+
+  const isLinkActive = (href: string) => {
+    if (activeMenu === href) return true;
+    const [path, query] = href.split('?');
+    if (pathname !== path) return false;
+    if (!query) return true;
+    const category = new URLSearchParams(query).get("category");
+    return currentCategory === category;
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -77,10 +156,10 @@ export function PublicHeader() {
   useEffect(() => {
     if (isHovered) return;
     const interval = setInterval(() => {
-      setMsgIndex((prev) => (prev + 1) % ANNOUNCEMENTS.length);
-    }, 3000);
+      setMsgIndex((prev) => (prev + 1) % announcementsToDisplay.length);
+    }, 4500); // 4.5s for smoother reading
     return () => clearInterval(interval);
-  }, [isHovered]);
+  }, [isHovered, announcementsToDisplay.length]);
 
   // Lock body scroll when mobile drawer is open
   useEffect(() => {
@@ -116,7 +195,10 @@ export function PublicHeader() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full">
+    <header 
+      className="fixed top-0 left-0 right-0 z-50 w-full"
+      onMouseLeave={() => setActiveMenu(null)}
+    >
       {/* ── Tier 1: Top Utility Bar ── */}
       <motion.div 
         initial={false}
@@ -128,40 +210,60 @@ export function PublicHeader() {
         className="hidden md:block bg-[#F8F8F8] overflow-hidden whitespace-nowrap"
         style={{ borderBottomWidth: scrolled ? 0 : 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
       >
-        <div className="mx-auto flex max-w-[1920px] items-center justify-between px-6 lg:px-12 py-2 text-[11px] font-bold tracking-tight text-[#121212] grid grid-cols-3">
+        <div className="mx-auto flex max-w-[1920px] items-center justify-between px-6 lg:px-12 py-1 text-[12px] font-bold tracking-tight text-[#121212] grid grid-cols-3">
           <div className="flex-1" />
           
           {/* Announcement Carousel */}
           <div 
-            className="text-center font-poppins flex-1 col-start-2 h-4 relative overflow-hidden"
+            className="text-center font-poppins flex-1 col-start-2 h-5 relative overflow-hidden"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
             <AnimatePresence mode="wait">
+              <Link 
+                href={announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.href || "/shop"} 
+                className="absolute inset-0 z-10" 
+              />
               <motion.div
-                key={ANNOUNCEMENTS[msgIndex]}
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
+                key={announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                whileHover={{ scale: 1.02 }}
-                className="absolute left-1/2 -translate-x-1/2 top-0 text-[11px] font-medium text-[#4B5563] tracking-wide uppercase whitespace-nowrap cursor-default"
+                className="absolute left-1/2 underline -translate-x-1/2 top-1/2 -translate-y-1/2 text-[9px] font-medium text-[#555] tracking-wide whitespace-nowrap cursor-pointer hover:text-[#222] transition-colors"
               >
-                {ANNOUNCEMENTS[msgIndex]}
+                {announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
               </motion.div>
             </AnimatePresence>
           </div>
 
           <div className="flex flex-1 items-center justify-end gap-5">
-            {TOP_NAV.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="hover:text-[#B8860B] transition-colors uppercase whitespace-nowrap"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {session ? (
+              <>
+                <Link href="/auth/register" className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap">
+                   Start My Legacy
+                </Link>
+                <Link href="/company#about" className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap">
+                   About KONIK
+                </Link>
+                <button 
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="hover:text-[#EF4444] text-[#EF4444] font-bold font-poppins transition-colors whitespace-nowrap"
+                >
+                  Log Out
+                </button>
+              </>
+            ) : (
+              TOP_NAV.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap"
+                >
+                  {link.label}
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </motion.div>
@@ -170,30 +272,33 @@ export function PublicHeader() {
       <motion.div 
         initial={false}
         animate={{ 
-          height: scrolled ? 0 : "auto",
-          opacity: scrolled ? 0 : 1
+          height: "auto",
+          opacity: 1
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="md:hidden bg-[#F8F8F8] text-center overflow-hidden"
-        style={{ borderBottomWidth: scrolled ? 0 : 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
+        style={{ borderBottomWidth: 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
       >
-        <div className="py-1.5 px-4 w-full">
+        <div className="py-1 px-4 w-full">
           <div 
-            className="h-4 relative overflow-hidden w-full"
+            className="h-5 relative overflow-hidden w-full"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
             <AnimatePresence mode="wait">
+              <Link 
+                href={announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.href || "/shop"} 
+                className="absolute inset-0 z-10" 
+              />
               <motion.div
-                key={ANNOUNCEMENTS[msgIndex]}
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
+                key={announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                whileHover={{ scale: 1.02 }}
-                className="absolute left-1/2 -translate-x-1/2 top-0 text-[10px] sm:text-[11px] font-medium text-[#4B5563] uppercase tracking-wide whitespace-nowrap"
+                className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-[8px] sm:text-[9px] font-medium text-[#4B5563] tracking-wide whitespace-nowrap"
               >
-                {ANNOUNCEMENTS[msgIndex]}
+                {announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -204,8 +309,8 @@ export function PublicHeader() {
       <div
         className={`transition-all duration-300 border-b ${
           isTransparent 
-            ? "bg-transparent border-transparent py-4 md:py-6" 
-            : "bg-[#FFFFFF] border-[#E5E7EB] py-2 md:py-3 shadow-sm"
+            ? "bg-transparent border-transparent py-3 md:py-2.5" 
+            : "bg-[#FFFFFF] border-[#E5E7EB] py-2 md:py-1.5 shadow-sm"
         }`}
       >
         <div className="mx-auto flex max-w-[1920px] items-center justify-between px-4 sm:px-6 lg:px-12 gap-4 lg:gap-8 grid grid-cols-3">
@@ -217,7 +322,7 @@ export function PublicHeader() {
                 alt="KONIK Logo"
                 width={25}
                 height={25}
-                className="object-contain transition-all duration-300"
+                className="object-contain transition-all duration-300 w-[35px] h-[35px]"
                 priority
               />
             </Link>
@@ -228,24 +333,19 @@ export function PublicHeader() {
             {MAIN_NAV.map(({ href, label }) => (
               <div
                 key={href}
-                className="relative py-2"
-                onMouseEnter={() => handleMenuEnter(href)}
-                onMouseLeave={handleMenuLeave}
+                className="relative"
+                onMouseEnter={() => setActiveMenu(href)}
               >
                 <Link
                   href={href}
-                  className={`text-[12px] font-bold tracking-tight transition-colors duration-200 whitespace-nowrap ${navHoverColor} ${
-                    pathname === href || pathname.startsWith(href + "/") || activeMenu === href
+                  className={`text-[14px] font-bold tracking-tight transition-colors duration-200 whitespace-nowrap block py-4 ${navHoverColor} ${
+                    isLinkActive(href)
                     ? (isTransparent && activeMenu !== href ? "text-[#FFFFFF] underline underline-offset-8 decoration-2" : "text-[#121212] underline underline-offset-8 decoration-2")
                     : headerTextColor
                   }`}
                 >
                   {label}
                 </Link>
-                {/* Invisible bridge to connect nav item to dropdown */}
-                {activeMenu === href && (
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full w-[200px] h-6" />
-                )}
               </div>
             ))}
           </nav>
@@ -273,35 +373,91 @@ export function PublicHeader() {
             </div>
 
             {/* Mobile search */}
-            <button className={`lg:hidden p-1.5 rounded-full flex items-center justify-center transition-colors ${
+            <button className={`lg:hidden p-2.5 rounded-full flex items-center justify-center transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
-              <Search className="w-5 h-5" color={iconColor} strokeWidth={1.5} />
+              <Search className="w-7 h-7" color={iconColor} strokeWidth={1.5} />
             </button>
 
-            <button className={`flex p-1.5 flex items-center justify-center rounded-full transition-colors ${
+            <button className={`flex p-2.5 items-center justify-center rounded-full transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
-              <Heart className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
+              <Heart className="w-7 h-7 sm:w-8 sm:h-8" color={iconColor} strokeWidth={1.5} />
             </button>
 
-            <Link href="/cart" className={`p-1.5 rounded-full flex items-center justify-center transition-colors relative ${
-              isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
-            }`}>
-              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
-              <span className="absolute -top-1 -right-1 bg-[#B8860B] text-[#FFFFFF] text-[9px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold">
-                0
-              </span>
-            </Link>
+            <MiniCart 
+              isTransparent={isTransparent} 
+              iconColor={iconColor} 
+            />
+
+            {/* User Profile Dropdown (Desktop & Mobile) */}
+            {session && (
+              <div 
+                className="relative"
+                onMouseEnter={() => {
+                  if (profileTimeout.current) clearTimeout(profileTimeout.current);
+                  setProfileOpen(true);
+                }}
+                onMouseLeave={() => {
+                  profileTimeout.current = setTimeout(() => setProfileOpen(false), 200);
+                }}
+              >
+                <button 
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className={`p-2 rounded-full flex items-center justify-center transition-colors ${
+                    isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
+                  }`}
+                >
+                  <UserIcon className="w-7 h-7 sm:w-8 sm:h-8" color={iconColor} strokeWidth={1.5} />
+                </button>
+                
+                <AnimatePresence>
+                  {profileOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute right-0 top-full pt-2 w-64 z-[100]"
+                    >
+                      <div className="bg-[#FFFFFF] border border-[#E5E7EB] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-xl overflow-hidden backdrop-blur-xl">
+                         {/* User Info - Ultra Minimal */}
+                         <div className="px-4 py-3 border-b border-[#F3F4F6]">
+                            <p className="text-[11px] font-bold text-[#121212] truncate uppercase tracking-tight font-poppins">{session.user?.name || session.user?.email}</p>
+                         </div>
+                         
+                         {/* Links - Text Only */}
+                         <div className="p-1.5 space-y-0.5">
+                            {[
+                              { href: "/dashboard/dashboard", label: "Dashboard" },
+                              { href: "/dashboard/dashboard/orders", label: "Orders" },
+                              { href: "/dashboard/dashboard/subscription", label: "Membership" },
+                              { href: "/dashboard/dashboard/profile", label: "Profile" },
+                            ].map(item => (
+                              <Link
+                                key={item.href}
+                                href={item.href}
+                                className="block px-3 py-2 rounded-lg text-[10px] font-bold uppercase tracking-[0.1em] text-[#4B5563] hover:bg-[#F8F8F8] hover:text-[#121212] transition-colors font-poppins"
+                                onClick={() => setProfileOpen(false)}
+                              >
+                                {item.label}
+                              </Link>
+                            ))}
+                         </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
             {/* Mobile hamburger */}
             <button
               onClick={() => setOpen(true)}
-              className={`lg:hidden p-1.5 rounded-full flex items-center justify-center transition-colors ${
+              className={`lg:hidden p-2.5 rounded-full flex items-center justify-center transition-colors ${
                 isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
               }`}
             >
-              <Menu className="w-6 h-6" color={iconColor} strokeWidth={1.5} />
+              <Menu className="w-8 h-8" color={iconColor} strokeWidth={1.5} />
             </button>
           </div>
         </div>
@@ -312,76 +468,71 @@ export function PublicHeader() {
         {activeMenu && MEGA_MENU[activeMenu] && (
           <motion.div
             key={activeMenu}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="hidden lg:block absolute left-0 right-0 bg-[#FFFFFF] border-b border-[#E5E7EB] shadow-lg z-[48] overflow-hidden"
-            onMouseEnter={handleDropdownEnter}
-            onMouseLeave={handleDropdownLeave}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="hidden lg:block absolute top-full left-0 right-0 bg-[#FFFFFF] border-b border-[#E5E7EB] shadow-2xl z-50 overflow-hidden"
+            onMouseEnter={() => setActiveMenu(activeMenu)}
           >
-            <div className="mx-auto max-w-[1440px] px-12 py-10 flex gap-16">
-              {/* Left Columns: Featured + Explore */}
-              <div className="flex gap-14 min-w-[280px] shrink-0">
-                <div>
-                  <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#121212] mb-5">
-                    Featured
-                  </h4>
-                  <ul className="space-y-3">
-                    {MEGA_MENU[activeMenu].featured.map((item) => (
-                      <li key={item}>
-                        <Link
-                          href={activeMenu}
-                          className="text-[13px] text-[#4B5563] hover:text-[#121212] transition-colors duration-200 block"
-                          onClick={() => setActiveMenu(null)}
-                        >
-                          {item}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+            <div className="mx-auto max-w-[1920px] px-6 lg:px-12 py-14">
+              <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 items-start">
+                {/* Left: Categories Grid */}
+                <div className="flex-1 flex flex-wrap gap-x-16 xl:gap-x-20 gap-y-12">
+                  {MEGA_MENU[activeMenu].columns.map((col) => {
+                    const isSpecial = col.title.includes("Just for You");
+                    return (
+                      <div key={col.title} className="flex flex-col min-w-0">
+                        <h4 className="text-[11px] font-bold tracking-normal text-[#121212] mb-8 font-poppins flex items-center gap-2 min-h-[20px] whitespace-nowrap">
+                          {isSpecial && <Sparkles className="w-3 h-3 text-[#B8860B] shrink-0" />}
+                          <span className={isSpecial ? "text-[#B8860B]" : ""}>
+                            {col.title.replace("Just for You: ", "")}
+                          </span>
+                        </h4>
+                        <ul className="space-y-4">
+                          {col.items.map((item) => (
+                            <li key={item}>
+                              <Link
+                                href={activeMenu}
+                                className="text-[11px] text-[#4B5563] hover:text-[#B8860B] transition-colors duration-200 block font-poppins whitespace-nowrap"
+                                onClick={() => setActiveMenu(null)}
+                              >
+                                {item}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
                 </div>
-                <div>
-                  <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#121212] mb-5">
-                    Explore
-                  </h4>
-                  <ul className="space-y-3">
-                    {MEGA_MENU[activeMenu].explore.map((item) => (
-                      <li key={item}>
-                        <Link
-                          href={activeMenu}
-                          className="text-[13px] text-[#4B5563] hover:text-[#121212] transition-colors duration-200 block"
-                          onClick={() => setActiveMenu(null)}
-                        >
-                          {item}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
 
-              {/* Right: Image Cards */}
-              <div className="flex-1 grid grid-cols-3 gap-4">
-                {MEGA_MENU[activeMenu].images.map((img) => (
-                  <Link
-                    key={img.label}
-                    href={img.href}
-                    className="relative aspect-[4/3] overflow-hidden group"
-                    onClick={() => setActiveMenu(null)}
-                  >
-                    <Image
-                      src={img.src}
-                      alt={img.label}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-[#121212]/40 group-hover:bg-[#121212]/50 transition-colors" />
-                    <span className="absolute bottom-4 left-4 text-[11px] font-bold tracking-[0.15em] uppercase text-[#FFFFFF]">
-                      {img.label}
-                    </span>
-                  </Link>
-                ))}
+                {/* Right: Image Cards */}
+                <div className="w-full lg:w-[320px] xl:w-[450px] shrink-0">
+                  <div className="grid grid-cols-3 gap-4 h-full">
+                    {MEGA_MENU[activeMenu].images.map((img) => (
+                      <Link
+                        key={img.label}
+                        href={img.href}
+                        className="relative aspect-[3/4] xl:aspect-[4/5] overflow-hidden group rounded-sm shadow-sm"
+                        onClick={() => setActiveMenu(null)}
+                      >
+                        <Image
+                          src={img.src}
+                          alt={img.label}
+                          fill
+                          className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/90 via-[#121212]/20 to-transparent opacity-40 group-hover:opacity-60 transition-opacity" />
+                        <div className="absolute bottom-6 left-6 right-6">
+                          <span className="text-[9px] font-bold tracking-normal text-[#FFFFFF] font-poppins drop-shadow-lg block leading-tight truncate">
+                            {img.label}
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -399,7 +550,7 @@ export function PublicHeader() {
 
       {/* Drawer panel */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-[60] w-[75vw] bg-[#121212] transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
+        className={`fixed top-0 right-0 bottom-0 z-[60] w-[85vw] bg-[#121212] transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -409,55 +560,132 @@ export function PublicHeader() {
             onClick={() => setOpen(false)}
             className="text-[#FFFFFF] p-2 hover:bg-[#FFFFFF]/10 rounded-full transition-colors"
           >
-            <X className="w-7 h-7" strokeWidth={1.5} />
+            <X className="w-8 h-8" strokeWidth={1.5} />
           </button>
         </div>
 
         <div className="flex flex-col flex-1 overflow-y-auto px-8 sm:px-10 pb-10">
+          {session && (
+            <div className="mb-10 pb-10 border-b border-[#FFFFFF]/5">
+               <span className="inline-block px-2 py-0.5 rounded-full bg-[#B8860B]/10 text-[9px] font-bold uppercase tracking-widest text-[#B8860B] mb-3 font-atmospheric">ACCOUNT ACTIVE</span>
+               <p className="text-lg font-bold text-[#FFFFFF] font-poppins leading-tight truncate uppercase tracking-tight">{session.user?.name || session.user?.email}</p>
+            </div>
+          )}
+
           {/* Main links */}
-          <nav className="space-y-7 mb-10">
+          <nav className="space-y-4 mb-10 overflow-x-hidden">
             {MAIN_NAV.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className={`block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric transition-colors ${
-                  pathname === href || pathname.startsWith(href + "/")
-                    ? "text-[#B8860B]"
-                    : "text-[#FFFFFF] hover:text-[#FFFFFF]/70"
-                }`}
-                onClick={() => setOpen(false)}
-              >
-                {label}
-              </Link>
+              <div key={href} className="border-b border-[#FFFFFF]/5 pb-4">
+                <button
+                  onClick={() => setMobileActiveCategory(mobileActiveCategory === href ? null : href)}
+                  className={`flex items-center justify-between w-full text-left text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins transition-colors uppercase ${
+                    isLinkActive(href) || mobileActiveCategory === href
+                      ? "text-[#B8860B]"
+                      : "text-[#FFFFFF]"
+                  }`}
+                >
+                  <span>{label}</span>
+                  <motion.span
+                    animate={{ rotate: mobileActiveCategory === href ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-4 h-4 opacity-30" />
+                  </motion.span>
+                </button>
+                
+                <AnimatePresence>
+                  {mobileActiveCategory === href && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-6 space-y-8 pl-4 border-l border-[#B8860B]/20 ml-2">
+                        {MEGA_MENU[href].columns.map(col => (
+                          <div key={col.title}>
+                            <h5 className="text-[11px] font-bold tracking-normal text-[#B8860B] mb-3 font-poppins truncate">
+                              {col.title}
+                            </h5>
+                            <ul className="space-y-3">
+                              {col.items.map(item => (
+                                <li key={item}>
+                                  <Link
+                                    href={href}
+                                    onClick={() => setOpen(false)}
+                                    className="text-[12px] font-medium text-[#FFFFFF]/50 hover:text-[#FFFFFF] block"
+                                  >
+                                    {item}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                        
+                        {/* Mobile Category Action */}
+                        <Link
+                          href={href}
+                          onClick={() => setOpen(false)}
+                          className="inline-block pt-4 text-[10px] font-bold tracking-widest text-[#B8860B] border-b border-[#B8860B]/30 pb-1"
+                        >
+                          View Full Collection
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ))}
           </nav>
 
+          {/* User Links (if logged in) */}
+          {session && (
+             <div className="space-y-5 mb-10 pb-10 border-b border-[#FFFFFF]/5 font-atmospheric">
+                {[
+                  { href: "/dashboard/dashboard", label: "Overview" },
+                  { href: "/dashboard/dashboard/orders", label: "My Orders" },
+                  { href: "/dashboard/dashboard/subscription", label: "Membership" },
+                  { href: "/dashboard/dashboard/profile", label: "Profile Settings" },
+                ].map(item => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block text-[14px] font-bold text-[#FFFFFF]/60 hover:text-[#B8860B] tracking-widest transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+             </div>
+          )}
+
           {/* Secondary */}
-          <div className="border-t border-[#FFFFFF]/10 pt-8 mb-8 space-y-5">
+          <div className="pt-2 mb-8 space-y-5">
             <Link
               href="/plans"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins uppercase text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Start My Legacy
             </Link>
             <Link
-              href="/about"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              href="/company"
+              className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins uppercase text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               About Konik
             </Link>
             <Link
               href="/feedback"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins uppercase text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Feedback
             </Link>
             <Link
               href="/help"
-              className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+              className="block text-[14px] sm:text-[16px] font-bold tracking-widest uppercase font-poppins text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
               Help
@@ -465,28 +693,44 @@ export function PublicHeader() {
           </div>
 
           {/* CTA copy */}
-          <p className="text-[#FFFFFF]/50 text-[15px] leading-relaxed mb-8 pr-4">
-            Become a KONIKER, unlock premium products, real inspiration, and
-            powerful stories that fuel your journey.
+          <p className="text-[#FFFFFF]/50 text-[14px] leading-relaxed mb-8 pr-4">
+             Unlock premium systems, elite performance gear, and 
+             the framework for your relentless pursuit.
           </p>
 
           {/* Buttons */}
-          <div className="flex gap-3 mt-auto">
-            <Link
-              href="/auth/register"
-              onClick={() => setOpen(false)}
-              className="flex-1 bg-[#FFFFFF] text-[#121212] py-3.5 text-center text-[13px] font-bold uppercase tracking-[0.15em] hover:bg-[#F8F8F8] transition-colors"
-            >
-              Join Us
-            </Link>
-            <Link
-              href="/auth/login"
-              onClick={() => setOpen(false)}
-              className="flex-1 border-2 border-[#FFFFFF] text-[#FFFFFF] py-3.5 text-center text-[13px] font-bold uppercase tracking-[0.15em] hover:bg-[#FFFFFF]/10 transition-colors"
-            >
-              Log In
-            </Link>
+          <div className="flex flex-col gap-3 mt-auto">
+            {!session && (
+              <>
+                <Link
+                  href="/auth/register"
+                  onClick={() => setOpen(false)}
+                   className="w-full bg-[#FFFFFF] text-[#121212] py-4 rounded-full text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors font-poppins"
+                >
+                  Join the Legacy
+                </Link>
+                <Link
+                  href="/auth/login"
+                  onClick={() => setOpen(false)}
+                  className="w-full border border-[#FFFFFF] text-[#FFFFFF] py-4 rounded-full text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#FFFFFF]/10 transition-colors font-poppins"
+                >
+                  Log In
+                </Link>
+              </>
+            )}
+            {session && (
+               <button
+                onClick={() => {
+                  setOpen(false);
+                  signOut({ callbackUrl: "/" });
+                }}
+                className="w-full border border-[#EF4444] text-[#EF4444] py-4 rounded-full text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-red-500/10 transition-colors font-poppins"
+              >
+                Log Out
+              </button>
+            )}
           </div>
+
         </div>
       </div>
     </header>

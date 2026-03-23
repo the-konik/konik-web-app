@@ -50,9 +50,11 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
   const role = req.auth?.user?.role as UserRole | undefined;
 
-  const isPublicRoute = publicRoutes.some(
+  const isPublicRoute = pathname === "/" || publicRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
+
+  console.log(`Middleware: ${pathname} | isPublic: ${isPublicRoute} | isLoggedIn: ${isLoggedIn}`);
 
   const isAdminRoute = adminRoutePrefixes.some((prefix) =>
     matchesPrefix(pathname, prefix)

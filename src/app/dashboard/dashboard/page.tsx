@@ -30,10 +30,10 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-primary">
-          Welcome back, {firstName}
+        <h1 className="font-atmospheric text-3xl sm:text-4xl text-[#121212] tracking-tight">
+          WELCOME BACK, {firstName.toUpperCase()}
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm text-[#4B5563] mt-2">
           Your KONIK hub — orders, clothing, tools, and membership.
         </p>
       </div>
@@ -43,57 +43,57 @@ export default async function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Link
           href="/dashboard/dashboard/products"
-          className="rounded-xl border border-border bg-white p-5 transition hover:border-accent"
+          className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 transition-colors hover:border-[#B8860B] group"
         >
-          <p className="text-sm text-muted-foreground">My Products</p>
-          <p className="mt-1 text-2xl font-bold text-primary">
+          <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#4B5563]">My Products</p>
+          <p className="mt-2 text-3xl font-bold text-[#121212]">
             {products.length}
           </p>
-          <span className="mt-2 inline-block text-xs text-accent">
+          <span className="mt-3 inline-block text-xs font-bold text-[#B8860B] tracking-wide uppercase group-hover:underline">
             Clothing →
           </span>
         </Link>
         <Link
           href="/dashboard/dashboard/tools"
-          className="rounded-xl border border-border bg-white p-5 transition hover:border-accent"
+          className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 transition-colors hover:border-[#B8860B] group"
         >
-          <p className="text-sm text-muted-foreground">Tools unlocked</p>
-          <p className="mt-1 text-2xl font-bold text-primary">
+          <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#4B5563]">Tools unlocked</p>
+          <p className="mt-2 text-3xl font-bold text-[#121212]">
             {tools.length}
           </p>
-          <span className="mt-2 inline-block text-xs text-accent">
+          <span className="mt-3 inline-block text-xs font-bold text-[#B8860B] tracking-wide uppercase group-hover:underline">
             Open tools →
           </span>
         </Link>
         <Link
           href="/dashboard/dashboard/orders"
-          className="rounded-xl border border-border bg-white p-5 transition hover:border-accent"
+          className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 transition-colors hover:border-[#B8860B] group"
         >
-          <p className="text-sm text-muted-foreground">Orders</p>
-          <p className="mt-1 text-2xl font-bold text-primary">{orderCount}</p>
-          <span className="mt-2 inline-block text-xs text-accent">
+          <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#4B5563]">Orders</p>
+          <p className="mt-2 text-3xl font-bold text-[#121212]">{orderCount}</p>
+          <span className="mt-3 inline-block text-xs font-bold text-[#B8860B] tracking-wide uppercase group-hover:underline">
             History →
           </span>
         </Link>
         <Link
           href="/dashboard/dashboard/subscription"
-          className="rounded-xl border border-border bg-white p-5 transition hover:border-accent"
+          className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 transition-colors hover:border-[#B8860B] group"
         >
-          <p className="text-sm text-muted-foreground">Subscription</p>
-          <p className="mt-1 text-lg font-bold leading-tight text-primary">
+          <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#4B5563]">Subscription</p>
+          <p className="mt-2 text-lg font-bold leading-tight text-[#121212]">
             {subscription ? subscription.plan.name : "None"}
           </p>
           {subscription && (
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-1 text-xs text-[#4B5563]">
               {subscription.status} · {subscription.plan.tier}
             </p>
           )}
           {!subscription && payingSubCount > 0 && (
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-1 text-xs text-[#4B5563]">
               {payingSubCount} record(s)
             </p>
           )}
-          <span className="mt-2 inline-block text-xs text-accent">
+          <span className="mt-3 inline-block text-xs font-bold text-[#B8860B] tracking-wide uppercase group-hover:underline">
             {subscription || payingSubCount
               ? "Manage →"
               : "Browse plans →"}
@@ -102,18 +102,18 @@ export default async function DashboardPage() {
       </div>
 
       {subscription && (
-        <div className="rounded-xl border border-border bg-white p-5">
-          <h2 className="text-sm font-semibold text-primary">
+        <div className="rounded-xl border border-[#E5E7EB] bg-[#F8F8F8] p-6">
+          <h2 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#121212]">
             Subscription snapshot
           </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {subscription.plan.name} —{" "}
+          <p className="mt-2 text-sm text-[#4B5563]">
+            <strong className="text-[#121212]">{subscription.plan.name}</strong> —{" "}
             {formatPrice(subscription.plan.price.toString())}/
             {subscription.plan.interval} · {subscription.status}
           </p>
           <Link
             href="/dashboard/dashboard/subscription"
-            className="mt-3 inline-block text-sm font-medium text-accent hover:underline"
+            className="mt-4 inline-block text-xs font-bold text-[#B8860B] tracking-wide uppercase hover:underline"
           >
             Full details & billing
           </Link>

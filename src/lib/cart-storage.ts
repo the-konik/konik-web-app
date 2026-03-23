@@ -20,6 +20,12 @@ export function loadCartFromStorage(): CartLine[] {
 export function saveCartToStorage(lines: CartLine[]) {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(lines));
+  window.dispatchEvent(new CustomEvent("cart:updated"));
+}
+
+export function openCartDrawer() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("cart:open"));
 }
 
 export function cartLineKey(line: CartLine): string {
