@@ -19,39 +19,48 @@ export default async function OrdersPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-primary">My Orders</h1>
-        <p className="text-muted-foreground">Track your purchase history.</p>
+        <h1 className="font-atmospheric text-3xl sm:text-4xl text-[#121212] tracking-tight">MY ORDERS</h1>
+        <p className="text-sm text-[#4B5563] mt-2">Track your purchase history.</p>
       </div>
 
       {orders.length === 0 ? (
-        <div className="rounded-xl border border-border bg-white p-12 text-center">
-          <p className="text-muted-foreground">No orders yet.</p>
+        <div className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-12 text-center shadow-sm">
+          <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#4B5563]">No orders yet.</p>
+          <a
+            href="/shop"
+            className="mt-6 inline-block bg-[#121212] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#FFFFFF] hover:bg-[#121212]/90 transition-colors"
+          >
+            Start Shopping
+          </a>
         </div>
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
             <div
               key={order.id}
-              className="rounded-xl border border-border bg-white p-6"
+              className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-6 shadow-sm flex flex-col sm:flex-row gap-6 relative group"
             >
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-1">
+                  <p className="text-sm font-bold text-[#121212]">
                     Order #{order.id.slice(-8).toUpperCase()}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <span className="text-[10px] bg-[#F8F8F8] px-2 py-0.5 rounded text-[#4B5563] font-medium border border-[#E5E7EB]">
                     {new Date(order.createdAt).toLocaleDateString()}
-                  </p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    <span className="font-medium text-primary">Payment: </span>
+                  </span>
+                </div>
+                
+                <div className="mt-4 space-y-1">
+                  <p className="text-[11px] text-[#4B5563]">
+                    <span className="font-bold tracking-wider uppercase text-[#121212]">Payment: </span>
                     {order.paymentStatus === "PAID"
                       ? "Paid — digital items unlock automatically; physical items ship next."
                       : order.paymentStatus === "PENDING"
                         ? "Pending — complete checkout or wait for Stripe confirmation."
                         : order.paymentStatus}
                   </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    <span className="font-medium text-primary">Shipment: </span>
+                  <p className="text-[11px] text-[#4B5563]">
+                    <span className="font-bold tracking-wider uppercase text-[#121212]">Shipment: </span>
                     {order.status === "DELIVERED"
                       ? "Delivered (or digital-only complete)."
                       : order.status === "SHIPPED"
@@ -63,33 +72,36 @@ export default async function OrdersPage() {
                             : order.status}
                   </p>
                 </div>
-                <div className="text-left sm:text-right">
-                  <p className="font-semibold text-primary">
-                    {formatPrice(order.totalAmount.toString())}
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-2 sm:justify-end">
-                    <span className="inline-block rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                      Pay: {order.paymentStatus}
-                    </span>
-                    <span className="inline-block rounded-full bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
-                      Ship: {order.status}
-                    </span>
-                  </div>
+
+                <div className="mt-5 space-y-2 border-t border-[#E5E7EB] pt-4">
+                  {order.items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex justify-between items-center text-sm"
+                    >
+                      <span className="text-[#4B5563] font-medium">
+                        {item.product?.name || item.tool?.name || "Item"}{" "}
+                        {item.quantity > 1 && <span className="text-[#121212] font-bold">x{item.quantity}</span>}
+                      </span>
+                      <span className="text-[#121212] font-semibold">{formatPrice(item.price.toString())}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="mt-4 space-y-2">
-                {order.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between text-sm text-muted-foreground"
+
+              <div className="sm:text-right flex flex-col justify-between sm:w-48 shrink-0 border-t sm:border-t-0 border-[#E5E7EB] pt-4 sm:pt-0">
+                <p className="text-xl font-bold text-[#B8860B] mb-2 sm:mb-0">
+                  {formatPrice(order.totalAmount.toString())}
+                </p>
+                
+                <div className="flex sm:flex-col gap-2 justify-end items-end sm:mt-auto">
+                  <a
+                    href={`/dashboard/dashboard/orders/${order.id}`}
+                    className="flex-1 sm:flex-none text-center bg-[#F8F8F8] whitespace-nowrap text-[#121212] border border-[#E5E7EB] px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:border-[#B8860B] transition-colors"
                   >
-                    <span>
-                      {item.product?.name || item.tool?.name || "Item"}{" "}
-                      {item.quantity > 1 && `x${item.quantity}`}
-                    </span>
-                    <span>{formatPrice(item.price.toString())}</span>
-                  </div>
-                ))}
+                    View Details
+                  </a>
+                </div>
               </div>
             </div>
           ))}

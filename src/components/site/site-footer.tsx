@@ -5,13 +5,23 @@ const COL_1 = [
   { href: "/shop", label: "The Collection" },
   { href: "/tools", label: "The Systems" },
   { href: "/plans", label: "The Path" },
+  { href: "/company", label: "About The Legacy" },
+  { href: "/search", label: "Search" },
 ] as const;
 
 const COL_2 = [
-  { href: "/cart", label: "Cart" },
-  { href: "/auth/login", label: "Command Center" },
-  { href: "/help", label: "Support The Pursuit" },
-  { href: "/auth/register", label: "Join The Legacy" },
+  { href: "/dashboard/dashboard", label: "Command Center" },
+  { href: "/dashboard/dashboard/orders", label: "My Orders" },
+  { href: "/dashboard/dashboard/tools", label: "My Tools" },
+  { href: "/dashboard/dashboard/subscription", label: "Membership" },
+  { href: "/dashboard/dashboard/profile", label: "Profile Settings" },
+] as const;
+
+const COL_3 = [
+  { href: "/help", label: "Help Center" },
+  { href: "/shipping", label: "Shipping & Returns" },
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Service" },
 ] as const;
 
 export function SiteFooter() {
@@ -65,6 +75,24 @@ export function SiteFooter() {
             </h4>
             <nav className="flex flex-col gap-3" aria-label="Footer account">
               {COL_2.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-sm text-[#FFFFFF]/60 hover:text-[#FFFFFF] transition-colors"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Nav col 3 */}
+          <div>
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B8860B] mb-6">
+              Support
+            </h4>
+            <nav className="flex flex-col gap-3" aria-label="Footer support">
+              {COL_3.map(({ href, label }) => (
                 <Link
                   key={href}
                   href={href}

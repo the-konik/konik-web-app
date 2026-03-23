@@ -6,6 +6,7 @@ import {
   loadCartFromStorage,
   mergeCartLine,
   saveCartToStorage,
+  openCartDrawer,
   type CartLine,
 } from "@/lib/cart-storage";
 
@@ -20,21 +21,25 @@ export function AddToCartProduct({ productId, stock, sizes, colors }: Props) {
   const [size, setSize] = useState(sizes[0] ?? "");
   const [color, setColor] = useState(colors[0] ?? "");
   const [qty, setQty] = useState(1);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const needSize = sizes.length > 0;
   const needColor = colors.length > 0;
 
   function add() {
-    setMsg(null);
+    setErrorMsg(null);
     if (needSize && !size) {
-      setMsg("Choose a size.");
+      setErrorMsg("Please select a size.");
       return;
     }
     if (needColor && !color) {
-      setMsg("Choose a color.");
+      setErrorMsg("Please select a color.");
       return;
     }
+    
+    setLoading(true);
+    
     const line: CartLine = {
       type: "PRODUCT",
       productId,
@@ -42,9 +47,14 @@ export function AddToCartProduct({ productId, stock, sizes, colors }: Props) {
       ...(size ? { size } : {}),
       ...(color ? { color } : {}),
     };
+    
     const prev = loadCartFromStorage();
     saveCartToStorage(mergeCartLine(prev, line));
-    setMsg("Added to cart.");
+    
+    setTimeout(() => {
+      setLoading(false);
+      openCartDrawer();
+    }, 400);
   }
 
   if (stock <= 0) {
@@ -52,84 +62,96 @@ export function AddToCartProduct({ productId, stock, sizes, colors }: Props) {
       <button
         type="button"
         disabled
-        className="mt-10 w-full cursor-not-allowed rounded-lg bg-muted py-3 font-medium text-muted-foreground opacity-70"
+        className="mt-10 w-full cursor-not-allowed bg-[#E5E7EB] py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#4B5563]"
       >
-        Unavailable
+        Sold Out
       </button>
     );
   }
 
   return (
-    <div className="mt-10 space-y-4">
-      <div className="flex flex-wrap gap-4">
+    <div className="mt-10 space-y-8">
+      <div className="flex flex-wrap gap-10">
         {sizes.length > 0 && (
-          <label className="flex flex-col text-sm">
-            <span className="font-medium text-primary">Size</span>
-            <select
-              value={size}
-              onChange={(e) => setSize(e.target.value)}
-              className="mt-1 rounded-lg border border-border bg-white px-3 py-2 text-primary"
-            >
-              <option value="">Select…</option>
-              {sizes.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div className="flex flex-col gap-3 min-w-[120px]">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-[#121212]">Select Size</span>
+            <div className="flex flex-wrap gap-2">
+               {sizes.map(s => (
+                 <button
+                   key={s}
+                   type="button"
+                   onClick={() => setSize(s)}
+                   className={`px-4 py-2 text-xs font-bold transition-all border ${
+                     size === s 
+                      ? "border-[#121212] bg-[#121212] text-[#FFFFFF]" 
+                      : "border-[#E5E7EB] bg-transparent text-[#121212] hover:border-[#121212]"
+                   }`}
+                 >
+                   {s}
+                 </button>
+               ))}
+            </div>
+          </div>
         )}
+        
         {colors.length > 0 && (
-          <label className="flex flex-col text-sm">
-            <span className="font-medium text-primary">Color</span>
+          <div className="flex flex-col gap-3 min-w-[120px]">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-[#121212]">Select Color</span>
             <select
               value={color}
               onChange={(e) => setColor(e.target.value)}
-              className="mt-1 rounded-lg border border-border bg-white px-3 py-2 text-primary"
+              className="w-full rounded-none border-b border-[#E5E7EB] bg-transparent pb-1.5 text-sm font-medium text-[#121212] focus:border-[#B8860B] focus:outline-none focus:ring-0 appearance-none cursor-pointer"
             >
-              <option value="">Select…</option>
+              <option value="">Choose color</option>
               {colors.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
+                <option key={c} value={c}>{c}</option>
               ))}
             </select>
-          </label>
+          </div>
         )}
-        <label className="flex flex-col text-sm">
-          <span className="font-medium text-primary">Qty</span>
-          <input
-            type="number"
-            min={1}
-            max={Math.min(99, stock)}
-            value={qty}
-            onChange={(e) =>
-              setQty(
-                Math.max(
-                  1,
-                  Math.min(Math.min(99, stock), Number(e.target.value) || 1)
-                )
-              )
-            }
-            className="mt-1 w-24 rounded-lg border border-border bg-white px-3 py-2 text-primary"
-          />
-        </label>
+
+        <div className="flex flex-col gap-3">
+          <span className="text-[10px] font-bold tracking-widest uppercase text-[#121212]">Quantity</span>
+          <div className="flex items-center gap-4 border border-[#E5E7EB] bg-[#FFFFFF] px-3 py-1.5 w-max">
+             <button 
+               type="button" 
+               onClick={() => setQty(Math.max(1, qty - 1))}
+               className="text-[#4B5563] hover:text-[#121212] transition-colors"
+             >
+               —
+             </button>
+             <span className="text-sm font-bold text-[#121212] min-w-[20px] text-center">{qty}</span>
+             <button 
+               type="button" 
+               onClick={() => setQty(Math.min(stock, qty + 1))}
+               className="text-[#4B5563] hover:text-[#121212] transition-colors"
+             >
+               +
+             </button>
+          </div>
+        </div>
       </div>
-      <button
-        type="button"
-        onClick={add}
-        className="w-full rounded-lg bg-accent py-3 font-medium text-accent-foreground hover:bg-accent/90"
-      >
-        Add to cart
-      </button>
-      {msg && (
-        <p className="text-center text-sm text-muted-foreground">{msg}</p>
-      )}
-      <p className="text-center text-xs text-muted-foreground">
-        Cart is stored on this device (
-        <code className="rounded bg-muted px-1">{CART_STORAGE_KEY}</code>
-        ).
-      </p>
+
+      <div className="space-y-4">
+        <button
+          type="button"
+          disabled={loading}
+          onClick={add}
+          className="w-full bg-[#121212] py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#FFFFFF] shadow-xl hover:bg-[#B8860B] transition-all duration-300 active:scale-[0.98]"
+        >
+          {loading ? "Syncing..." : "Add to Cart"}
+        </button>
+        
+        {errorMsg && (
+          <p className="text-center text-[10px] font-bold uppercase tracking-widest text-[#EF4444] animate-bounce">
+            {errorMsg}
+          </p>
+        )}
+        
+        <p className="text-center text-[9px] font-bold tracking-[0.2em] text-[#4B5563] uppercase opacity-50">
+          Secure Personal Purchase
+        </p>
+      </div>
     </div>
   );
 }

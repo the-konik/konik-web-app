@@ -17,55 +17,68 @@ export default async function MyToolsPage() {
   const lockedTools = allTools.filter((t) => !unlockedIds.has(t.id));
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-16">
       <div>
-        <h1 className="text-2xl font-bold text-primary">Tools</h1>
-        <p className="text-muted-foreground">
-          Open tools you own or get through your plan. Below, locked tools show
-          how to unlock them based on your tier.
+        <h1 className="font-atmospheric text-3xl text-[#121212] tracking-tight mb-2">DIGITAL TOOLS</h1>
+        <p className="text-sm text-[#4B5563] font-medium leading-relaxed max-w-xl">
+          Functional assets authorized for your professional workflow. Unlock additional 
+          capabilities through membership expansion or individual acquisition.
         </p>
       </div>
 
       <section>
-        <h2 className="mb-4 text-lg font-semibold text-primary">My tools</h2>
+        <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#121212] mb-6">UNLOCKED ASSETS</h2>
         {userTools.length === 0 ? (
-          <div className="rounded-xl border border-border bg-white p-8 text-center text-sm text-muted-foreground">
-            Nothing unlocked yet. Purchase from{" "}
-            <Link href="/tools" className="text-accent underline">
-              Tools
-            </Link>{" "}
-            or{" "}
-            <Link href="/plans" className="text-accent underline">
-              subscribe
-            </Link>
-            .
+          <div className="rounded-2xl border border-dashed border-[#E5E7EB] bg-[#FFFFFF] p-12 text-center">
+            <p className="text-sm text-[#4B5563] font-medium mb-6">
+              Your digital arsenal is currently empty. Explore our specialized tools or subscribe 
+               to a membership plan to initialize your access.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                href="/tools" 
+                className="bg-[#121212] text-[#FFFFFF] px-8 py-3 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-[#B8860B] transition-all"
+              >
+                Browse Tools
+              </Link>
+              <Link 
+                href="/plans" 
+                className="border border-[#121212] text-[#121212] px-8 py-3 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-[#F8F8F8] transition-all"
+              >
+                Subscribe
+              </Link>
+            </div>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {userTools.map(({ tool, source }) => (
               <div
                 key={tool.id}
-                className="flex flex-col rounded-xl border border-border bg-white p-6 shadow-sm"
+                className="flex flex-col rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-8 shadow-sm transition-all duration-500 hover:border-[#B8860B]/30 group"
               >
-                <h3 className="font-semibold text-primary">{tool.name}</h3>
-                <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-3 mb-4">
+                   <div className="w-1.5 h-1.5 bg-[#B8860B] rounded-full" />
+                   <h3 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#121212]">{tool.name}</h3>
+                </div>
+                <p className="text-sm text-[#4B5563] font-medium leading-relaxed mb-6 flex-1 line-clamp-3">
                   {tool.description}
                 </p>
-                <span className="mt-3 inline-block w-fit rounded-full bg-accent/10 px-3 py-0.5 text-xs font-medium text-accent">
-                  {source === "subscription"
-                    ? "Subscription plan"
-                    : source === "manual"
-                      ? "Granted"
-                      : source === "trial"
-                        ? "Trial"
-                        : "Purchased"}
-                </span>
-                <div className="mt-4 flex flex-wrap gap-2">
+                
+                <div className="flex items-center justify-between mt-auto pt-6 border-t border-[#F8F8F8]">
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-[#B8860B] py-1">
+                    {source === "subscription"
+                      ? "Membership Perk"
+                      : source === "manual"
+                        ? "Authorized"
+                        : source === "trial"
+                          ? "Evaluation"
+                          : "Primary Asset"}
+                  </span>
                   <Link
                     href={`/dashboard/dashboard/tools/${tool.slug}`}
-                    className="inline-flex flex-1 justify-center rounded-lg bg-accent px-4 py-2.5 text-center text-sm font-medium text-accent-foreground hover:bg-accent/90 sm:flex-none"
+                    className="bg-[#121212] text-[#FFFFFF] px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-[#B8860B] transition-all"
                   >
-                    Open Tool
+                    Launch
                   </Link>
                 </div>
               </div>
@@ -75,30 +88,43 @@ export default async function MyToolsPage() {
       </section>
 
       <section>
-        <h2 className="mb-2 text-lg font-semibold text-primary">
-          Available tools
-        </h2>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Locked — upgrade, subscribe, or buy one-time to unlock.
-        </p>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#121212] mb-1">
+              AVAILABLE EXTENSIONS
+            </h2>
+            <p className="text-[10px] text-[#4B5563] font-bold uppercase tracking-widest opacity-40">
+              Locked — require authorization to initialize
+            </p>
+          </div>
+        </div>
+        
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {lockedTools.map((tool) => (
             <div
               key={tool.id}
-              className="rounded-xl border border-border bg-white p-6 opacity-95"
+              className="rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF]/50 p-8 shadow-sm grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700 relative overflow-hidden group"
             >
-              <h3 className="font-semibold text-primary">{tool.name}</h3>
-              <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-3 mb-4">
+                 <div className="w-1.5 h-1.5 bg-[#4B5563]/20 rounded-full" />
+                 <h3 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#121212]">{tool.name}</h3>
+              </div>
+              <p className="text-sm text-[#4B5563] font-medium leading-relaxed mb-6 line-clamp-2">
                 {tool.description}
               </p>
-              <LockedToolUpsell tool={tool} role={session.user.role} />
+              <div className="mt-auto">
+                <LockedToolUpsell tool={tool} role={session.user.role} />
+              </div>
             </div>
           ))}
         </div>
+        
         {lockedTools.length === 0 && (
-          <p className="text-sm text-muted-foreground">
-            You have access to all published tools.
-          </p>
+          <div className="bg-[#121212] p-8 rounded-2xl text-center">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#B8860B]">
+              FULL ECOSYSTEM UNLOCKED
+            </p>
+          </div>
         )}
       </section>
     </div>

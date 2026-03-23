@@ -31,65 +31,68 @@ export function LockedToolUpsell({ tool, role }: Props) {
     cta = (
       <Link
         href="/plans"
-        className="inline-flex rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
+        className="inline-flex bg-[#121212] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#FFFFFF] hover:bg-[#B8860B] transition-all shadow-sm"
       >
-        View membership plans
+        View Membership Plans
       </Link>
     );
   } else if (isOneTime) {
     cta = (
-      <>
+      <div className="flex flex-col gap-2">
         <Link
           href="/tools"
-          className="inline-flex rounded-lg bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground hover:bg-accent/90"
+          className="inline-flex bg-[#B8860B] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#FFFFFF] hover:bg-[#121212] transition-all shadow-sm"
         >
-          Add to cart — {price}
+          Add to Cart — {price}
         </Link>
-        <span className="text-xs text-muted-foreground"> One-time</span>
-      </>
+        <span className="text-[9px] font-bold uppercase tracking-widest text-[#4B5563]/60 px-1">One-Time Acquisition</span>
+      </div>
     );
   } else if (isVipOrAbove(role)) {
     cta = (
-      <p className="text-xs text-muted-foreground">
-        Not in your current plans.{" "}
-        <Link href="/plans" className="text-accent underline">
-          Switch plan
+      <p className="text-[10px] font-bold uppercase tracking-widest text-[#4B5563]">
+        Excluded from current plan.{" "}
+        <Link href="/plans" className="text-[#B8860B] hover:underline">
+          Reconfigure Membership
         </Link>
       </p>
     );
   } else if (isPremiumOrAbove(role)) {
     cta = (
-      <p className="text-xs text-muted-foreground">
-        VIP plans may include more tools.{" "}
-        <Link href="/plans" className="text-accent underline">
-          View plans
+      <p className="text-[10px] font-bold uppercase tracking-widest text-[#4B5563]">
+        VIP tiers provide expanded access.{" "}
+        <Link href="/plans" className="text-[#B8860B] hover:underline">
+          View VIP Plans
         </Link>
       </p>
     );
   } else if (roleMeetsMinimum(role, "SUBSCRIBER")) {
     cta = (
-      <p className="text-xs text-muted-foreground">
-        Upgrade for more included tools.{" "}
-        <Link href="/plans" className="text-accent underline">
-          Compare tiers
+      <p className="text-[10px] font-bold uppercase tracking-widest text-[#4B5563]">
+        Upgrade for expanded utilities.{" "}
+        <Link href="/plans" className="text-[#B8860B] hover:underline">
+          Compare Tiers
         </Link>
       </p>
     );
   } else {
     cta = (
-      <p className="text-xs text-muted-foreground">
-        <Link href="/plans" className="font-medium text-accent underline">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-[#4B5563]">
+        <Link href="/plans" className="text-[#B8860B] hover:underline">
           Subscribe
         </Link>{" "}
-        for member tools, or buy one-time where available.
+        for member utilities, or purchase one-time.
       </p>
     );
   }
 
   return (
-    <div className="mt-3 rounded-lg border border-dashed border-border bg-muted/40 p-3">
-      <p className="text-xs font-medium text-primary">Locked</p>
-      <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
+    <div className="mt-4 rounded-xl border border-[#E5E7EB] bg-[#F8F8F8] p-4 group-hover:bg-[#FFFFFF] transition-colors duration-500">
+      <div className="flex items-center gap-2 mb-3">
+         <div className="w-1 h-1 bg-[#EF4444] rounded-full animate-pulse" />
+         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#EF4444]">Authorization Required</p>
+      </div>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
         {cta}
       </div>
     </div>

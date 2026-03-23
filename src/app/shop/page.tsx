@@ -61,25 +61,25 @@ export default async function ShopPage({
   const dtos = products.map(productToDTO);
 
   return (
-    <div className="flex min-h-screen flex-col bg-muted">
+    <div className="flex min-h-screen flex-col bg-[#F8F8F8]">
       <PublicHeader />
 
-      <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-10 pt-32 sm:pt-36">
-        <h1 className="text-3xl font-bold text-primary">Shop</h1>
-        <p className="mt-1 text-muted-foreground">
-          Clothing — filter by category, price, and size.
+      <div className="mx-auto w-full max-w-[1440px] flex-1 px-6 sm:px-8 lg:px-12 py-10 pt-32 sm:pt-36">
+        <h1 className="font-atmospheric text-4xl sm:text-5xl text-[#121212] tracking-tight">SHOP</h1>
+        <p className="mt-2 text-sm text-[#4B5563]">
+          Complete your uniform. Filter by category, price, and size.
         </p>
 
-        <div className="mt-8 flex flex-col gap-8 lg:flex-row">
+        <div className="mt-10 flex flex-col gap-8 lg:flex-row">
           <aside className="w-full shrink-0 lg:w-64">
-            <Suspense fallback={<div className="h-48 animate-pulse rounded-xl bg-white" />}>
+            <Suspense fallback={<div className="h-48 animate-pulse rounded-xl bg-[#FFFFFF] border border-[#E5E7EB]" />}>
               <ShopFilters priceCeiling={priceCeiling} />
             </Suspense>
           </aside>
 
           <div className="flex-1">
             {dtos.length === 0 ? (
-              <p className="rounded-xl border border-border bg-white p-12 text-center text-muted-foreground">
+              <p className="rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-12 text-center text-sm font-medium text-[#4B5563] shadow-sm">
                 No products match your filters.
               </p>
             ) : (

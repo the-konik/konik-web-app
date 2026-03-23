@@ -4,8 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Search, Heart, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X, User as UserIcon, LogOut, LayoutDashboard, Package, CreditCard, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { MiniCart } from "@/components/cart/mini-cart";
+import { useSession, signOut } from "next-auth/react";
 
 const MEGA_MENU: Record<string, { featured: string[]; explore: string[]; images: { src: string; label: string; href: string }[] }> = {
   "/shop": {
@@ -58,12 +60,15 @@ const ANNOUNCEMENTS = [
 
 export function PublicHeader() {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [msgIndex, setMsgIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [profileOpen, setProfileOpen] = useState(false);
   const menuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const profileTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isHomePage = pathname === "/";
 
@@ -153,15 +158,29 @@ export function PublicHeader() {
           </div>
 
           <div className="flex flex-1 items-center justify-end gap-5">
-            {TOP_NAV.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="hover:text-[#B8860B] transition-colors uppercase whitespace-nowrap"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {session ? (
+              <>
+                <Link href="/dashboard/dashboard" className="hover:text-[#B8860B] transition-colors uppercase whitespace-nowrap">
+                   COMMAND CENTER
+                </Link>
+                <button 
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="hover:text-[#EF4444] transition-colors uppercase whitespace-nowrap text-[10px]"
+                >
+                  LOG OUT
+                </button>
+              </>
+            ) : (
+              TOP_NAV.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="hover:text-[#B8860B] transition-colors uppercase whitespace-nowrap"
+                >
+                  {link.label}
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </motion.div>
@@ -285,14 +304,83 @@ export function PublicHeader() {
               <Heart className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
             </button>
 
-            <Link href="/cart" className={`p-1.5 rounded-full flex items-center justify-center transition-colors relative ${
-              isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
-            }`}>
-              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
-              <span className="absolute -top-1 -right-1 bg-[#B8860B] text-[#FFFFFF] text-[9px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold">
-                0
-              </span>
-            </Link>
+            <MiniCart 
+              isTransparent={isTransparent} 
+              iconColor={iconColor} 
+            />
+
+            {/* User Profile Dropdown (Desktop) */}
+            {session && (
+              <div 
+                className="relative hidden lg:block"
+                onMouseEnter={() => {
+                  if (profileTimeout.current) clearTimeout(profileTimeout.current);
+                  setProfileOpen(true);
+                }}
+                onMouseLeave={() => {
+                  profileTimeout.current = setTimeout(() => setProfileOpen(false), 200);
+                }}
+              >
+                <button 
+                  className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${
+                    isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
+                  }`}
+                >
+                  <UserIcon className="w-5 h-5 sm:w-6 sm:h-6" color={iconColor} strokeWidth={1.5} />
+                </button>
+                
+                <AnimatePresence>
+                  {profileOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute right-0 top-full pt-4 w-72 z-[100]"
+                    >
+                      <div className="bg-[#FFFFFF] border border-[#E5E7EB] shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden py-5 backdrop-blur-xl">
+                         {/* User Info */}
+                         <div className="px-6 pb-5 mb-5 border-b border-[#F8F8F8]">
+                            <span className="inline-block px-2 py-0.5 rounded-full bg-[#B8860B]/5 text-[9px] font-bold uppercase tracking-widest text-[#B8860B] mb-2 font-atmospheric">AUTHENTICATED</span>
+                            <p className="text-md font-bold text-[#121212] truncate uppercase tracking-tight">{session.user?.name || session.user?.email}</p>
+                            <p className="text-[10px] text-[#4B5563] font-bold uppercase tracking-widest mt-0.5 opacity-60">Professional Profile</p>
+                         </div>
+                         
+                         {/* Links */}
+                         <div className="px-3 space-y-1">
+                            {[
+                              { href: "/dashboard/dashboard", label: "Command Center", icon: LayoutDashboard },
+                              { href: "/dashboard/dashboard/orders", label: "My Orders", icon: Package },
+                              { href: "/dashboard/dashboard/subscription", label: "Membership", icon: CreditCard },
+                              { href: "/dashboard/dashboard/profile", label: "Personalization", icon: UserIcon },
+                            ].map(item => (
+                              <Link
+                                key={item.href}
+                                href={item.href}
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.1em] text-[#4B5563] hover:bg-[#F8F8F8] hover:text-[#121212] transition-all group"
+                                onClick={() => setProfileOpen(false)}
+                              >
+                                <item.icon className="w-4 h-4 text-[#4B5563] group-hover:text-[#B8860B] transition-colors" strokeWidth={2} />
+                                {item.label}
+                              </Link>
+                            ))}
+                         </div>
+                         
+                         {/* Logout */}
+                         <div className="mt-5 pt-5 px-3 border-t border-[#F8F8F8]">
+                           <button
+                             onClick={() => signOut({ callbackUrl: "/" })}
+                             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.1em] text-[#EF4444] hover:bg-red-50 transition-all border border-transparent hover:border-red-100"
+                           >
+                             <LogOut className="w-4 h-4" strokeWidth={2} />
+                             Log Out
+                           </button>
+                         </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
             {/* Mobile hamburger */}
             <button
@@ -399,7 +487,7 @@ export function PublicHeader() {
 
       {/* Drawer panel */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-[60] w-[75vw] bg-[#121212] transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
+        className={`fixed top-0 right-0 bottom-0 z-[60] w-[85vw] bg-[#121212] transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -414,6 +502,13 @@ export function PublicHeader() {
         </div>
 
         <div className="flex flex-col flex-1 overflow-y-auto px-8 sm:px-10 pb-10">
+          {session && (
+            <div className="mb-10 pb-10 border-b border-[#FFFFFF]/5">
+               <span className="inline-block px-2 py-0.5 rounded-full bg-[#B8860B]/10 text-[9px] font-bold uppercase tracking-widest text-[#B8860B] mb-3 font-atmospheric">ACCOUNT ACTIVE</span>
+               <p className="text-xl font-bold text-[#FFFFFF] font-atmospheric leading-tight truncate uppercase tracking-tight">{session.user?.name || session.user?.email}</p>
+            </div>
+          )}
+
           {/* Main links */}
           <nav className="space-y-7 mb-10">
             {MAIN_NAV.map(({ href, label }) => (
@@ -432,8 +527,29 @@ export function PublicHeader() {
             ))}
           </nav>
 
+          {/* User Links (if logged in) */}
+          {session && (
+             <div className="space-y-5 mb-10 pb-10 border-b border-[#FFFFFF]/5 font-atmospheric">
+                {[
+                  { href: "/dashboard/dashboard", label: "Overview" },
+                  { href: "/dashboard/dashboard/orders", label: "My Orders" },
+                  { href: "/dashboard/dashboard/subscription", label: "Membership" },
+                  { href: "/dashboard/dashboard/profile", label: "Profile Settings" },
+                ].map(item => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block text-[14px] font-bold text-[#FFFFFF]/60 hover:text-[#B8860B] tracking-widest uppercase transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+             </div>
+          )}
+
           {/* Secondary */}
-          <div className="border-t border-[#FFFFFF]/10 pt-8 mb-8 space-y-5">
+          <div className="pt-2 mb-8 space-y-5">
             <Link
               href="/plans"
               className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
@@ -442,7 +558,7 @@ export function PublicHeader() {
               Start My Legacy
             </Link>
             <Link
-              href="/about"
+              href="/company"
               className="block text-[16px] sm:text-[20px] font-bold tracking-widest uppercase font-atmospheric text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
               onClick={() => setOpen(false)}
             >
@@ -465,27 +581,42 @@ export function PublicHeader() {
           </div>
 
           {/* CTA copy */}
-          <p className="text-[#FFFFFF]/50 text-[15px] leading-relaxed mb-8 pr-4">
-            Become a KONIKER, unlock premium products, real inspiration, and
-            powerful stories that fuel your journey.
+          <p className="text-[#FFFFFF]/50 text-[14px] leading-relaxed mb-8 pr-4">
+             Unlock premium systems, elite performance gear, and 
+             the framework for your relentless pursuit.
           </p>
 
           {/* Buttons */}
-          <div className="flex gap-3 mt-auto">
-            <Link
-              href="/auth/register"
-              onClick={() => setOpen(false)}
-              className="flex-1 bg-[#FFFFFF] text-[#121212] py-3.5 text-center text-[13px] font-bold uppercase tracking-[0.15em] hover:bg-[#F8F8F8] transition-colors"
-            >
-              Join Us
-            </Link>
-            <Link
-              href="/auth/login"
-              onClick={() => setOpen(false)}
-              className="flex-1 border-2 border-[#FFFFFF] text-[#FFFFFF] py-3.5 text-center text-[13px] font-bold uppercase tracking-[0.15em] hover:bg-[#FFFFFF]/10 transition-colors"
-            >
-              Log In
-            </Link>
+          <div className="flex flex-col gap-3 mt-auto">
+            {!session && (
+              <>
+                <Link
+                  href="/auth/register"
+                  onClick={() => setOpen(false)}
+                   className="w-full bg-[#FFFFFF] text-[#121212] py-4 text-center text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-colors"
+                >
+                  Join the Legacy
+                </Link>
+                <Link
+                  href="/auth/login"
+                  onClick={() => setOpen(false)}
+                  className="w-full border border-[#FFFFFF] text-[#FFFFFF] py-4 text-center text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-[#FFFFFF]/10 transition-colors"
+                >
+                  Log In
+                </Link>
+              </>
+            )}
+            {session && (
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  signOut({ callbackUrl: "/" });
+                }}
+                className="w-full border border-[#EF4444] text-[#EF4444] py-4 text-center text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-red-500/10 transition-colors"
+              >
+                Log Out
+              </button>
+            )}
           </div>
         </div>
       </div>

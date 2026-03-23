@@ -13,38 +13,49 @@ export default async function PublicToolsPage() {
   });
 
   return (
-    <div className="flex min-h-screen flex-col bg-muted">
+    <div className="flex min-h-screen flex-col bg-[#F8F8F8]">
       <PublicHeader />
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10 pt-32 sm:pt-36">
-        <h1 className="text-2xl font-bold text-primary">Digital tools</h1>
-        <p className="mt-2 text-muted-foreground">
-          Add tools to your cart and pay once with clothing in a single Stripe
-          checkout (subscription plans use a separate checkout).
-        </p>
+      <main className="mx-auto w-full max-w-[1440px] flex-1 px-6 sm:px-8 lg:px-12 py-10 pt-32 sm:pt-40 lg:pt-48 pb-24">
+        <div className="max-w-3xl mb-12">
+          <h1 className="font-atmospheric text-4xl sm:text-5xl text-[#121212] tracking-tight">DIGITAL TOOLS</h1>
+          <p className="mt-4 text-sm sm:text-base text-[#4B5563] leading-relaxed">
+            Functional assets for the modern workflow. Add tools to your cart and pay once with 
+            clothing in a single secure checkout.
+          </p>
+        </div>
 
-        <ul className="mt-8 space-y-4">
+        <div className="grid gap-6">
           {tools.map((tool) => (
-            <li
+            <div
               key={tool.id}
-              className="flex flex-col gap-4 rounded-xl border border-border bg-white p-6 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-6 rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-8 sm:flex-row sm:items-center sm:justify-between shadow-sm hover:border-[#B8860B]/30 transition-all duration-500 group"
             >
-              <div>
-                <h2 className="font-semibold text-primary">{tool.name}</h2>
-                <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+              <div className="max-w-2xl">
+                <div className="flex items-center gap-3 mb-2">
+                   <div className="w-1.5 h-1.5 bg-[#B8860B] rounded-full" />
+                   <h2 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#121212]">{tool.name}</h2>
+                </div>
+                <p className="line-clamp-2 text-sm text-[#4B5563] font-medium leading-relaxed mb-4">
                   {tool.description}
                 </p>
-                <p className="mt-2 text-lg font-medium text-accent">
+                <p className="text-xl font-bold text-[#B8860B] tracking-tight">
                   {formatPrice(tool.price.toString())}
                 </p>
               </div>
-              <AddToCartTool toolId={tool.id} />
-            </li>
+              <div className="shrink-0">
+                <AddToCartTool toolId={tool.id} />
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
 
         {tools.length === 0 && (
-          <p className="mt-8 text-muted-foreground">No tools published yet.</p>
+          <div className="mt-12 p-16 text-center border border-dashed border-[#E5E7EB] rounded-2xl bg-[#FFFFFF]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#4B5563]">
+              No digital tools have been published yet.
+            </p>
+          </div>
         )}
       </main>
 
