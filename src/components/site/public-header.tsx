@@ -353,16 +353,17 @@ function PublicHeaderContent() {
           {/* Right side — search + icons */}
           <div className={`col-start-3 flex items-center gap-2 sm:gap-4 md:gap-5 justify-end ${headerTextColor}`}>
             {/* Desktop search */}
-            <div className={`hidden lg:flex relative items-center max-w-[200px] xl:max-w-xs group`}>
-              <div className={`absolute left-0 h-10 w-10 flex border items-center justify-center rounded-l-full transition-colors ${
+            <form action="/search" method="GET" className={`hidden lg:flex relative items-center max-w-[200px] xl:max-w-xs group`}>
+              <button type="submit" className={`absolute left-0 h-10 w-10 flex border items-center justify-center rounded-l-full transition-colors ${
                 isTransparent 
                   ? "bg-white/10 border-white/20 group-hover:bg-white/20" 
                   : "bg-[#F8F8F8] border-[#E7E7EB] group-hover:bg-[#E5E7EB]"
               }`}>
                 <Search className="w-4 h-4" color={iconColor} />
-              </div>
+              </button>
               <input  
                 type="text"
+                name="q"
                 placeholder="Search"
                 className={`w-full h-10 pl-11 pr-4 rounded-full border text-sm font-medium focus:outline-none focus:ring-1 transition-all ${
                   isTransparent
@@ -370,20 +371,20 @@ function PublicHeaderContent() {
                     : "bg-[#F8F8F8] border-[#E7E7EB] placeholder:text-[#4B5563] text-[#121212] focus:ring-[#121212]"
                 }`}
               />
-            </div>
+            </form>
 
             {/* Mobile search */}
-            <button className={`lg:hidden p-2.5 rounded-full flex items-center justify-center transition-colors ${
+            <Link href="/search" className={`lg:hidden p-2.5 rounded-full flex items-center justify-center transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
               <Search className="w-5 h-5 md:w-7 md:h-7" color={iconColor} strokeWidth={1.5} />
-            </button>
+            </Link>
 
-            <button className={`flex p-2.5 items-center justify-center rounded-full transition-colors ${
+            <Link href="/wishlist" className={`flex p-2.5 items-center justify-center rounded-full transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
               <Heart className="w-5 h-5 md:w-8 md:h-8" color={iconColor} strokeWidth={1.5} />
-            </button>
+            </Link>
 
             <MiniCart 
               isTransparent={isTransparent} 

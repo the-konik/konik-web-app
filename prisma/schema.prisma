@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -89,6 +90,7 @@ model User {
   sessions         Session[]
   subscriptions    Subscription[]
   toolAccess       UserToolAccess[]
+  wishlist         Wishlist[]
 
   @@index([role])
   @@index([staffRole])
@@ -132,6 +134,7 @@ model Product {
   /// Shipping weight (grams); nullable until fulfillment integration.
   weightGrams     Int?
   orderItems      OrderItem[]
+  wishlist        Wishlist[]
 
   @@index([category, published, archived])
   @@index([featured, published, archived])
@@ -161,6 +164,7 @@ model Tool {
   orderItems      OrderItem[]
   plans           SubscriptionPlanTool[]
   userAccess      UserToolAccess[]
+  wishlist        Wishlist[]
 
   @@index([published, accessType])
   @@index([featured, published])
@@ -433,4 +437,20 @@ model Newsletter {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String?
+  toolId    String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product? @relation(fields: [productId], references: [id])
+  tool      Tool?    @relation(fields: [toolId], references: [id])
+
+  @@unique([userId, productId, toolId])
+  @@index([userId])
+  @@index([productId])
+  @@index([toolId])
 }
