@@ -5,7 +5,7 @@
  * "konik.superadmin.mail.com", the correct email form is below — override with
  * SEED_SUPERADMIN_EMAIL in .env if you need a different mailbox.
  */
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../src/generated/prisma";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
