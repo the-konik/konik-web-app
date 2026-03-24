@@ -1,5 +1,5 @@
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
+import { auth } from "@/lib/auth/auth";
+import { db } from "@/lib/db/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {

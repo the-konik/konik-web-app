@@ -29,9 +29,9 @@ const MEGA_MENU: Record<string, MegaMenuData> = {
       { title: "Recovery Gear", items: ["Minimal Sleepwear", "Recovery Hoodies"] },
     ],
     images: [
-      { src: "/discipline-uniform.png", label: "The Uniform", href: "/shop?category=APPAREL" },
-      { src: "/hero-legacy.png", label: "Elite Performance", href: "/shop?category=APPAREL" },
-      { src: "/hero-training.png", label: "Discipline Gear", href: "/shop?category=APPAREL" },
+      { src: "/images/products/discipline-uniform.png", label: "The Uniform", href: "/shop?category=APPAREL" },
+      { src: "/images/hero/hero-legacy.png", label: "Elite Performance", href: "/shop?category=APPAREL" },
+      { src: "/images/hero/hero-training.png", label: "Discipline Gear", href: "/shop?category=APPAREL" },
     ],
   },
   "/shop?category=FOOTWEAR": {
@@ -42,9 +42,9 @@ const MEGA_MENU: Record<string, MegaMenuData> = {
       { title: "Lifestyle Edge", items: ["High-top Sneakers", "Streetwear Sneakers"] },
     ],
     images: [
-      { src: "/hero-footwear.png", label: "The Rotation", href: "/shop?category=FOOTWEAR" },
-      { src: "/sneakers-minimal.png", label: "Daily Presence", href: "/shop?category=FOOTWEAR" },
-      { src: "/shoes-gym.png", label: "Technical Movement", href: "/shop?category=FOOTWEAR" },
+      { src: "/images/hero/hero-footwear.png", label: "The Rotation", href: "/shop?category=FOOTWEAR" },
+      { src: "/images/products/sneakers-minimal.png", label: "Daily Presence", href: "/shop?category=FOOTWEAR" },
+      { src: "/images/products/shoes-gym.png", label: "Technical Movement", href: "/shop?category=FOOTWEAR" },
     ],
   },
   "/shop?category=ACCESSORIES": {
@@ -55,9 +55,9 @@ const MEGA_MENU: Record<string, MegaMenuData> = {
       { title: "Grooming", items: ["Beard Kits", "Skincare Basics", "Signature Perfume"] },
     ],
     images: [
-      { src: "/hero-accessories.png", label: "The Details", href: "/shop?category=ACCESSORIES" },
-      { src: "/accessories-jewelry.png", label: "Masculine Identity", href: "/shop?category=ACCESSORIES" },
-      { src: "/grooming-kit.png", label: "Elite Grooming", href: "/shop?category=ACCESSORIES" },
+      { src: "/images/hero/hero-accessories.png", label: "The Details", href: "/shop?category=ACCESSORIES" },
+      { src: "/images/products/accessories-jewelry.png", label: "Masculine Identity", href: "/shop?category=ACCESSORIES" },
+      { src: "/images/products/grooming-kit.png", label: "Elite Grooming", href: "/shop?category=ACCESSORIES" },
     ],
   },
   "/tools": {
@@ -67,9 +67,9 @@ const MEGA_MENU: Record<string, MegaMenuData> = {
       { title: "Plan Legacy Budget", items: ["Wealth Control", "Focus Sessions"] },
     ],
     images: [
-      { src: "/system-legacy.png", label: "Best System", href: "/tools" },
-      { src: "/hero-levelup.png", label: "Build Legacy Life", href: "/tools" },
-      { src: "/hero-tools.png", label: "Plan Legacy Budget", href: "/tools" },
+      { src: "/images/sections/system-legacy.png", label: "Best System", href: "/tools" },
+      { src: "/images/hero/hero-levelup.png", label: "Build Legacy Life", href: "/tools" },
+      { src: "/images/hero/hero-tools.png", label: "Plan Legacy Budget", href: "/tools" },
     ],
   },
 };
@@ -210,7 +210,7 @@ function PublicHeaderContent() {
         className="hidden md:block bg-[#F8F8F8] overflow-hidden whitespace-nowrap"
         style={{ borderBottomWidth: scrolled ? 0 : 1, borderBottomStyle: "solid", borderBottomColor: "#E5E7EB" }}
       >
-        <div className="mx-auto flex max-w-[1920px] items-center justify-between px-6 lg:px-12 py-1 text-[12px] font-bold tracking-tight text-[#121212] grid grid-cols-3">
+        <div className="mx-auto flex max-w-[var(--max-content-width)] items-center justify-between px-6 lg:px-12 py-1 text-[length:var(--text-sm)] font-bold tracking-tight text-[#121212] grid grid-cols-3">
           <div className="flex-1" />
           
           {/* Announcement Carousel */}
@@ -230,7 +230,7 @@ function PublicHeaderContent() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="absolute left-1/2 underline -translate-x-1/2 top-1/2 -translate-y-1/2 text-[9px] font-medium text-[#555] tracking-wide whitespace-nowrap cursor-pointer hover:text-[#222] transition-colors"
+                className="absolute left-1/2 underline -translate-x-1/2 top-1/2 -translate-y-1/2 text-[length:var(--text-2xs)] font-medium text-[#555] tracking-wide whitespace-nowrap cursor-pointer hover:text-[#222] transition-colors"
               >
                 {announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
               </motion.div>
@@ -238,32 +238,15 @@ function PublicHeaderContent() {
           </div>
 
           <div className="flex flex-1 items-center justify-end gap-5">
-            {session ? (
-              <>
-                <Link href="/auth/register" className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap">
-                   Start My Legacy
-                </Link>
-                <Link href="/company#about" className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap">
-                   About KONIK
-                </Link>
-                <button 
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="hover:text-[#EF4444] text-[#EF4444] font-bold font-poppins transition-colors whitespace-nowrap"
-                >
-                  Log Out
-                </button>
-              </>
-            ) : (
-              TOP_NAV.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap"
-                >
-                  {link.label}
-                </Link>
-              ))
-            )}
+            {TOP_NAV.filter(link => !session || (link.href !== "/auth/login" && link.href !== "/auth/register")).map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="hover:text-[#B8860B] text-[#121212] font-poppins transition-colors whitespace-nowrap"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </motion.div>
@@ -296,7 +279,7 @@ function PublicHeaderContent() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-[11px] sm:text-[12px] font-bold text-[#4B5563] tracking-wide underline underline-offset-4 whitespace-nowrap"
+                className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-[length:var(--text-xs)] sm:text-[length:var(--text-sm)] font-bold text-[#4B5563] tracking-wide underline underline-offset-4 whitespace-nowrap"
               >
                 {announcementsToDisplay[msgIndex % announcementsToDisplay.length]?.text}
               </motion.div>
@@ -313,16 +296,16 @@ function PublicHeaderContent() {
             : "bg-[#FFFFFF] border-[#E5E7EB] py-2 md:py-1.5 shadow-sm"
         }`}
       >
-        <div className="mx-auto flex max-w-[1920px] items-center justify-between px-4 sm:px-6 lg:px-12 gap-4 lg:gap-8 grid grid-cols-3">
+        <div className="mx-auto flex max-w-[var(--max-content-width)] items-center justify-between px-4 sm:px-6 lg:px-12 gap-4 lg:gap-8 grid grid-cols-3">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2.5">
               <Image
-                src={isTransparent ? "/KONIK%20NEW%20-%20WHITE.png" : "/KONIK%20NEW%20-%20BLACK.png"}
+                src={isTransparent ? "/logos/konik-logo-white.png" : "/logos/konik-logo-black.png"}
                 alt="KONIK Logo"
-                width={25}
-                height={25}
-                className="object-contain transition-all duration-300 w-[28px] h-[28px] md:w-[35px] md:h-[35px]"
+                width={32}
+                height={32}
+                className="object-contain transition-all duration-[var(--duration-normal)] w-[var(--logo-sm)] h-[var(--logo-sm)] md:w-[var(--logo-md)] md:h-[var(--logo-md)]"
                 priority
               />
             </Link>
@@ -338,7 +321,7 @@ function PublicHeaderContent() {
               >
                 <Link
                   href={href}
-                  className={`text-[14px] font-bold tracking-tight transition-colors duration-200 whitespace-nowrap block py-4 ${navHoverColor} ${
+                  className={`text-[length:var(--text-base)] font-bold tracking-[var(--tracking-tight)] transition-colors duration-200 whitespace-nowrap block py-4 ${navHoverColor} ${
                     isLinkActive(href)
                     ? (isTransparent && activeMenu !== href ? "text-[#FFFFFF] underline underline-offset-8 decoration-2" : "text-[#121212] underline underline-offset-8 decoration-2")
                     : headerTextColor
@@ -359,7 +342,7 @@ function PublicHeaderContent() {
                   ? "bg-white/10 border-white/20 group-hover:bg-white/20" 
                   : "bg-[#F8F8F8] border-[#E7E7EB] group-hover:bg-[#E5E7EB]"
               }`}>
-                <Search className="w-4 h-4" color={iconColor} />
+                <Search className="w-[var(--icon-xs)] h-[var(--icon-xs)]" color={iconColor} />
               </button>
               <input  
                 type="text"
@@ -377,13 +360,13 @@ function PublicHeaderContent() {
             <Link href="/search" className={`lg:hidden p-2.5 rounded-full flex items-center justify-center transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
-              <Search className="w-5 h-5 md:w-7 md:h-7" color={iconColor} strokeWidth={1.5} />
+              <Search className="w-[var(--icon-sm)] h-[var(--icon-sm)] md:w-[var(--icon-md)] md:h-[var(--icon-md)]" color={iconColor} strokeWidth={1.5} />
             </Link>
 
             <Link href="/wishlist" className={`flex p-2.5 items-center justify-center rounded-full transition-colors ${
               isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
             }`}>
-              <Heart className="w-5 h-5 md:w-8 md:h-8" color={iconColor} strokeWidth={1.5} />
+              <Heart className="w-[var(--icon-sm)] h-[var(--icon-sm)] md:w-[var(--icon-md)] md:h-[var(--icon-md)]" color={iconColor} strokeWidth={1.5} />
             </Link>
 
             <MiniCart 
@@ -391,65 +374,108 @@ function PublicHeaderContent() {
               iconColor={iconColor} 
             />
 
-            {/* User Profile Dropdown (Desktop & Mobile) */}
-            {session && (
-              <div 
-                className="relative hidden lg:block"
-                onMouseEnter={() => {
-                  if (profileTimeout.current) clearTimeout(profileTimeout.current);
-                  setProfileOpen(true);
-                }}
-                onMouseLeave={() => {
-                  profileTimeout.current = setTimeout(() => setProfileOpen(false), 200);
-                }}
+            {/* User Profile Icon — Always visible, with login indicator */}
+            <div 
+              className="relative hidden lg:block"
+              onMouseEnter={() => {
+                if (profileTimeout.current) clearTimeout(profileTimeout.current);
+                setProfileOpen(true);
+              }}
+              onMouseLeave={() => {
+                profileTimeout.current = setTimeout(() => setProfileOpen(false), 200);
+              }}
+            >
+              <button 
+                onClick={() => setProfileOpen(!profileOpen)}
+                className={`p-2 rounded-full flex items-center justify-center transition-colors relative ${
+                  isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
+                }`}
+                aria-label={session ? "Account menu" : "Sign in"}
               >
-                <button 
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className={`p-2 rounded-full flex items-center justify-center transition-colors ${
-                    isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
-                  }`}
-                >
-                  <UserIcon className="w-5 h-5 md:w-8 md:h-8" color={iconColor} strokeWidth={1.5} />
-                </button>
-                
-                <AnimatePresence>
-                  {profileOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 top-full pt-2 w-64 z-[100]"
-                    >
-                      <div className="bg-[#FFFFFF] border border-[#E5E7EB] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-xl overflow-hidden backdrop-blur-xl">
-                         {/* User Info - Ultra Minimal */}
-                         <div className="px-4 py-3 border-b border-[#F3F4F6]">
-                            <p className="text-[11px] font-bold text-[#121212] truncate uppercase tracking-tight font-poppins">{session.user?.name || session.user?.email}</p>
-                         </div>
-                         
-                         {/* Links - Text Only */}
-                         <div className="p-1.5 space-y-0.5">
-                            {[
-                              { href: "/dashboard/dashboard", label: "Dashboard" },
-                              { href: "/dashboard/dashboard/orders", label: "Orders" },
-                              { href: "/dashboard/dashboard/subscription", label: "Membership" },
-                              { href: "/dashboard/dashboard/profile", label: "Profile" },
-                            ].map(item => (
-                              <Link
-                                key={item.href}
-                                href={item.href}
-                                className="block px-3 py-2 rounded-lg text-[10px] font-bold uppercase tracking-[0.1em] text-[#4B5563] hover:bg-[#F8F8F8] hover:text-[#121212] transition-colors font-poppins"
-                                onClick={() => setProfileOpen(false)}
+                <UserIcon className="w-[var(--icon-sm)] h-[var(--icon-sm)] md:w-[var(--icon-md)] md:h-[var(--icon-md)]" color={iconColor} strokeWidth={1.5} />
+                {/* Green dot = logged in */}
+                {session && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+                )}
+              </button>
+              
+              <AnimatePresence>
+                {profileOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 top-full pt-2 w-64 z-[var(--z-tooltip)]"
+                  >
+                    <div className="bg-[#FFFFFF] border border-[#E5E7EB] shadow-[var(--shadow-dropdown)] rounded-xl overflow-hidden backdrop-blur-xl">
+                       {session ? (
+                         <>
+                           {/* User Info */}
+                           <div className="px-4 py-3 border-b border-[#F3F4F6]">
+                              <p className="text-[length:var(--text-xs)] font-bold text-[#121212] truncate uppercase tracking-[var(--tracking-tight)] font-poppins">{session.user?.name || session.user?.email}</p>
+                           </div>
+                           
+                           {/* Links */}
+                           <div className="p-1.5 space-y-0.5">
+                              {[
+                                { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+                                { href: "/dashboard/orders", label: "Orders", icon: Package },
+                                { href: "/dashboard/subscription", label: "Membership", icon: CreditCard },
+                                { href: "/dashboard/profile", label: "Profile", icon: User },
+                              ].map(item => (
+                                <Link
+                                  key={item.href}
+                                  href={item.href}
+                                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[length:var(--text-2xs)] font-bold uppercase tracking-[var(--tracking-wider)] text-[#4B5563] hover:bg-[#F8F8F8] hover:text-[#121212] transition-colors font-poppins"
+                                  onClick={() => setProfileOpen(false)}
+                                >
+                                  <item.icon className="w-3.5 h-3.5 opacity-50" />
+                                  {item.label}
+                                </Link>
+                              ))}
+                           </div>
+
+                           {/* Log Out */}
+                           <div className="border-t border-[#F3F4F6] p-1.5">
+                              <button
+                                onClick={() => { setProfileOpen(false); signOut({ callbackUrl: "/" }); }}
+                                className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-[length:var(--text-2xs)] font-bold uppercase tracking-[var(--tracking-wider)] text-[#EF4444] hover:bg-red-50 transition-colors font-poppins"
                               >
-                                {item.label}
+                                <LogOut className="w-3.5 h-3.5 opacity-70" />
+                                Log Out
+                              </button>
+                           </div>
+                         </>
+                       ) : (
+                         <>
+                           {/* Guest Menu */}
+                           <div className="px-4 py-3 border-b border-[#F3F4F6]">
+                              <p className="text-[length:var(--text-xs)] font-bold text-[#121212] uppercase tracking-[var(--tracking-tight)] font-poppins">Welcome to KONIK</p>
+                              <p className="text-[length:var(--text-2xs)] text-[#4B5563] mt-0.5 font-poppins">Sign in for the full experience</p>
+                           </div>
+                           <div className="p-3 space-y-2">
+                              <Link
+                                href="/auth/login"
+                                onClick={() => setProfileOpen(false)}
+                                className="block w-full bg-[#121212] text-[#FFFFFF] py-2.5 rounded-lg text-center text-[length:var(--text-2xs)] font-bold uppercase tracking-[var(--tracking-wider)] hover:bg-[#2a2a2a] transition-colors font-poppins"
+                              >
+                                Log In
                               </Link>
-                            ))}
-                         </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
+                              <Link
+                                href="/auth/register"
+                                onClick={() => setProfileOpen(false)}
+                                className="block w-full border border-[#E5E7EB] text-[#121212] py-2.5 rounded-lg text-center text-[length:var(--text-2xs)] font-bold uppercase tracking-[var(--tracking-wider)] hover:bg-[#F8F8F8] transition-colors font-poppins"
+                              >
+                                Join the Legacy
+                              </Link>
+                           </div>
+                         </>
+                       )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Mobile hamburger */}
             <button
@@ -458,7 +484,7 @@ function PublicHeaderContent() {
                 isTransparent ? "hover:bg-white/10" : "hover:bg-[#F8F8F8]"
               }`}
             >
-              <Menu className="w-6 h-6 md:w-8 md:h-8" color={iconColor} strokeWidth={1.5} />
+              <Menu className="w-[var(--icon-md)] h-[var(--icon-md)] md:w-[var(--icon-lg)] md:h-[var(--icon-lg)]" color={iconColor} strokeWidth={1.5} />
             </button>
           </div>
         </div>
@@ -476,7 +502,7 @@ function PublicHeaderContent() {
             className="hidden lg:block absolute top-full left-0 right-0 bg-[#FFFFFF] border-b border-[#E5E7EB] shadow-2xl z-50 overflow-hidden"
             onMouseEnter={() => setActiveMenu(activeMenu)}
           >
-            <div className="mx-auto max-w-[1920px] px-6 lg:px-12 py-14">
+            <div className="mx-auto max-w-[var(--max-content-width)] px-6 lg:px-12 py-14">
               <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 items-start">
                 {/* Left: Categories Grid */}
                 <div className="flex-1 flex flex-wrap gap-x-16 xl:gap-x-20 gap-y-12">
@@ -484,7 +510,7 @@ function PublicHeaderContent() {
                     const isSpecial = col.title.includes("Just for You");
                     return (
                       <div key={col.title} className="flex flex-col min-w-0">
-                        <h4 className="text-[11px] font-bold tracking-normal text-[#121212] mb-8 font-poppins flex items-center gap-2 min-h-[20px] whitespace-nowrap">
+                        <h4 className="text-[length:var(--text-xs)] font-bold tracking-normal text-[#121212] mb-8 font-poppins flex items-center gap-2 min-h-[20px] whitespace-nowrap">
                           {isSpecial && <Sparkles className="w-3 h-3 text-[#B8860B] shrink-0" />}
                           <span className={isSpecial ? "text-[#B8860B]" : ""}>
                             {col.title.replace("Just for You: ", "")}
@@ -495,7 +521,7 @@ function PublicHeaderContent() {
                             <li key={item}>
                               <Link
                                 href={activeMenu}
-                                className="text-[11px] text-[#4B5563] hover:text-[#B8860B] transition-colors duration-200 block font-poppins whitespace-nowrap"
+                                className="text-[length:var(--text-xs)] text-[#4B5563] hover:text-[#B8860B] transition-colors duration-200 block font-poppins whitespace-nowrap"
                                 onClick={() => setActiveMenu(null)}
                               >
                                 {item}
@@ -526,7 +552,7 @@ function PublicHeaderContent() {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/90 via-[#121212]/20 to-transparent opacity-40 group-hover:opacity-60 transition-opacity" />
                         <div className="absolute bottom-6 left-6 right-6">
-                          <span className="text-[9px] font-bold tracking-normal text-[#FFFFFF] font-poppins drop-shadow-lg block leading-tight truncate">
+                          <span className="text-[length:var(--text-2xs)] font-bold tracking-normal text-[#FFFFFF] font-poppins drop-shadow-lg block leading-tight truncate">
                             {img.label}
                           </span>
                         </div>
@@ -561,7 +587,7 @@ function PublicHeaderContent() {
             onClick={() => setOpen(false)}
             className="text-[#FFFFFF] p-2 hover:bg-[#FFFFFF]/10 rounded-full transition-colors"
           >
-            <X className="w-8 h-8" strokeWidth={1.5} />
+            <X className="w-[var(--icon-lg)] h-[var(--icon-lg)]" strokeWidth={1.5} />
           </button>
         </div>
 
@@ -603,10 +629,10 @@ function PublicHeaderContent() {
                      >
                        <div className="py-2 space-y-1">
                          {[
-                           { href: "/dashboard/dashboard", label: "Overview" },
-                           { href: "/dashboard/dashboard/orders", label: "My Orders" },
-                           { href: "/dashboard/dashboard/subscription", label: "Membership" },
-                           { href: "/dashboard/dashboard/profile", label: "Profile Settings" },
+                           { href: "/dashboard", label: "Overview" },
+                           { href: "/dashboard/orders", label: "My Orders" },
+                           { href: "/dashboard/subscription", label: "Membership" },
+                           { href: "/dashboard/profile", label: "Profile Settings" },
                          ].map(item => (
                            <Link
                              key={item.href}

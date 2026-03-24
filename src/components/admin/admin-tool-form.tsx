@@ -70,7 +70,7 @@ export function AdminToolForm({
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) throw new Error(data.error || "Request failed");
-      router.push("/admin/admin/tools");
+      router.push("/admin/tools");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed");
@@ -90,7 +90,7 @@ export function AdminToolForm({
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) throw new Error(data.error || "Delete failed");
-      router.push("/admin/admin/tools");
+      router.push("/admin/tools");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed");

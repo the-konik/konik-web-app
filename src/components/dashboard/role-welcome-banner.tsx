@@ -4,7 +4,7 @@ import {
   isPremiumOrAbove,
   isVipOrAbove,
   roleMeetsMinimum,
-} from "@/lib/rbac";
+} from "@/lib/auth/rbac";
 
 type Props = {
   role: UserRole;
@@ -37,7 +37,7 @@ export function RoleWelcomeBanner({ role, firstName }: Props) {
     return (
       <div className="rounded-xl border border-violet-500/40 bg-violet-500/10 px-4 py-3 text-sm text-violet-950">
         <strong>Premium</strong> — You&apos;re on a premium membership tier.{" "}
-        <Link href="/dashboard/dashboard/tools" className="font-medium underline">
+        <Link href="/dashboard/tools" className="font-medium underline">
           Open your tools
         </Link>{" "}
         or{" "}

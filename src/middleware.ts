@@ -1,10 +1,10 @@
 import NextAuth from "next-auth";
-import { authConfig } from "@/lib/auth.config";
+import { authConfig } from "@/lib/auth/auth.config";
 import { NextResponse } from "next/server";
 import type { StaffRole, UserRole } from "@prisma/client";
-import { roleMeetsMinimum } from "@/lib/rbac";
-import { effectiveStaffFromAuthUser } from "@/lib/staff-rbac";
-import { STAFF_LOGIN_PATH } from "@/lib/auth-redirect";
+import { roleMeetsMinimum } from "@/lib/auth/rbac";
+import { effectiveStaffFromAuthUser } from "@/lib/auth/staff-rbac";
+import { STAFF_LOGIN_PATH } from "@/lib/auth/auth-redirect";
 
 const { auth } = NextAuth(authConfig);
 
@@ -76,7 +76,7 @@ export default auth((req) => {
     }
     if (!role || !roleMeetsMinimum(role, tierRule.minimumRole)) {
       return NextResponse.redirect(
-        new URL("/dashboard/dashboard?notice=upgrade_required", req.nextUrl)
+        new URL("/dashboard?notice=upgrade_required", req.nextUrl)
       );
     }
   }

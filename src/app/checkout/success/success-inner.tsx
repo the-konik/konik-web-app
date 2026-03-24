@@ -16,7 +16,7 @@ export function CheckoutSuccessInner() {
       <p className="mt-4 text-sm text-[#4B5563] leading-relaxed">
         Your payment is processing. When Stripe confirms it, we&apos;ll mark your
         order paid and update fulfillment status. Digital tools unlock under{" "}
-        <Link href="/dashboard/dashboard/tools" className="text-[#B8860B] font-bold uppercase tracking-wider hover:underline">
+        <Link href="/dashboard/tools" className="text-[#B8860B] font-bold uppercase tracking-wider hover:underline">
           Dashboard → Tools
         </Link>
         .
@@ -28,7 +28,7 @@ export function CheckoutSuccessInner() {
       )}
       <div className="mt-10 flex flex-col gap-3 w-full sm:flex-row sm:justify-center">
         <Link
-          href="/dashboard/dashboard/orders"
+          href="/dashboard/orders"
           className="rounded-none bg-[#121212] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#FFFFFF] hover:bg-[#121212]/90 transition-colors"
         >
           View Orders

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils/cn";
 import { PRODUCT_CATEGORY_LABELS } from "@/lib/products/constants";
 import type { ProductCategory } from "@prisma/client";
 

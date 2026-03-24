@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ProductCategory } from "@prisma/client";
-import { canUseAdminProductCatalog, requireApiStaffCan } from "@/lib/api-auth";
-import { db } from "@/lib/db";
+import { canUseAdminProductCatalog, requireApiStaffCan } from "@/lib/auth/api-auth";
+import { db } from "@/lib/db/prisma";
 import { productCreateSchema } from "@/lib/validators/product";
 import {
   buildProductWhere,
   productToDTO,
   uniqueProductSlug,
   parseStatusToDb,
-} from "@/services/product.service";
+} from "@/services/admin/product.service";
 /**
  * GET — List products (storefront or full admin catalog).
  * Query: category, minPrice, maxPrice, size, admin=true (requires ADMIN session).

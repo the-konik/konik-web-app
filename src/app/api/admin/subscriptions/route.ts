@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { requireApiStaffCan } from "@/lib/api-auth";
-import { db } from "@/lib/db";
+import { requireApiStaffCan } from "@/lib/auth/api-auth";
+import { db } from "@/lib/db/prisma";
 
 /**
  * GET — List subscriptions with user + plan (admin).

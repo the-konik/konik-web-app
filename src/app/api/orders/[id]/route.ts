@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { requireApiSession } from "@/lib/api-auth";
-import { db } from "@/lib/db";
+import { requireApiSession } from "@/lib/auth/api-auth";
+import { db } from "@/lib/db/prisma";
 
 type Ctx = { params: Promise<{ id: string }> };
 

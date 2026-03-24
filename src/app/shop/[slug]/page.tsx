@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
-import { formatPrice } from "@/lib/utils";
+import { db } from "@/lib/db/prisma";
+import { formatPrice } from "@/lib/utils/cn";
 import { PRODUCT_CATEGORY_LABELS } from "@/lib/products/constants";
 import { AddToCartProduct } from "@/components/cart/add-to-cart-product";
 import { PublicHeader } from "@/components/site/public-header";

@@ -1,7 +1,7 @@
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/prisma";
 import { PublicHeader } from "@/components/site/public-header";
 import { SiteFooter } from "@/components/site/site-footer";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils/cn";
 import { AddToCartTool } from "@/components/cart/add-to-cart-tool";
 
 export const dynamic = "force-dynamic";

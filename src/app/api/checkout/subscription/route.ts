@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import { subscriptionCheckoutSchema } from "@/lib/validators/checkout";
-import { createSubscriptionCheckoutSession } from "@/services/subscription-checkout";
+import { createSubscriptionCheckoutSession } from "@/services/subscriptions/checkout";
 
 const DEFAULT_APP =
   process.env.NEXT_PUBLIC_APP_URL || process.env.AUTH_URL || "http://localhost:3000";

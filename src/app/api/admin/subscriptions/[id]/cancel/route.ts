@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { requireApiStaffCan } from "@/lib/api-auth";
-import { adminCancelSubscription } from "@/services/subscription-admin";
+import { requireApiStaffCan } from "@/lib/auth/api-auth";
+import { adminCancelSubscription } from "@/services/subscriptions/admin";
 
 type Ctx = { params: Promise<{ id: string }> };
 

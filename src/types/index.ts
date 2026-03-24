@@ -1,3 +1,4 @@
+// Re-export all types from domain-specific files
 export type {
   User,
   UserRole,
@@ -9,29 +10,8 @@ export type {
   SubscriptionPlan,
   UserToolAccess,
   ToolAccessSource,
-} from "@prisma/client";
+} from "./prisma";
 
-export type CartItem =
-  | {
-      type: "product";
-      productId: string;
-      name: string;
-      price: number;
-      quantity: number;
-      size?: string;
-      color?: string;
-      image?: string;
-    }
-  | {
-      type: "tool";
-      toolId: string;
-      name: string;
-      price: number;
-      image?: string;
-    };
+export type { CartItem } from "./cart";
 
-export interface ApiResponse<T = unknown> {
-  data?: T;
-  error?: string;
-  message?: string;
-}
+export type { ApiResponse } from "./api";

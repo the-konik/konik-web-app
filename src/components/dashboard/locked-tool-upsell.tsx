@@ -1,11 +1,11 @@
 import Link from "next/link";
 import type { UserRole } from "@prisma/client";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils/cn";
 import {
   isPremiumOrAbove,
   isVipOrAbove,
   roleMeetsMinimum,
-} from "@/lib/rbac";
+} from "@/lib/auth/rbac";
 import type { ToolAccessType } from "@prisma/client";
 
 type ToolBrief = {

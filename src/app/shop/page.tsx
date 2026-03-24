@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/prisma";
 import { PublicHeader } from "@/components/site/public-header";
 import { SiteFooter } from "@/components/site/site-footer";
-import { buildProductWhere, productToDTO } from "@/services/product.service";
+import { buildProductWhere, productToDTO } from "@/services/admin/product.service";
 import { ProductCard } from "@/components/shop/product-card";
 import { ShopFilters } from "@/components/shop/shop-filters";
 import type { ProductCategory } from "@prisma/client";

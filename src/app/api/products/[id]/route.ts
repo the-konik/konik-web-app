@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { requireApiStaffCan } from "@/lib/api-auth";
-import { canReadSection, getEffectiveStaffRole } from "@/lib/staff-rbac";
-import { db } from "@/lib/db";
+import { auth } from "@/lib/auth/auth";
+import { requireApiStaffCan } from "@/lib/auth/api-auth";
+import { canReadSection, getEffectiveStaffRole } from "@/lib/auth/staff-rbac";
+import { db } from "@/lib/db/prisma";
 import { productUpdateSchema } from "@/lib/validators/product";
-import { productToDTO, parseStatusToDb } from "@/services/product.service";
+import { productToDTO, parseStatusToDb } from "@/services/admin/product.service";
 
 type Ctx = { params: Promise<{ id: string }> };
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { formatPrice } from "@/lib/utils";
+import { db } from "@/lib/db/prisma";
+import { formatPrice } from "@/lib/utils/cn";
 import { cartPreviewSchema } from "@/lib/validators/checkout";
 
 /**

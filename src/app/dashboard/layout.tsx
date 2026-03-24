@@ -1,4 +1,4 @@
-import { requireSession } from "@/lib/require-auth";
+import { requireSession } from "@/lib/auth/require-auth";
 import { DashboardChrome } from "@/components/dashboard/dashboard-chrome";
 import { dashboardRoleHints } from "@/components/dashboard/dashboard-role-context";
 

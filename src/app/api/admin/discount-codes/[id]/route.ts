@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireApiStaffCan } from "@/lib/api-auth";
-import { db } from "@/lib/db";
+import { requireApiStaffCan } from "@/lib/auth/api-auth";
+import { db } from "@/lib/db/prisma";
 import { discountCodeUpdateSchema } from "@/lib/validators/admin-core";
 
 type Ctx = { params: Promise<{ id: string }> };

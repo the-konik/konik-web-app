@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { X } from "lucide-react";
-import { DEFAULT_USER_HOME } from "@/lib/auth-redirect";
+import { DEFAULT_USER_HOME } from "@/lib/auth/auth-redirect";
 
 export function UserRegisterForm() {
   const router = useRouter();
@@ -71,7 +71,7 @@ export function UserRegisterForm() {
         <div className="absolute top-30 left-1/2 -translate-x-1/2">
           <Link href="/">
             <Image
-              src="/KONIK%20NEW%20-%20WHITE.png"
+              src="/logos/konik-logo-white.png"
               alt="KONIK Logo"
               width={80}
               height={80}
@@ -109,7 +109,7 @@ export function UserRegisterForm() {
           <div className="lg:hidden mb-10 flex justify-center">
             <Link href="/">
               <Image
-                src="/KONIK%20NEW%20-%20BLACK.png"
+                src="/logos/konik-logo-black.png"
                 alt="KONIK Logo"
                 width={80}
                 height={80}

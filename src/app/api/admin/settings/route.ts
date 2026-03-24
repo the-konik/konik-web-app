@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
-import { requireApiStaffCan } from "@/lib/api-auth";
-import { db } from "@/lib/db";
+import { requireApiStaffCan } from "@/lib/auth/api-auth";
+import { db } from "@/lib/db/prisma";
 import {
   APP_SETTING_KEYS,
   appSettingPatchSchema,

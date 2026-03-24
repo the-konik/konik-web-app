@@ -16,31 +16,31 @@ const CATEGORIES = [
     slug: "T_SHIRT",
     label: "T-Shirts",
     tagline: "The daily uniform of discipline.",
-    image: "/discipline-uniform.png",
+    image: "/images/products/discipline-uniform.png",
   },
   {
     slug: "HOODIE",
     label: "Hoodies",
     tagline: "Built for the cold mornings and late nights.",
-    image: "/hero-legacy.png",
+    image: "/images/hero/hero-legacy.png",
   },
   {
     slug: "JACKET",
     label: "Jackets",
     tagline: "Armor for the man on a mission.",
-    image: "/hero-mustang.png",
+    image: "/images/hero/hero-mustang.png",
   },
   {
     slug: "PANTS",
     label: "Pants",
     tagline: "Move without limits. Look without compromise.",
-    image: "/hero-training.png",
+    image: "/images/hero/hero-training.png",
   },
   {
     slug: "ACCESSORIES",
     label: "Accessories",
     tagline: "Details that separate the intentional.",
-    image: "/hero-tools.png",
+    image: "/images/hero/hero-tools.png",
   },
 ] as const;
 

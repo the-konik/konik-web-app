@@ -8,7 +8,7 @@ import {
   PRODUCT_CATEGORIES,
   COMMON_SIZES,
 } from "@/lib/products/constants";
-import type { ProductDTO } from "@/services/product.service";
+import type { ProductDTO } from "@/services/admin/product.service";
 import type { ProductCategory } from "@prisma/client";
 
 type Mode = "create" | "edit";
@@ -112,7 +112,7 @@ export function ProductForm({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Request failed");
-      router.push("/admin/admin/products");
+      router.push("/admin/products");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save");

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStripe } from "@/lib/stripe";
-import { fulfillOrderAfterPayment } from "@/services/order-fulfillment";
-import { activateSubscriptionFromSession } from "@/services/subscription-checkout";
+import { getStripe } from "@/lib/stripe/client";
+import { fulfillOrderAfterPayment } from "@/services/orders/fulfillment";
+import { activateSubscriptionFromSession } from "@/services/subscriptions/checkout";
 import {
   markSubscriptionCancelledByStripeId,
   syncStripeSubscriptionToDb,
-} from "@/services/stripe-subscription-sync";
+} from "@/services/subscriptions/sync";
 import type Stripe from "stripe";
 
 export const runtime = "nodejs";
