@@ -1,6 +1,6 @@
 "use client";
 
-import type { SubscriptionPlan, SubscriptionStatus, UserRole } from "@prisma/client";
+import type { SubscriptionPlan, SubscriptionStatus, UserRole } from "@/generated/prisma";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

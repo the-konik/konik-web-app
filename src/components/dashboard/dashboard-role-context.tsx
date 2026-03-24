@@ -1,4 +1,4 @@
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma";
 
 /**
  * Passed from server layout for lightweight role hints in client nav (active states).

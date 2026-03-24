@@ -1,25 +1,25 @@
 import Link from "next/link";
-import { requireStaffPanel } from "@/lib/require-auth";
+import { requireStaffPanel } from "@/lib/auth/require-auth";
 import {
   canReadSection,
   getEffectiveStaffRole,
   type AdminSection,
-} from "@/lib/staff-rbac";
+} from "@/lib/auth/staff-rbac";
 import { AdminSignOutButton } from "@/components/admin/admin-sign-out-button";
 
 const NAV: { href: string; label: string; section: AdminSection }[] = [
-  { href: "/admin/admin", label: "Dashboard", section: "dashboard" },
-  { href: "/admin/admin/products", label: "Products", section: "products" },
-  { href: "/admin/admin/tools", label: "Tools", section: "tools" },
-  { href: "/admin/admin/orders", label: "Orders", section: "orders" },
-  { href: "/admin/admin/users", label: "Users", section: "users" },
+  { href: "/admin", label: "Dashboard", section: "dashboard" },
+  { href: "/admin/products", label: "Products", section: "products" },
+  { href: "/admin/tools", label: "Tools", section: "tools" },
+  { href: "/admin/orders", label: "Orders", section: "orders" },
+  { href: "/admin/users", label: "Users", section: "users" },
   {
-    href: "/admin/admin/subscriptions",
+    href: "/admin/subscriptions",
     label: "Subscriptions",
     section: "subscriptions",
   },
-  { href: "/admin/admin/marketing", label: "Marketing", section: "marketing" },
-  { href: "/admin/admin/settings", label: "Settings", section: "settings" },
+  { href: "/admin/marketing", label: "Marketing", section: "marketing" },
+  { href: "/admin/settings", label: "Settings", section: "settings" },
 ];
 
 export default async function AdminLayout({
@@ -36,7 +36,7 @@ export default async function AdminLayout({
       <header className="sticky top-0 z-30 border-b border-border bg-primary text-primary-foreground shadow-sm">
         <div className="mx-auto flex max-w-[1920px] items-center justify-between gap-4 px-4 py-3 lg:px-6">
           <div className="flex min-w-0 items-center gap-3">
-            <Link href="/admin/admin" className="truncate text-lg font-bold">
+            <Link href="/admin" className="truncate text-lg font-bold">
               KONIK
             </Link>
             <span className="shrink-0 rounded bg-accent px-2 py-0.5 text-xs font-semibold text-accent-foreground">
@@ -51,7 +51,7 @@ export default async function AdminLayout({
               {session.user.email}
             </span>
             <Link
-              href="/dashboard/dashboard"
+              href="/dashboard"
               className="text-sm text-primary-foreground/80 hover:text-primary-foreground"
             >
               User dashboard

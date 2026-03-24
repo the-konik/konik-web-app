@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, ArrowRight, Loader2, Check } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 const COL_1 = [
   { href: "/shop?category=APPAREL", label: "Apparel" },
@@ -16,11 +16,11 @@ const COL_1 = [
 ] as const;
 
 const COL_2 = [
-  { href: "/dashboard/dashboard", label: "Command Center" },
-  { href: "/dashboard/dashboard/orders", label: "My Orders" },
-  { href: "/dashboard/dashboard/tools", label: "My Tools" },
-  { href: "/dashboard/dashboard/subscription", label: "Membership" },
-  { href: "/dashboard/dashboard/profile", label: "Profile Settings" },
+  { href: "/dashboard", label: "Command Center" },
+  { href: "/dashboard/orders", label: "My Orders" },
+  { href: "/dashboard/tools", label: "My Tools" },
+  { href: "/dashboard/subscription", label: "Membership" },
+  { href: "/dashboard/profile", label: "Profile Settings" },
 ] as const;
 
 const COL_3 = [
@@ -78,7 +78,7 @@ export function SiteFooter() {
             <div className="flex items-center gap-4 mb-6 group cursor-pointer">
               <div className="relative w-12 h-12 flex items-center justify-center">
                 <Image
-                  src="/KONIK%20NEW%20-%20WHITE.png"
+                  src="/logos/konik-logo-white.png"
                   alt="KONIK Logo"
                   fill
                   className="object-contain transition-transform group-hover:scale-110 duration-500"

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireApiStaffCan } from "@/lib/api-auth";
-import { uploadProductImage } from "@/lib/cloudinary";
+import { requireApiStaffCan } from "@/lib/auth/api-auth";
+import { uploadProductImage } from "@/lib/integrations/cloudinary";
 
 const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
 

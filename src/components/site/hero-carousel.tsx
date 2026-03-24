@@ -8,7 +8,7 @@ import { Pause, Play, ChevronLeft, ChevronRight } from "lucide-react";
 
 const HERO_SLIDES = [
   {
-    image: "/Gemini_Generated_Image_futbnfutbnfutbnf.png",
+    image: "/images/sections/generated-bg-1.png",
     headline: "BUILD YOUR LEGACY.",
     subtext:
       "Average is a choice. Greatness is a system. Equip yourself with the uniform and the architecture of a disciplined life.",
@@ -17,7 +17,7 @@ const HERO_SLIDES = [
     align: "left",
   },
   {
-    image: "/Gemini_Generated_Image_g2koahg2koahg2ko.png",
+    image: "/images/sections/generated-bg-2.png",
     headline: "WEAR THE DISCIPLINE.",
     subtext:
       "Every rep. Every set. Every early morning. Your armor should match your ambition.",
@@ -26,7 +26,7 @@ const HERO_SLIDES = [
     align: "left",
   },
   {
-    image: "/Gemini_Generated_Image_uc7wr8uc7wr8uc7w.png",
+    image: "/images/sections/generated-bg-4.png",
     headline: "ENGINEER YOUR LIFE.",
     subtext:
       "Systems beat motivation. Build the habits, track the progress, and never look back.",

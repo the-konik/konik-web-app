@@ -1,4 +1,4 @@
-import { requireApiSession } from "@/lib/api-auth";
+import { requireApiSession } from "@/lib/auth/api-auth";
 import { NextResponse } from "next/server";
 
 /**

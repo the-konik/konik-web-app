@@ -34,7 +34,7 @@ export function LegacyTransitionSection() {
           {/* First Copy */}
           <div className="relative h-full w-1/2 flex-shrink-0">
             <Image
-              src="/Gemini_Generated_Image_mf72g1mf72g1mf72.png"
+              src="/images/sections/generated-bg-3.png"
               alt="The Legacy Path"
               fill
               className={`object-cover transition-transform duration-[5000ms] ease-out ${
@@ -46,7 +46,7 @@ export function LegacyTransitionSection() {
           {/* Second Copy for Seamless Loop */}
           <div className="relative h-full w-1/2 flex-shrink-0">
             <Image
-              src="/Gemini_Generated_Image_mf72g1mf72g1mf72.png"
+              src="/images/sections/generated-bg-3.png"
               alt="The Legacy Path"
               fill
               className={`object-cover transition-transform duration-[5000ms] ease-out ${

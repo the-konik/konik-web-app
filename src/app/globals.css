@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════
+   KONIK Design System — Design Tokens
+   Based on 8px grid · Nike/premium e-commerce standards
+   ═══════════════════════════════════════════════════════════════════ */
+
 @theme {
+  /* ── Colors ─────────────────────────────────────────────────────── */
   --color-background: #ffffff;
   --color-foreground: #121212;
   --color-primary: #121212;
@@ -12,14 +18,140 @@
   --color-destructive: #ef4444;
   --color-border: #e5e7eb;
   --color-ring: #121212;
+  --color-surface: #f9fafb;
+  --color-surface-elevated: #ffffff;
+
+  /* ── Fonts ──────────────────────────────────────────────────────── */
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
   --font-atmospheric: var(--font-atmospheric), ui-sans-serif, system-ui, sans-serif;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CSS Custom Properties — Global Design Tokens
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Typography Scale (modular, 8px-aligned) ────────────────────
+       Standard premium e-commerce scale:
+       - Base: 16px (1rem)
+       - Scale: minorThird (1.2)
+  ──────────────────────────────────────────────────────────────── */
+  --text-2xs:   0.625rem;   /*  10px — legal fine print only              */
+  --text-xs:    0.6875rem;  /*  11px — label/overline text                */
+  --text-sm:    0.75rem;    /*  12px — captions, helper text              */
+  --text-base:  0.875rem;   /*  14px — body text, nav links               */
+  --text-md:    1rem;       /*  16px — readable body, input text          */
+  --text-lg:    1.125rem;   /*  18px — subheadings, card titles           */
+  --text-xl:    1.25rem;    /*  20px — section titles                     */
+  --text-2xl:   1.5rem;     /*  24px — page titles                        */
+  --text-3xl:   2rem;       /*  32px — hero subtitle                      */
+  --text-4xl:   2.5rem;     /*  40px — hero heading                       */
+  --text-5xl:   3rem;       /*  48px — display / splash heading           */
+  --text-6xl:   4rem;       /*  64px — mega display                       */
+
+  /* ── Logo Sizes (pixel-perfect, responsive) ─────────────────── */
+  --logo-sm:    24px;       /* mobile, compact contexts                   */
+  --logo-md:    32px;       /* default header                             */
+  --logo-lg:    40px;       /* hero / splash                              */
+  --logo-xl:    56px;       /* footer, about page                         */
+
+  /* ── Icon Sizes (8px grid-aligned) ──────────────────────────── */
+  --icon-xs:    16px;       /* inline indicators, badges                  */
+  --icon-sm:    20px;       /* nav items, compact buttons                 */
+  --icon-md:    24px;       /* default nav/action icons                   */
+  --icon-lg:    32px;       /* hero, mobile-touch targets                 */
+  --icon-xl:    40px;       /* feature icons, illustrations               */
+
+  /* ── Spacing (8px grid) ─────────────────────────────────────── */
+  --space-1:    4px;        /* micro spacing                              */
+  --space-2:    8px;        /* compact                                    */
+  --space-3:    12px;       /* default tight                              */
+  --space-4:    16px;       /* standard                                   */
+  --space-5:    20px;       /* comfortable                                */
+  --space-6:    24px;       /* section inner                              */
+  --space-8:    32px;       /* section gap                                */
+  --space-10:   40px;       /* between sections                           */
+  --space-12:   48px;       /* large section gap                          */
+  --space-16:   64px;       /* page section                               */
+  --space-20:   80px;       /* hero section                               */
+  --space-24:   96px;       /* top-level spacing                          */
+
+  /* ── Border Radius ──────────────────────────────────────────── */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ────────────────────────────────────────────────── */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.10);
+  --shadow-dropdown: 0 10px 30px rgba(0, 0, 0, 0.10);
+
+  /* ── Z-index Scale ──────────────────────────────────────────── */
+  --z-base:     0;
+  --z-dropdown: 50;
+  --z-sticky:   40;
+  --z-header:   50;
+  --z-overlay:  59;
+  --z-modal:    60;
+  --z-tooltip:  100;
+
+  /* ── Transitions ────────────────────────────────────────────── */
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --duration-fast:    150ms;
+  --duration-normal:  300ms;
+  --duration-slow:    500ms;
+
+  /* ── Header Dimensions ──────────────────────────────────────── */
+  --header-height-mobile:  56px;
+  --header-height-desktop: 64px;
+  --header-utility-height: 32px;
+  --max-content-width: 1920px;
+
+  /* ── Touch Targets (a11y: min 44px for mobile) ──────────────── */
+  --touch-target-min: 44px;
+  --touch-target-sm:  40px;
+
+  /* ── Tracking (letter-spacing tokens) ───────────────────────── */
+  --tracking-tighter: -0.02em;
+  --tracking-tight:   -0.01em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.05em;
+  --tracking-wider:   0.1em;
+  --tracking-widest:  0.15em;
+  --tracking-mega:    0.2em;
+
+  /* ── Line Heights ───────────────────────────────────────────── */
+  --leading-none:    1;
+  --leading-tight:   1.2;
+  --leading-snug:    1.35;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+
+  /* ── Font Weights ───────────────────────────────────────────── */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Base Styles
+   ═══════════════════════════════════════════════════════════════════ */
 
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -35,9 +167,76 @@ body {
   display: none; /* Chrome/Safari/Opera */
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   Typography Utility Classes
+   ═══════════════════════════════════════════════════════════════════ */
+
 @layer utilities {
+  /* ── Button pill ────────────────────────────────────────────── */
   .btn-pill {
     @apply rounded-full px-8 py-4 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300;
   }
-}
 
+  /* ── Overline (labels, section tags) ────────────────────────── */
+  .text-overline {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    line-height: var(--leading-tight);
+  }
+
+  /* ── Caption text ───────────────────────────────────────────── */
+  .text-caption {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-snug);
+    color: var(--color-muted-foreground);
+  }
+
+  /* ── Body text ──────────────────────────────────────────────── */
+  .text-body {
+    font-size: var(--text-base);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-normal);
+  }
+
+  .text-body-sm {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-normal);
+  }
+
+  /* ── Nav link text ──────────────────────────────────────────── */
+  .text-nav {
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-none);
+  }
+
+  /* ── Section heading ────────────────────────────────────────── */
+  .text-section-title {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tighter);
+    line-height: var(--leading-tight);
+  }
+
+  /* ── Page heading ───────────────────────────────────────────── */
+  .text-page-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tighter);
+    line-height: var(--leading-tight);
+  }
+
+  /* ── Premium label ──────────────────────────────────────────── */
+  .text-label {
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-mega);
+    text-transform: uppercase;
+    line-height: var(--leading-tight);
+  }
+}

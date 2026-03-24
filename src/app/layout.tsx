@@ -13,7 +13,7 @@ const poppins = Poppins({
 });
 
 const atmospheric = localFont({
-  src: "../../public/a-atmospheric-font-FONT/Atmospheric-rg4aL.ttf",
+  src: "../../public/fonts/a-atmospheric-font-FONT/Atmospheric-rg4aL.ttf",
   variable: "--font-atmospheric",
   display: "swap",
 });
@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} ${atmospheric.variable} ${inter.variable} antialiased`}>
+      <body suppressHydrationWarning className={`${poppins.variable} ${atmospheric.variable} ${inter.variable} antialiased`}>
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

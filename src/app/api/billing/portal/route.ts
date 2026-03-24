@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { requireApiSession } from "@/lib/api-auth";
-import { getStripe } from "@/lib/stripe";
-import { getOrCreateStripeCustomerId } from "@/services/stripe-customer";
+import { requireApiSession } from "@/lib/auth/api-auth";
+import { getStripe } from "@/lib/stripe/client";
+import { getOrCreateStripeCustomerId } from "@/services/stripe/customer";
 
 const DEFAULT_APP =
   process.env.NEXT_PUBLIC_APP_URL || process.env.AUTH_URL || "http://localhost:3000";
@@ -23,7 +23,7 @@ export async function POST() {
   const stripe = getStripe();
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: `${DEFAULT_APP}/dashboard/dashboard/subscription`,
+    return_url: `${DEFAULT_APP}/dashboard/subscription`,
   });
 
   return NextResponse.json({ url: session.url });

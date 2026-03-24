@@ -13,34 +13,34 @@ import {
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import type { DashboardRoleContextValue } from "@/components/dashboard/dashboard-role-context";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import { PublicHeader } from "@/components/site/public-header";
 import { SiteFooter } from "@/components/site/site-footer";
 
 const desktopNav = [
-  { href: "/dashboard/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/dashboard/products", label: "My Products", icon: Shirt },
-  { href: "/dashboard/dashboard/tools", label: "Tools", icon: Wrench },
+  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard/products", label: "My Products", icon: Shirt },
+  { href: "/dashboard/tools", label: "Tools", icon: Wrench },
   {
-    href: "/dashboard/dashboard/subscription",
+    href: "/dashboard/subscription",
     label: "Subscription",
     icon: CreditCard,
   },
-  { href: "/dashboard/dashboard/orders", label: "Orders", icon: Package },
-  { href: "/dashboard/dashboard/profile", label: "Profile", icon: User },
+  { href: "/dashboard/orders", label: "Orders", icon: Package },
+  { href: "/dashboard/profile", label: "Profile", icon: User },
 ] as const;
 
 /** Bottom bar: 5 slots — Orders reachable from Overview + sidebar on tablet. */
 const mobileNav = [
-  { href: "/dashboard/dashboard", label: "Home", icon: LayoutDashboard },
-  { href: "/dashboard/dashboard/products", label: "Products", icon: Shirt },
-  { href: "/dashboard/dashboard/tools", label: "Tools", icon: Wrench },
+  { href: "/dashboard", label: "Home", icon: LayoutDashboard },
+  { href: "/dashboard/products", label: "Products", icon: Shirt },
+  { href: "/dashboard/tools", label: "Tools", icon: Wrench },
   {
-    href: "/dashboard/dashboard/subscription",
+    href: "/dashboard/subscription",
     label: "Plan",
     icon: CreditCard,
   },
-  { href: "/dashboard/dashboard/profile", label: "Profile", icon: User },
+  { href: "/dashboard/profile", label: "Profile", icon: User },
 ] as const;
 
 function roleBadgeClass(role: string) {
@@ -68,7 +68,7 @@ export function DashboardChrome({ session, hints, children }: Props) {
   const role = session.user?.role ?? "USER";
 
   function isActive(href: string) {
-    if (href === "/dashboard/dashboard") {
+    if (href === "/dashboard") {
       return pathname === href;
     }
     return pathname === href || pathname.startsWith(`${href}/`);

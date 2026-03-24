@@ -1,12 +1,12 @@
 import Link from "next/link";
-import type { UserRole } from "@prisma/client";
-import { formatPrice } from "@/lib/utils";
+import type { UserRole } from "@/generated/prisma";
+import { formatPrice } from "@/lib/utils/cn";
 import {
   isPremiumOrAbove,
   isVipOrAbove,
   roleMeetsMinimum,
-} from "@/lib/rbac";
-import type { ToolAccessType } from "@prisma/client";
+} from "@/lib/auth/rbac";
+import type { ToolAccessType } from "@/generated/prisma";
 
 type ToolBrief = {
   id: string;

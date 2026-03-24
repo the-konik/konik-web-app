@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireApiStaffCan } from "@/lib/api-auth";
+import { requireApiStaffCan } from "@/lib/auth/api-auth";
 import { adminAssignSubscriptionSchema } from "@/lib/validators/admin-subscription";
-import { adminAssignSubscription } from "@/services/subscription-admin";
+import { adminAssignSubscription } from "@/services/subscriptions/admin";
 
 /**
  * POST — Assign a comp / manual subscription (no Stripe charge).

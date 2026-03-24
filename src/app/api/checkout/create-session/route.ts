@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { getStripe } from "@/lib/stripe";
+import { auth } from "@/lib/auth/auth";
+import { db } from "@/lib/db/prisma";
+import { getStripe } from "@/lib/stripe/client";
 import { mixedCartSchema } from "@/lib/validators/checkout";
-import { expandMixedCartForCheckout } from "@/services/order-fulfillment";
-import { getOrCreateStripeCustomerId } from "@/services/stripe-customer";
+import { expandMixedCartForCheckout } from "@/services/orders/fulfillment";
+import { getOrCreateStripeCustomerId } from "@/services/stripe/customer";
 
 const DEFAULT_APP =
   process.env.NEXT_PUBLIC_APP_URL || process.env.AUTH_URL || "http://localhost:3000";
@@ -53,7 +53,8 @@ export async function POST(req: NextRequest) {
         totalAmount: total,
         paymentStatus: "PENDING",
         status: "PENDING",
-        items: { create: lines },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        items: { create: lines as any },
       },
     });
 

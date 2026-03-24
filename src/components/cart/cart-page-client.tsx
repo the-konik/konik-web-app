@@ -8,7 +8,7 @@ import {
   loadCartFromStorage,
   saveCartToStorage,
   type CartLine,
-} from "@/lib/cart-storage";
+} from "@/lib/cart/storage";
 
 type PreviewRow = {
   line: CartLine;

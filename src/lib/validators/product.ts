@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { ProductCategory } from "@prisma/client";
+import type { ProductCategory } from "@/generated/prisma";
 
 const categories = [
   "T_SHIRT",

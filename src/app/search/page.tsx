@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import { db } from "@/lib/db";
+import { db } from "@/lib/db/prisma";
 import { PublicHeader } from "@/components/site/public-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { ProductCard } from "@/components/shop/product-card";
-import { productToDTO } from "@/services/product.service";
+import { productToDTO } from "@/services/admin/product.service";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

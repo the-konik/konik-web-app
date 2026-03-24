@@ -8,7 +8,7 @@ import {
   saveCartToStorage,
   openCartDrawer,
   type CartLine,
-} from "@/lib/cart-storage";
+} from "@/lib/cart/storage";
 
 type Props = { toolId: string };
 

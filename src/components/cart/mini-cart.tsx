@@ -9,7 +9,7 @@ import {
   saveCartToStorage,
   cartLineKey,
   type CartLine,
-} from "@/lib/cart-storage";
+} from "@/lib/cart/storage";
 
 export function MiniCart({ 
   isTransparent, 
@@ -76,7 +76,7 @@ export function MiniCart({
         }`}
         aria-label="Open cart"
       >
-        <ShoppingBag className="w-6 h-6 sm:w-7 sm:h-7" color={iconColor} strokeWidth={1.5} />
+        <ShoppingBag className="w-[var(--icon-sm)] h-[var(--icon-sm)] md:w-[var(--icon-md)] md:h-[var(--icon-md)]" color={iconColor} strokeWidth={1.5} />
         {totalQty > 0 && (
           <span className="absolute -top-1 -right-1 bg-[#B8860B] text-[#FFFFFF] text-[10px] w-[20px] h-[20px] rounded-full flex items-center justify-center font-bold">
             {totalQty > 9 ? "9+" : totalQty}
