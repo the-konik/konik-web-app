@@ -52,7 +52,7 @@ const githubProvider =
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
-  adapter: PrismaAdapter(db),
+  adapter: PrismaAdapter(db as Parameters<typeof PrismaAdapter>[0]),
   providers: [
     ...(googleProvider ? [googleProvider] : []),
     ...(githubProvider ? [githubProvider] : []),
