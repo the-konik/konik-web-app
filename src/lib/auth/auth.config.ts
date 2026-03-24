@@ -1,4 +1,4 @@
-import type { StaffRole, UserRole } from "@prisma/client";
+import type { StaffRole, UserRole } from "@/generated/prisma";
 import type { NextAuthConfig } from "next-auth";
 
 /**

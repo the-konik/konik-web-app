@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import { authConfig } from "@/lib/auth/auth.config";
 import { NextResponse } from "next/server";
-import type { StaffRole, UserRole } from "@prisma/client";
+import type { StaffRole, UserRole } from "@/generated/prisma";
 import { roleMeetsMinimum } from "@/lib/auth/rbac";
 import { effectiveStaffFromAuthUser } from "@/lib/auth/staff-rbac";
 import { STAFF_LOGIN_PATH } from "@/lib/auth/auth-redirect";

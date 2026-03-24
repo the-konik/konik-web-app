@@ -1,5 +1,5 @@
 import { db } from "@/lib/db/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma";
 
 export type AdminRecentOrder = {
   id: string;

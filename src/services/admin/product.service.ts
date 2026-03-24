@@ -1,6 +1,6 @@
 import { db } from "@/lib/db/prisma";
 import { slugify } from "@/lib/utils/cn";
-import type { Prisma, Product, ProductCategory } from "@prisma/client";
+import type { Prisma, Product, ProductCategory } from "@/generated/prisma";
 import { fromListingStatus, toListingStatus } from "@/lib/products/status";
 import type { ProductListingStatus } from "@/lib/products/status";
 

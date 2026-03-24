@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
-import type { StaffRole, UserRole } from "@prisma/client";
+import type { StaffRole, UserRole } from "@/generated/prisma";
 import { roleMeetsMinimum } from "@/lib/auth/rbac";
 import {
   canReadSection,

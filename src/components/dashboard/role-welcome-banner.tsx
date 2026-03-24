@@ -1,4 +1,4 @@
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma";
 import Link from "next/link";
 import {
   isPremiumOrAbove,

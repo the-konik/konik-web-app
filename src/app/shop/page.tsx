@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { buildProductWhere, productToDTO } from "@/services/admin/product.service";
 import { ProductCard } from "@/components/shop/product-card";
 import { ShopFilters } from "@/components/shop/shop-filters";
-import type { ProductCategory } from "@prisma/client";
+import type { ProductCategory } from "@/generated/prisma";
 
 type SearchParams = {
   category?: string;

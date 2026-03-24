@@ -1,6 +1,6 @@
 "use client";
 
-import type { ToolAccessType } from "@prisma/client";
+import type { ToolAccessType } from "@/generated/prisma";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

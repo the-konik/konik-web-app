@@ -1,6 +1,6 @@
 "use client";
 
-import type { OrderStatus, PaymentStatus } from "@prisma/client";
+import type { OrderStatus, PaymentStatus } from "@/generated/prisma";
 import { useState } from "react";
 
 const ORDER_STATUSES: OrderStatus[] = [

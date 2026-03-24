@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ProductCategory } from "@prisma/client";
+import type { ProductCategory } from "@/generated/prisma";
 import { canUseAdminProductCatalog, requireApiStaffCan } from "@/lib/auth/api-auth";
 import { db } from "@/lib/db/prisma";
 import { productCreateSchema } from "@/lib/validators/product";

@@ -1,4 +1,4 @@
-import type { ProductCategory } from "@prisma/client";
+import type { ProductCategory } from "@/generated/prisma";
 
 /** Human-readable labels for `ProductCategory` (UI + filters). */
 export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {

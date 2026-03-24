@@ -1,4 +1,4 @@
-import type { SubscriptionStatus } from "@prisma/client";
+import type { SubscriptionStatus } from "@/generated/prisma";
 import { db } from "@/lib/db/prisma";
 import { getStripe } from "@/lib/stripe/client";
 import { reconcileUserRoleFromSubscriptions } from "@/services/subscriptions/role";

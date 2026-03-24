@@ -1,6 +1,6 @@
 import { db } from "@/lib/db/prisma";
 import { dollarsToCents } from "@/lib/stripe/client";
-import type { OrderItem, Prisma } from "@prisma/client";
+import type { OrderItem, Prisma } from "@/generated/prisma";
 import type Stripe from "stripe";
 import type { MixedCartInput } from "@/lib/validators/checkout";
 

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db/prisma";
-import type { ToolAccessSource } from "@prisma/client";
+import type { ToolAccessSource } from "@/generated/prisma";
 import {
   SUBSCRIPTION_ACCESS_STATUSES,
   TIER_RANK,

@@ -6,7 +6,7 @@ import GitHub from "next-auth/providers/github";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db/prisma";
 import { authConfig } from "@/lib/auth/auth.config";
-import type { StaffRole, UserRole } from "@prisma/client";
+import type { StaffRole, UserRole } from "@/generated/prisma";
 
 declare module "next-auth" {
   interface Session {

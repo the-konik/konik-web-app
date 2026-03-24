@@ -9,4 +9,4 @@ export type {
   SubscriptionPlan,
   UserToolAccess,
   ToolAccessSource,
-} from "@prisma/client";
+} from "@/generated/prisma";

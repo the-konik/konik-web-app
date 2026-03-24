@@ -1,5 +1,5 @@
 import type { Session } from "next-auth";
-import type { StaffRole, UserRole } from "@prisma/client";
+import type { StaffRole, UserRole } from "@/generated/prisma";
 
 /** Sidebar / permission sections for the admin panel. */
 export const ADMIN_SECTIONS = [

@@ -1,9 +1,9 @@
 import { auth } from "@/lib/auth/auth";
 import { NextResponse } from "next/server";
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma";
 import { roleMeetsMinimum } from "@/lib/auth/rbac";
 import type { Session } from "next-auth";
-import type { StaffRole } from "@prisma/client";
+import type { StaffRole } from "@/generated/prisma";
 import {
   canReadSection,
   canWriteSection,

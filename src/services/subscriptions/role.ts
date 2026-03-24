@@ -1,4 +1,4 @@
-import type { SubscriptionPlanTier, UserRole } from "@prisma/client";
+import type { SubscriptionPlanTier, UserRole } from "@/generated/prisma";
 import { db } from "@/lib/db/prisma";
 
 /** Tier strength for picking the best role when a user has multiple paying subs. */

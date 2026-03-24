@@ -9,7 +9,7 @@ import {
   COMMON_SIZES,
 } from "@/lib/products/constants";
 import type { ProductDTO } from "@/services/admin/product.service";
-import type { ProductCategory } from "@prisma/client";
+import type { ProductCategory } from "@/generated/prisma";
 
 type Mode = "create" | "edit";
 
