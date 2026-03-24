@@ -272,8 +272,8 @@ function PublicHeaderContent() {
       <motion.div 
         initial={false}
         animate={{ 
-          height: "auto",
-          opacity: 1
+          height: scrolled ? 0 : "auto",
+          opacity: scrolled ? 0 : 1
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="md:hidden bg-[#F8F8F8] text-center overflow-hidden"
