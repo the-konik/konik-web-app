@@ -152,6 +152,10 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  firstName: 'firstName',
+  surname: 'surname',
+  dateOfBirth: 'dateOfBirth',
+  firstPurchaseDiscountClaimed: 'firstPurchaseDiscountClaimed',
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',

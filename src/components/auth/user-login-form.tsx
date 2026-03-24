@@ -5,7 +5,8 @@ import { getProviders, getSession, signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { X } from "lucide-react";
+import { X, Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
 import {
   DEFAULT_USER_HOME,
   postAuthRedirectUrl,
@@ -20,6 +21,8 @@ export function UserLoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(
     authError ? decodeURIComponent(authError.replace(/\+/g, " ")) : ""
   );
@@ -33,17 +36,20 @@ export function UserLoginForm() {
     });
   }, []);
 
+  useEffect(() => {
+    const saved = localStorage.getItem("konik_remember_email");
+    if (saved) { setEmail(saved); setRememberMe(true); }
+  }, []);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    if (rememberMe) localStorage.setItem("konik_remember_email", email);
+    else localStorage.removeItem("konik_remember_email");
 
+    const result = await signIn("credentials", { email, password, redirect: false });
     setLoading(false);
 
     if (result?.error || !result?.ok) {
@@ -64,142 +70,125 @@ export function UserLoginForm() {
         staffRole: (u as { staffRole?: string | null }).staffRole ?? null,
       });
 
-    const nextUrl = postAuthRedirectUrl(isStaff, callbackUrl);
-    router.push(nextUrl);
+    router.push(postAuthRedirectUrl(isStaff, callbackUrl));
     router.refresh();
   }
 
+  const inputCls =
+    "w-full border border-[#D1D5DB] bg-white text-[#121212] rounded-md px-4 py-3 text-sm placeholder:text-[#9CA3AF] focus:border-[#121212] focus:ring-0 outline-none transition-colors";
+
   return (
-    <div className="grid min-h-screen lg:grid-cols-2 bg-[#FFFFFF] text-[#121212] font-sans">
-      {/* Brand Panel (Left) */}
-      <div className="hidden lg:flex flex-col justify-center items-center p-12 lg:p-20 bg-[#121212] text-[#FFFFFF] relative overflow-hidden text-center">
-        <div className="absolute top-30 left-1/2 -translate-x-1/2">
-          <Link href="/">
-            <Image
-              src="/logos/konik-logo-white.png"
-              alt="KONIK Logo"
-              width={80}
-              height={80}
-              className="object-contain"
-              priority
-            />
-          </Link>
-        </div>
-        
-        <div className="w-full space-y-6">
-          <h1 className="font-atmospheric text-3xl lg:text-4xl leading-none tracking-wide whitespace-nowrap">
-            YOUR LEGACY <span className="text-[#B8860B]">STARTS HERE.</span>
-          </h1>
-          <p className="text-[#F8F8F8] text-lg font-light leading-relaxed max-w-2xl mx-auto">
-            Premium clothing and elite digital tools built for the modern relentless pursuit.
-          </p>
-        </div>
-        
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] font-semibold text-[#4B5563] uppercase tracking-widest whitespace-nowrap">
-          © {new Date().getFullYear()} KONIK. The Legacy Continues.
-        </div>
-      </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => router.push("/")} />
 
-      {/* Form Panel (Right) */}
-      <div className="flex w-full flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 relative">
-        {/* Back Button */}
-        <Link 
-          href="/" 
-          className="absolute top-6 right-6 sm:top-8 sm:right-8 text-[#4B5563] hover:text-[#121212] transition-colors p-2 z-20"
-          aria-label="Back to home"
+      {/* Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        className="relative z-10 w-full max-w-[400px] bg-white rounded-xl shadow-2xl"
+      >
+        <button
+          onClick={() => router.push("/")}
+          className="absolute top-3.5 right-3.5 p-1.5 text-[#9CA3AF] hover:text-[#121212] transition-colors"
+          aria-label="Close"
         >
-          <X className="w-5 h-5 sm:w-6 sm:h-6" />
-        </Link>
-        <div className="w-full max-w-md mx-auto">
-          <div className="lg:hidden mb-10 flex justify-center">
-            <Link href="/">
-              <Image
-                src="/logos/konik-logo-black.png"
-                alt="KONIK Logo"
-                width={80}
-                height={80}
-                className="object-contain"
-                priority
-              />
-            </Link>
-          </div>
-          
-          <div className="mb-8 text-center px-4 sm:px-0">
-            <h2 className="font-atmospheric text-xl sm:text-2xl tracking-wide text-[#121212] mb-3 uppercase">
-              Your Account
-            </h2>
-            <p className="text-sm text-[#4B5563] font-normal leading-relaxed">
-              Sign in to access exclusive drops and your private dashboard.
-            </p>
-          </div>
+          <X className="w-4 h-4" />
+        </button>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="px-7 pt-8 pb-7 sm:px-8">
+          {/* Logo */}
+          <Link href="/" className="flex justify-center mb-7">
+            <Image src="/logos/konik-logo-black.png" alt="KONIK" width={32} height={32} priority />
+          </Link>
+
+          <h2 className="font-atmospheric text-lg tracking-wide text-[#121212] uppercase text-center mb-1">
+            Sign In
+          </h2>
+          <p className="text-xs text-[#6B7280] text-center mb-6">
+            Access your account and exclusive drops.
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-3.5">
             {error && (
-              <div className="border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-600">
+              <div className="bg-red-50 border border-red-200 rounded-md px-3 py-2.5 text-xs text-red-600 font-medium">
                 {error}
               </div>
             )}
 
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="email" className="sr-only">Email Address</label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="block w-full border border-gray-300 bg-[#FFFFFF] text-[#121212] px-4 py-3 text-sm placeholder:text-gray-400 focus:border-[#121212] focus:ring-1 focus:ring-[#121212] transition-colors outline-none"
-                  placeholder="Email Address"
-                />
-              </div>
+            <input
+              id="login-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              className={inputCls}
+              placeholder="Email address"
+            />
 
-              <div>
-                <label htmlFor="password" className="sr-only">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="block w-full border border-gray-300 bg-[#FFFFFF] text-[#121212] px-4 py-3 text-sm placeholder:text-gray-400 focus:border-[#121212] focus:ring-1 focus:ring-[#121212] transition-colors outline-none"
-                  placeholder="Password"
-                />
-              </div>
-            </div>
-
-            <div className="pt-2">
+            <div className="relative">
+              <input
+                id="login-password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                className={`${inputCls} pr-10`}
+                placeholder="Password"
+              />
               <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#121212] py-3 text-sm font-bold uppercase tracking-wider text-[#FFFFFF] transition-opacity hover:opacity-90 disabled:opacity-70"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#121212] transition-colors"
+                aria-label={showPassword ? "Hide" : "Show"}
               >
-                {loading ? "Signing In..." : "Sign In"}
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+
+            <div className="flex items-center justify-between pt-0.5">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-3.5 h-3.5 rounded border-[#D1D5DB] text-[#121212] focus:ring-0 accent-[#121212]"
+                />
+                <span className="text-xs text-[#6B7280]">Remember me</span>
+              </label>
+              <Link href="/auth/forgot-password" className="text-xs text-[#6B7280] hover:text-[#121212] transition-colors">
+                Forgot password?
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#121212] py-3 rounded-md text-xs font-semibold uppercase tracking-widest text-white hover:bg-[#2a2a2a] disabled:opacity-50 transition-colors mt-1"
+            >
+              {loading ? "Signing in…" : "Sign In"}
+            </button>
           </form>
 
+          {/* OAuth */}
           {oauthIds.length > 0 && (
-            <div className="mt-8">
-              <div className="relative mb-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200" />
-                </div>
-                <div className="relative flex justify-center text-[10px] uppercase tracking-widest font-semibold">
-                  <span className="bg-[#FFFFFF] px-4 text-[#4B5563]">
-                    Or continue with
-                  </span>
-                </div>
+            <>
+              <div className="flex items-center gap-3 my-5">
+                <div className="flex-1 h-px bg-[#E5E7EB]" />
+                <span className="text-[10px] uppercase tracking-widest text-[#9CA3AF] font-semibold">or</span>
+                <div className="flex-1 h-px bg-[#E5E7EB]" />
               </div>
-
-              <div className="grid grid-cols-1 gap-3">
+              <div className="space-y-2.5">
                 {oauthIds.includes("google") && (
                   <button
                     type="button"
                     onClick={() => signIn("google", { callbackUrl })}
-                    className="flex items-center justify-center gap-2 w-full border border-gray-300 bg-[#FFFFFF] py-3 text-xs font-semibold uppercase tracking-wider text-[#121212] hover:bg-[#F8F8F8] transition-colors"
+                    className="flex items-center justify-center gap-2.5 w-full border border-[#E5E7EB] py-2.5 rounded-md text-xs font-semibold text-[#121212] hover:bg-[#F9FAFB] transition-colors"
                   >
-                     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                       <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                       <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
@@ -208,30 +197,18 @@ export function UserLoginForm() {
                     Continue with Google
                   </button>
                 )}
-                {oauthIds.includes("github") && (
-                  <button
-                    type="button"
-                    onClick={() => signIn("github", { callbackUrl })}
-                    className="flex items-center justify-center gap-2 w-full border border-gray-300 bg-[#FFFFFF] py-3 text-xs font-semibold uppercase tracking-wider text-[#121212] hover:bg-[#F8F8F8] transition-colors"
-                  >
-                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                    </svg>
-                    Continue with GitHub
-                  </button>
-                )}
               </div>
-            </div>
+            </>
           )}
 
-          <div className="mt-8 pt-6 border-t border-gray-100 text-center text-xs text-[#4B5563]">
+          <p className="text-xs text-[#6B7280] text-center mt-6 pt-5 border-t border-[#F3F4F6]">
             Not a member?{" "}
-            <Link href="/auth/register" className="font-semibold text-[#121212] hover:text-[#B8860B] transition-colors underline underline-offset-2 decoration-2 decoration-transparent hover:decoration-[#B8860B]">
-              JOIN KONIK
+            <Link href="/auth/register" className="font-semibold text-[#121212] hover:text-[#B8860B] transition-colors">
+              Join KONIK
             </Link>
-          </div>
+          </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

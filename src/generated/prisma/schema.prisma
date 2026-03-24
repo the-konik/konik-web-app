@@ -56,41 +56,49 @@ model VerificationToken {
 /// Registered person (or elevated guest row). Central actor for orders, tools, subscriptions.
 model User {
   /// Internal id (cuid).
-  id               String           @id @default(cuid())
-  /// Display name.
-  name             String?
+  id                           String           @id @default(cuid())
+  /// Display name (full).
+  name                         String?
+  /// First name.
+  firstName                    String?
+  /// Last name / surname.
+  surname                      String?
+  /// Date of birth (birthday discount).
+  dateOfBirth                  DateTime?
+  /// Whether user has claimed the 40% first-purchase discount.
+  firstPurchaseDiscountClaimed Boolean          @default(false)
   /// Login identifier; unique when set.
-  email            String?          @unique
+  email                        String?          @unique
   /// When the email was verified (NextAuth / app flow).
-  emailVerified    DateTime?
+  emailVerified                DateTime?
   /// Avatar URL (OAuth or uploaded).
-  image            String?
+  image                        String?
   /// Bcrypt hash for credentials provider; null for OAuth-only users.
-  password         String?
+  password                     String?
   /// Record creation time.
-  createdAt        DateTime         @default(now())
+  createdAt                    DateTime         @default(now())
   /// Last update time.
-  updatedAt        DateTime         @updatedAt
+  updatedAt                    DateTime         @updatedAt
   /// Stripe Customer id for checkout, subscriptions, and portal.
-  stripeCustomerId String?          @unique
+  stripeCustomerId             String?          @unique
   /// Structured preferences for recommendations / UX (not for secrets).
   /// Future: sync with ML feature store or embedding service ids.
-  aiPreferences    Json?
+  aiPreferences                Json?
   /// Opaque reference to an external vector / RAG store document (e.g. Pinecone id).
   /// Keeps DB small; actual vectors live in the AI service.
-  aiProfileRef     String?          @db.VarChar(255)
+  aiProfileRef                 String?          @db.VarChar(255)
   /// Arbitrary JSON: marketing consent, locale, feature flags, A/B buckets.
-  metadata         Json?
+  metadata                     Json?
   /// Admin panel permissions. Null = not staff (`UserRole.ADMIN` still treated as SUPER_ADMIN for legacy accounts).
-  staffRole        StaffRole?
+  staffRole                    StaffRole?
   /// Role / tier for authorization and UX (see `UserRole`).
-  role             UserRole         @default(USER)
-  accounts         Account[]
-  orders           Order[]
-  sessions         Session[]
-  subscriptions    Subscription[]
-  toolAccess       UserToolAccess[]
-  wishlist         Wishlist[]
+  role                         UserRole         @default(USER)
+  accounts                     Account[]
+  orders                       Order[]
+  sessions                     Session[]
+  subscriptions                Subscription[]
+  toolAccess                   UserToolAccess[]
+  wishlist                     Wishlist[]
 
   @@index([role])
   @@index([staffRole])
