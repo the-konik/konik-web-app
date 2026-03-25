@@ -151,6 +151,7 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  engagementScore: 'engagementScore',
   name: 'name',
   firstName: 'firstName',
   surname: 'surname',
@@ -338,6 +339,18 @@ exports.Prisma.WishlistScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.HomepageSectionScalarFieldEnum = {
+  id: 'id',
+  stage: 'stage',
+  sectionType: 'sectionType',
+  content: 'content',
+  mediaUrl: 'mediaUrl',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -440,6 +453,12 @@ exports.ToolAccessSource = exports.$Enums.ToolAccessSource = {
   TRIAL: 'TRIAL'
 };
 
+exports.Stage = exports.$Enums.Stage = {
+  COLD: 'COLD',
+  WARM: 'WARM',
+  HOT: 'HOT'
+};
+
 exports.Prisma.ModelName = {
   Account: 'Account',
   Session: 'Session',
@@ -457,7 +476,8 @@ exports.Prisma.ModelName = {
   MarketingCampaign: 'MarketingCampaign',
   AppSetting: 'AppSetting',
   Newsletter: 'Newsletter',
-  Wishlist: 'Wishlist'
+  Wishlist: 'Wishlist',
+  HomepageSection: 'HomepageSection'
 };
 
 /**

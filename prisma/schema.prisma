@@ -57,6 +57,8 @@ model VerificationToken {
 model User {
   /// Internal id (cuid).
   id               String           @id @default(cuid())
+  /// Engagement score for stage-based homepage (COLD/WARM/HOT).
+  engagementScore  Int              @default(0)
   /// Display name (full).
   name             String?
   /// First name.
@@ -461,4 +463,32 @@ model Wishlist {
   @@index([userId])
   @@index([productId])
   @@index([toolId])
+}
+
+/// User engagement stage for dynamic homepage rendering.
+enum Stage {
+  COLD
+  WARM
+  HOT
+}
+
+/// Database-driven homepage section. Admin controls layout per stage.
+model HomepageSection {
+  id          String   @id @default(uuid())
+  /// Which engagement stage this section appears in.
+  stage       Stage
+  /// Maps to COMPONENT_MAP key (e.g. HERO_CAROUSEL, IDENTITY, CTA).
+  sectionType String
+  /// Component-specific props as JSON.
+  content     Json
+  /// Optional hero image or video URL.
+  mediaUrl    String?
+  /// Display order within the stage layout.
+  sortOrder   Int
+  /// Toggle visibility without deleting.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([stage, isActive, sortOrder])
 }

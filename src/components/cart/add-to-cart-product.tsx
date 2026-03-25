@@ -9,6 +9,7 @@ import {
   openCartDrawer,
   type CartLine,
 } from "@/lib/cart/storage";
+import { trackEngagement } from "@/lib/engagement/track";
 
 type Props = {
   productId: string;
@@ -50,6 +51,7 @@ export function AddToCartProduct({ productId, stock, sizes, colors }: Props) {
     
     const prev = loadCartFromStorage();
     saveCartToStorage(mergeCartLine(prev, line));
+    trackEngagement("add_to_cart");
     
     setTimeout(() => {
       setLoading(false);

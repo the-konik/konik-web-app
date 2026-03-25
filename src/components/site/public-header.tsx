@@ -593,64 +593,62 @@ function PublicHeaderContent() {
 
         <div className="flex flex-col flex-1 overflow-y-auto px-8 sm:px-10 pb-10 relative">
           {session && (
-            <div className="mb-8 pb-8 border-b border-[#FFFFFF]/5">
-               <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-[#B8860B]/10 border border-[#B8860B]/20 flex items-center justify-center flex-shrink-0">
-                     <UserIcon className="w-5 h-5 text-[#B8860B]" strokeWidth={1.5} />
-                  </div>
-                  <div className="min-w-0">
-                     <span className="inline-block px-2 py-0.5 rounded-full bg-[#B8860B]/10 text-[8px] font-bold tracking-widest text-[#B8860B] mb-1 font-poppins">Account Active</span>
-                     <p className="text-[14px] font-bold text-[#FFFFFF] font-poppins leading-tight truncate tracking-tight">{session.user?.name || session.user?.email}</p>
-                  </div>
-               </div>
-               
-               {/* User Settings Dropdown */}
-               <div className="space-y-1">
+            <div className="mb-6 pb-6 border-b border-[#FFFFFF]/5">
+               <div className="flex items-center justify-between">
+                 <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#B8860B]/10 border border-[#B8860B]/20 flex items-center justify-center flex-shrink-0">
+                       <UserIcon className="w-5 h-5 text-[#B8860B]" strokeWidth={1.5} />
+                    </div>
+                    <div className="min-w-0">
+                       <p className="text-[14px] font-bold text-[#FFFFFF] font-poppins leading-tight truncate tracking-tight">Mr {session.user?.name || session.user?.email}</p>
+                    </div>
+                 </div>
                  <button
                    onClick={() => setProfileOpen(!profileOpen)}
-                   className="flex items-center justify-between w-full text-[11px] font-bold tracking-[0.2em] text-[#B8860B] font-poppins py-2"
+                   className="p-2"
                  >
-                   <span>User Settings</span>
                    <motion.span
                      animate={{ rotate: profileOpen ? 180 : 0 }}
                      transition={{ duration: 0.2 }}
+                     className="block"
                    >
-                     <Menu className="w-4 h-4 opacity-50" />
+                     <Menu className="w-5 h-5 text-[#FFFFFF] opacity-50" />
                    </motion.span>
                  </button>
-                 
-                 <AnimatePresence>
-                   {profileOpen && (
-                     <motion.div
-                       initial={{ height: 0, opacity: 0 }}
-                       animate={{ height: "auto", opacity: 1 }}
-                       exit={{ height: 0, opacity: 0 }}
-                       className="overflow-hidden bg-[#FFFFFF]/5 rounded-xl mt-2 px-2"
-                     >
-                       <div className="py-2 space-y-1">
-                         {[
-                           { href: "/dashboard", label: "Overview" },
-                           { href: "/dashboard/orders", label: "My Orders" },
-                           { href: "/dashboard/subscription", label: "Membership" },
-                           { href: "/dashboard/profile", label: "Profile Settings" },
-                         ].map(item => (
-                           <Link
-                             key={item.href}
-                             href={item.href}
-                             className="block px-3 py-2.5 text-[11px] font-bold text-[#FFFFFF]/60 hover:text-[#B8860B] tracking-widest transition-colors font-poppins"
-                             onClick={() => {
-                               setOpen(false);
-                               setProfileOpen(false);
-                             }}
-                           >
-                             {item.label}
-                           </Link>
-                         ))}
-                       </div>
-                     </motion.div>
-                   )}
-                 </AnimatePresence>
                </div>
+               
+               {/* User Settings Dropdown */}
+               <AnimatePresence>
+                 {profileOpen && (
+                   <motion.div
+                     initial={{ height: 0, opacity: 0 }}
+                     animate={{ height: "auto", opacity: 1 }}
+                     exit={{ height: 0, opacity: 0 }}
+                     className="overflow-hidden bg-[#FFFFFF]/5 rounded-xl mt-4 px-2"
+                   >
+                     <div className="py-2 space-y-1">
+                       {[
+                         { href: "/dashboard", label: "Overview" },
+                         { href: "/dashboard/orders", label: "My Orders" },
+                         { href: "/dashboard/subscription", label: "Membership" },
+                         { href: "/dashboard/profile", label: "Profile Settings" },
+                       ].map(item => (
+                         <Link
+                           key={item.href}
+                           href={item.href}
+                           className="block px-3 py-2.5 text-[11px] font-bold text-[#FFFFFF]/60 hover:text-[#B8860B] tracking-widest transition-colors font-poppins"
+                           onClick={() => {
+                             setOpen(false);
+                             setProfileOpen(false);
+                           }}
+                         >
+                           {item.label}
+                         </Link>
+                       ))}
+                     </div>
+                   </motion.div>
+                 )}
+               </AnimatePresence>
             </div>
           )}
 
@@ -723,13 +721,15 @@ function PublicHeaderContent() {
 
           {/* Secondary */}
           <div className="pt-2 mb-8 space-y-5">
-            <Link
-              href="/plans"
-              className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              Start My Legacy
-            </Link>
+            {!session && (
+              <Link
+                href="/plans"
+                className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
+                onClick={() => setOpen(false)}
+              >
+                Start My Legacy
+              </Link>
+            )}
             <Link
               href="/company"
               className="block text-[14px] sm:text-[16px] font-bold tracking-widest font-poppins text-[#FFFFFF] hover:text-[#FFFFFF]/70 transition-colors"
@@ -752,12 +752,6 @@ function PublicHeaderContent() {
               Help
             </Link>
           </div>
-
-          {/* CTA copy */}
-           <p className="text-[#FFFFFF]/50 text-[14px] font-poppins leading-relaxed mb-8 pr-4">
-             Unlock premium systems, elite performance gear, and 
-             the framework for your relentless pursuit.
-          </p>
 
           {/* Buttons */}
           <div className="flex flex-col gap-3 mt-auto">
