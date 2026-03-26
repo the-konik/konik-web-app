@@ -31,23 +31,41 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── Typography Scale (modular, 8px-aligned) ────────────────────
-       Standard premium e-commerce scale:
+  /* ── Typography Scale (Major Third 1.25 ratio) ──────────────────
+       Industry standard for premium e-commerce:
        - Base: 16px (1rem)
-       - Scale: minorThird (1.2)
+       - Minimum readable: 14px (body), 12px (fine print)
+       - H1: 32–40px, H2: 24–32px, H3: 18–24px
+       - CTA buttons: 11–13px uppercase
   ──────────────────────────────────────────────────────────────── */
-  --text-2xs:   0.625rem;   /*  10px — legal fine print only              */
-  --text-xs:    0.6875rem;  /*  11px — label/overline text                */
-  --text-sm:    0.75rem;    /*  12px — captions, helper text              */
-  --text-base:  0.875rem;   /*  14px — body text, nav links               */
-  --text-md:    1rem;       /*  16px — readable body, input text          */
-  --text-lg:    1.125rem;   /*  18px — subheadings, card titles           */
-  --text-xl:    1.25rem;    /*  20px — section titles                     */
-  --text-2xl:   1.5rem;     /*  24px — page titles                        */
-  --text-3xl:   2rem;       /*  32px — hero subtitle                      */
-  --text-4xl:   2.5rem;     /*  40px — hero heading                       */
-  --text-5xl:   3rem;       /*  48px — display / splash heading           */
-  --text-6xl:   4rem;       /*  64px — mega display                       */
+  --text-2xs:   0.6875rem;  /*  11px — legal fine print, timestamps        */
+  --text-xs:    0.75rem;    /*  12px — label/overline, CTA buttons         */
+  --text-sm:    0.8125rem;  /*  13px — captions, helper text               */
+  --text-base:  0.875rem;   /*  14px — secondary body, nav links           */
+  --text-md:    1rem;       /*  16px — primary body text (minimum readable)*/
+  --text-lg:    1.125rem;   /*  18px — card titles, H3                     */
+  --text-xl:    1.25rem;    /*  20px — section titles, H3 desktop          */
+  --text-2xl:   1.5rem;     /*  24px — H2, page titles                     */
+  --text-3xl:   2rem;       /*  32px — H1, hero subtitle                   */
+  --text-4xl:   2.5rem;     /*  40px — hero heading                        */
+  --text-5xl:   3rem;       /*  48px — display heading                     */
+  --text-6xl:   4rem;       /*  64px — mega display                        */
+
+  /* ── Atmospheric Display Font — Size Corrections ─────────────────
+       Atmospheric renders ~30% larger than standard sans-serif at the
+       same px value. These mapped sizes compensate so that
+       font-atmospheric text-atm-h1 visually equals ~32px Poppins.
+       USE THESE for Atmospheric font only.
+  ──────────────────────────────────────────────────────────────── */
+  --atm-label:  0.5625rem;  /*  9px  → looks like 12px Poppins             */
+  --atm-sm:     0.6875rem;  /*  11px → looks like 14px Poppins             */
+  --atm-base:   0.8125rem;  /*  13px → looks like 16px Poppins             */
+  --atm-h3:     1rem;       /*  16px → looks like 20px Poppins             */
+  --atm-h2:     1.25rem;    /*  20px → looks like 26px Poppins             */
+  --atm-h1:     1.5rem;     /*  24px → looks like 32px Poppins             */
+  --atm-hero:   2rem;       /*  32px → looks like 42px Poppins             */
+  --atm-display: 2.5rem;    /*  40px → looks like 52px Poppins             */
+  --atm-mega:   3rem;       /*  48px → looks like 64px Poppins             */
 
   /* ── Logo Sizes (pixel-perfect, responsive) ─────────────────── */
   --logo-sm:    24px;       /* mobile, compact contexts                   */
@@ -239,4 +257,29 @@ body {
     text-transform: uppercase;
     line-height: var(--leading-tight);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Custom Animations
+   ═══════════════════════════════════════════════════════════════════ */
+
+@keyframes slow-zoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.animate-slow-zoom {
+  animation: slow-zoom 20s ease-in-out infinite alternate;
+}
+
+/* Snap-scroll container for horizontal product carousels */
+.snap-scroll-x {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.snap-scroll-x > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
 }

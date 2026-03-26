@@ -1,88 +1,85 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Cpu, Target, BarChart3, Zap } from "lucide-react";
+import { Wrench, Target, Zap, Users } from "lucide-react";
 import type { SectionProps } from "@/types/section";
 
-const ICON_MAP: Record<string, typeof Cpu> = {
-  cpu: Cpu,
+const ICON_MAP: Record<string, typeof Wrench> = {
+  wrench: Wrench,
   target: Target,
-  chart: BarChart3,
   zap: Zap,
 };
 
 /**
- * Systems Section — showcases digital tools with icons and descriptions.
- *
- * Data: { title, subtitle?, tools: [{ name, description, icon?, href }] }
+ * Systems Section — tool cards with name, user count, and transformation benefit.
+ * WARM stage: labelled "Usage" for familiar users.
+ * Shows current tools with engagement stats.
  */
 export function SystemsSection({ data }: SectionProps) {
-  const title = (data.title as string) || "The Systems";
-  const subtitle = (data.subtitle as string) || "Tools engineered for disciplined men.";
-  const tools = (data.tools as Array<{ name: string; description: string; icon?: string; href: string }>) || [];
-
-  if (tools.length === 0) {
-    return (
-      <section className="bg-[#0A0A0A]">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-16 py-20 sm:py-28 text-center">
-          <h2 className="font-atmospheric text-xl sm:text-3xl text-[#FFFFFF] tracking-[0.08em] uppercase mb-4">
-            {title}
-          </h2>
-          <p className="text-[#FFFFFF]/40 text-sm font-poppins mb-8">{subtitle}</p>
-          <Link
-            href="/tools"
-            className="inline-block bg-[#B8860B] text-[#FFFFFF] px-8 py-3.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-[#D4A017] transition-all font-poppins"
-          >
-            Explore Systems
-          </Link>
-        </div>
-      </section>
-    );
-  }
+  const title = (data.title as string) || "Digital Systems";
+  const systems = (data.systems as Array<{
+    name: string;
+    benefit: string;
+    userCount?: string;
+    icon?: string;
+    href?: string;
+  }>) || [
+    { name: "Habit Tracker", benefit: "Build unbreakable consistency", userCount: "2.4K users", icon: "target", href: "/tools" },
+    { name: "Legacy Planner", benefit: "Engineer your next 90 days", userCount: "1.8K users", icon: "wrench", href: "/tools" },
+    { name: "Performance Log", benefit: "Track every rep and win", userCount: "3.1K users", icon: "zap", href: "/tools" },
+  ];
 
   return (
-    <section className="bg-[#0A0A0A]">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-16 py-20 sm:py-28 lg:py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 sm:mb-16"
+    <section className="bg-[#FFFFFF]">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-8 sm:py-12">
+        <h2
+          className="font-atmospheric text-[#121212] tracking-[0.06em] uppercase mb-5 sm:mb-6"
+          style={{ fontSize: "var(--atm-h2)" }}
         >
-          <h2 className="font-atmospheric text-xl sm:text-3xl lg:text-4xl text-[#FFFFFF] tracking-[0.08em] uppercase mb-3">
-            {title}
-          </h2>
-          <p className="text-[#FFFFFF]/40 text-xs sm:text-sm font-poppins">{subtitle}</p>
-        </motion.div>
+          <span className="sm:hidden">{title}</span>
+          <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{title}</span>
+        </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {tools.map((tool, i) => {
-            const Icon = ICON_MAP[tool.icon || ""] || Zap;
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {systems.map((system, i) => {
+            const Icon = ICON_MAP[system.icon || "wrench"] || Wrench;
             return (
-              <motion.div
+              <Link
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
+                href={system.href || "/tools"}
+                className="group bg-[#121212] p-5 sm:p-6 rounded-lg hover:bg-[#1a1a1a] transition-colors duration-200"
               >
-                <Link
-                  href={tool.href || "/tools"}
-                  className="group block bg-[#FFFFFF]/[0.03] border border-[#FFFFFF]/10 rounded-xl p-6 sm:p-8 hover:border-[#B8860B]/30 hover:bg-[#FFFFFF]/[0.05] transition-all duration-300"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-[#B8860B]/10 flex items-center justify-center mb-5">
-                    <Icon className="w-5 h-5 text-[#B8860B]" />
+                {/* Header: icon + name */}
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-full bg-[#B8860B]/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-[#B8860B]" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-sm font-bold text-[#FFFFFF] font-poppins tracking-tight mb-2">
-                    {tool.name}
+                  <h3 className="font-bold text-[#FFFFFF] font-poppins tracking-tight" style={{ fontSize: "var(--text-sm)" }}>
+                    {system.name}
                   </h3>
-                  <p className="text-[11px] text-[#FFFFFF]/40 font-poppins leading-relaxed">
-                    {tool.description}
-                  </p>
-                </Link>
-              </motion.div>
+                </div>
+
+                {/* Benefit */}
+                <p
+                  className="text-[#FFFFFF]/40 font-poppins leading-relaxed mb-3"
+                  style={{ fontSize: "var(--text-xs)" }}
+                >
+                  {system.benefit}
+                </p>
+
+                {/* User count */}
+                {system.userCount && (
+                  <div className="flex items-center gap-1.5 pt-3 border-t border-[#FFFFFF]/5">
+                    <Users className="w-3.5 h-3.5 text-[#B8860B]/60" strokeWidth={1.5} />
+                    <span
+                      className="text-[#FFFFFF]/25 font-poppins font-bold"
+                      style={{ fontSize: "var(--text-2xs)" }}
+                    >
+                      {system.userCount}
+                    </span>
+                  </div>
+                )}
+              </Link>
             );
           })}
         </div>
