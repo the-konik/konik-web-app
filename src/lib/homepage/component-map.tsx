@@ -16,15 +16,24 @@ import { UserSystemsSection } from "@/components/homepage/sections/user-systems-
 import { RecommendationsSection } from "@/components/homepage/sections/recommendations-section";
 import { LoyaltyStatusSection } from "@/components/homepage/sections/loyalty-status-section";
 
+// New components for restructured stage layouts
+import { HeroCardsSection } from "@/components/homepage/sections/hero-cards-section";
+import { NewArrivalsSection } from "@/components/homepage/sections/new-arrivals-section";
+import { ToolTransformationSection } from "@/components/homepage/sections/tool-transformation-section";
+import { LifestyleGridSection } from "@/components/homepage/sections/lifestyle-grid-section";
+import { ShopOutfitSection } from "@/components/homepage/sections/shop-outfit-section";
+import { ShopLegacySection } from "@/components/homepage/sections/shop-legacy-section";
+import { MembershipCtaSection } from "@/components/homepage/sections/membership-cta-section";
+import { SpecialOfferSection } from "@/components/homepage/sections/special-offer-section";
+import { NewUpdatesSection } from "@/components/homepage/sections/new-updates-section";
+import { UpcomingEventsSection } from "@/components/homepage/sections/upcoming-events-section";
+import { LoyaltyAboutSection } from "@/components/homepage/sections/loyalty-about-section";
+
 /**
  * Mapping from HomepageSection.sectionType → React component.
  *
  * SECURITY: Only components listed here can be rendered.
  * Unknown sectionType values are silently skipped.
- *
- * Existing components (HeroCarousel, LegacyTransitionSection)
- * are wrapped — they accept no props internally, so `data`/`media`
- * are ignored by them. This keeps them 100% untouched.
  */
 
 // Wrapper to make existing no-prop components conform to SectionProps
@@ -35,25 +44,38 @@ function wrapNoProps(Component: ComponentType): ComponentType<SectionProps> {
 }
 
 export const COMPONENT_MAP: Record<string, ComponentType<SectionProps>> = {
-  // Phase 1 — Core
+  // ── Legacy (kept for backward compatibility) ──
   HERO_CAROUSEL: wrapNoProps(HeroCarousel),
   LEGACY_TRANSITION: wrapNoProps(LegacyTransitionSection),
   IDENTITY: IdentitySection,
-  CTA: CTASection,
-  PRODUCT_GRID: ProductGridSection,
-
-  // Phase 2 — COLD/WARM stage
-  LIFESTYLE: LifestyleSection,
   CATEGORY_PREVIEW: CategoryPreviewSection,
   BUNDLES: BundlesSection,
-  SOCIAL_PROOF: SocialProofSection,
   COMPARISON: ComparisonSection,
+  LIFESTYLE: LifestyleSection,
+
+  // ── Restructured stage layouts ──
+  HERO_CARDS: HeroCardsSection,
+  NEW_ARRIVALS: NewArrivalsSection,
+  TOOL_TRANSFORMATION: ToolTransformationSection,
+  PRODUCT_GRID: ProductGridSection,
+  SOCIAL_PROOF: SocialProofSection,
+  LIFESTYLE_GRID: LifestyleGridSection,
+  SHOP_OUTFIT: ShopOutfitSection,
+  SHOP_LEGACY: ShopLegacySection,
+  MEMBERSHIP_CTA: MembershipCtaSection,
+  CTA: CTASection,
   SYSTEMS: SystemsSection,
 
-  // Phase 2 — HOT stage
+  // ── HOT stage ──
+  RECOMMENDATIONS: RecommendationsSection,
+  SPECIAL_OFFER: SpecialOfferSection,
+  NEW_UPDATES: NewUpdatesSection,
+  UPCOMING_EVENTS: UpcomingEventsSection,
+  LOYALTY_ABOUT: LoyaltyAboutSection,
+
+  // ── Dashboard / utility ──
   QUICK_ACTIONS: QuickActionsSection,
   USER_SYSTEMS: UserSystemsSection,
-  RECOMMENDATIONS: RecommendationsSection,
   LOYALTY_STATUS: LoyaltyStatusSection,
 };
 

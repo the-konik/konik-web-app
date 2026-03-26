@@ -1,64 +1,77 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Sparkles, ArrowRight } from "lucide-react";
+import Image from "next/image";
 import type { SectionProps } from "@/types/section";
 
 /**
- * Recommendations Section — personalized product picks for HOT-stage users.
- *
- * Data: { title, subtitle?, ctaLabel?, ctaHref? }
- * In a full implementation, products would be fetched based on user preferences.
+ * Recommendations — horizontal scroll product row.
+ * IMAGE: 1000×1250 (4:5 portrait) per card
+ * FONT: Atmospheric atm-h2 for title, Poppins for card text
  */
 export function RecommendationsSection({ data }: SectionProps) {
-  const title = (data.title as string) || "Picked for You";
-  const subtitle = (data.subtitle as string) || "Based on your style and purchases.";
-  const ctaLabel = (data.ctaLabel as string) || "View All Recommendations";
-  const ctaHref = (data.ctaHref as string) || "/shop";
+  const products = (data.products as Array<{
+    name: string;
+    price: string;
+    image: string;
+    href: string;
+  }>) || [];
 
   return (
     <section className="bg-[#FFFFFF]">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-16 py-16 sm:py-24">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#B8860B]/10 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-[#B8860B]" />
-            </div>
-            <div>
-              <h2 className="font-atmospheric text-lg sm:text-2xl text-[#121212] tracking-[0.08em] uppercase">
-                {title}
-              </h2>
-              <p className="text-[#4B5563] text-[11px] font-poppins mt-0.5">{subtitle}</p>
-            </div>
-          </div>
-          <Link
-            href={ctaHref}
-            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#B8860B] font-poppins hover:text-[#121212] transition-colors"
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-8 sm:py-10">
+        <div className="flex items-center justify-between mb-4 sm:mb-5">
+          <h2
+            className="font-atmospheric text-[#121212] tracking-[0.06em] uppercase"
+            style={{ fontSize: "var(--atm-h2)" }}
           >
-            {ctaLabel}
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span className="sm:hidden">For You</span>
+            <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>For You</span>
+          </h2>
+          <Link
+            href="/shop"
+            className="font-bold uppercase tracking-[0.12em] text-[#121212] border-b border-[#121212] pb-0.5 hover:text-[#B8860B] hover:border-[#B8860B] transition-colors font-poppins"
+            style={{ fontSize: "var(--text-xs)" }}
+          >
+            See All
           </Link>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="bg-[#F8F8F8] rounded-xl p-8 sm:p-10 text-center"
-        >
-          <Sparkles className="w-8 h-8 text-[#B8860B]/30 mx-auto mb-4" />
-          <p className="text-sm text-[#4B5563] font-poppins mb-6">
-            Personalized recommendations are being curated based on your activity.
-          </p>
-          <Link
-            href={ctaHref}
-            className="inline-block bg-[#121212] text-[#FFFFFF] px-8 py-3 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-[#2a2a2a] transition-all font-poppins"
-          >
-            Browse Collection
-          </Link>
-        </motion.div>
+        {products.length > 0 ? (
+          <div className="flex lg:grid lg:grid-cols-4 gap-2 sm:gap-3 snap-scroll-x lg:overflow-visible">
+            {products.map((product, i) => (
+              <Link
+                key={i}
+                href={product.href || "/shop"}
+                className="group block min-w-[42vw] sm:min-w-[30vw] lg:min-w-0"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden bg-[#F8F8F8] mb-2">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width:640px) 42vw, (max-width:1024px) 30vw, 25vw"
+                    loading="lazy"
+                  />
+                </div>
+                <h3 className="font-bold text-[#121212] font-poppins tracking-tight truncate" style={{ fontSize: "var(--text-sm)" }}>
+                  {product.name}
+                </h3>
+                <p className="text-[#4B5563] font-poppins" style={{ fontSize: "var(--text-xs)" }}>
+                  {product.price}
+                </p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-[#4B5563] font-poppins mb-4" style={{ fontSize: "var(--text-sm)" }}>Keep browsing to unlock personalised picks.</p>
+            <Link href="/shop" className="inline-block bg-[#121212] text-[#FFFFFF] px-7 py-3 rounded-full font-bold uppercase tracking-[0.2em] font-poppins hover:bg-[#2a2a2a] transition-colors" style={{ fontSize: "var(--text-xs)" }}>
+              Browse Collection
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
