@@ -5,7 +5,7 @@ import type { SectionProps } from "@/types/section";
 
 /**
  * Social Proof Bar — stats + rotating customer feedback.
- * Auto-rotates testimonials every 5s.
+ * Nike-aligned: bigger stats, larger text, more padding
  */
 export function SocialProofSection({ data }: SectionProps) {
   const stats = (data.stats as Array<{ value: string; label: string }>) || [
@@ -32,21 +32,20 @@ export function SocialProofSection({ data }: SectionProps) {
 
   return (
     <section className="bg-[#121212] border-y border-[#FFFFFF]/5">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-16 py-8 sm:py-10">
-        {/* Stats row */}
-        <div className="grid grid-cols-3 gap-4 sm:gap-8 mb-6 sm:mb-8">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-14 lg:py-16">
+        {/* Stats row — Nike-style bigger numbers */}
+        <div className="grid grid-cols-3 gap-6 sm:gap-10 mb-8 sm:mb-10">
           {stats.map((stat, i) => (
             <div key={i} className="text-center">
               <span
                 className="block font-atmospheric text-[#FFFFFF] tracking-tight"
-                style={{ fontSize: "var(--atm-h2)" }}
+                style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
               >
-                <span className="sm:hidden">{stat.value}</span>
-                <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{stat.value}</span>
+                {stat.value}
               </span>
               <span
-                className="font-bold uppercase tracking-[0.12em] text-[#FFFFFF]/40 font-poppins mt-1 block"
-                style={{ fontSize: "var(--text-2xs)" }}
+                className="font-medium uppercase tracking-[0.1em] text-[#FFFFFF]/40 font-poppins mt-1.5 block"
+                style={{ fontSize: "12px" }}
               >
                 {stat.label}
               </span>
@@ -56,8 +55,8 @@ export function SocialProofSection({ data }: SectionProps) {
 
         {/* Testimonial rotation */}
         {testimonials.length > 0 && (
-          <div className="border-t border-[#FFFFFF]/5 pt-6 sm:pt-8">
-            <div className="max-w-2xl mx-auto text-center relative min-h-[80px]">
+          <div className="border-t border-[#FFFFFF]/5 pt-8 sm:pt-10">
+            <div className="max-w-2xl mx-auto text-center relative min-h-[90px]">
               {testimonials.map((t, i) => (
                 <div
                   key={i}
@@ -68,13 +67,13 @@ export function SocialProofSection({ data }: SectionProps) {
                   }`}
                 >
                   <p
-                    className="text-[#FFFFFF]/60 font-poppins italic leading-relaxed mb-3"
-                    style={{ fontSize: "var(--text-sm)" }}
+                    className="text-[#FFFFFF]/60 font-poppins italic leading-relaxed mb-3.5"
+                    style={{ fontSize: "16px" }}
                   >
                     &ldquo;{t.quote}&rdquo;
                   </p>
-                  <p className="font-poppins" style={{ fontSize: "var(--text-2xs)" }}>
-                    <span className="font-bold text-[#FFFFFF]/80">{t.name}</span>
+                  <p className="font-poppins" style={{ fontSize: "13px" }}>
+                    <span className="font-medium text-[#FFFFFF]/80">{t.name}</span>
                     {t.role && (
                       <span className="text-[#FFFFFF]/30 ml-2">{t.role}</span>
                     )}
@@ -85,13 +84,13 @@ export function SocialProofSection({ data }: SectionProps) {
 
             {/* Dots */}
             {testimonials.length > 1 && (
-              <div className="flex justify-center gap-1.5 mt-4">
+              <div className="flex justify-center gap-2 mt-5">
                 {testimonials.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setActiveIdx(i)}
-                    className={`h-[2px] rounded-full transition-all duration-300 ${
-                      i === activeIdx ? "w-6 bg-[#B8860B]" : "w-3 bg-[#FFFFFF]/15"
+                    className={`h-[3px] rounded-full transition-all duration-300 ${
+                      i === activeIdx ? "w-7 bg-[#B8860B]" : "w-3.5 bg-[#FFFFFF]/15"
                     }`}
                     aria-label={`View testimonial ${i + 1}`}
                   />

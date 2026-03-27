@@ -7,7 +7,7 @@ import type { SectionProps } from "@/types/section";
 /**
  * Bundles Section — lookbook-style outfit cards.
  * IMAGE: 900×1200 (3:4 portrait) per card
- * FONT: Poppins --text-sm for names, Atmospheric not used here
+ * Nike-aligned: larger cards, bigger text, more padding
  */
 export function BundlesSection({ data }: SectionProps) {
   const bundles = (data.bundles as Array<{
@@ -21,14 +21,14 @@ export function BundlesSection({ data }: SectionProps) {
   if (bundles.length === 0) {
     return (
       <section className="bg-[#121212]">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-8 sm:py-12 text-center">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-14 text-center">
           <h2
-            className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] uppercase mb-3"
-            style={{ fontSize: "var(--atm-h2)" }}
+            className="font-atmospheric text-[#FFFFFF] tracking-[0.04em] uppercase mb-4"
+            style={{ fontSize: "clamp(1.375rem, 2.5vw, 1.75rem)" }}
           >
             Shop The Look
           </h2>
-          <p className="text-[#FFFFFF]/30 font-poppins" style={{ fontSize: "var(--text-2xs)" }}>Coming soon.</p>
+          <p className="text-[#FFFFFF]/30 font-poppins" style={{ fontSize: "14px" }}>Coming soon.</p>
         </div>
       </section>
     );
@@ -36,16 +36,15 @@ export function BundlesSection({ data }: SectionProps) {
 
   return (
     <section className="bg-[#121212]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-8 sm:py-12">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-12 lg:py-14">
         <h2
-          className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] uppercase mb-5 sm:mb-6"
-          style={{ fontSize: "var(--atm-h2)" }}
+          className="font-atmospheric text-[#FFFFFF] tracking-[0.04em] uppercase mb-6 sm:mb-8 leading-[1.1]"
+          style={{ fontSize: "clamp(1.375rem, 2.5vw, 1.75rem)" }}
         >
-          <span className="sm:hidden">Shop The Look</span>
-          <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>Shop The Look</span>
+          Shop The Look
         </h2>
 
-        <div className="flex lg:grid lg:grid-cols-3 gap-3 snap-scroll-x lg:overflow-visible">
+        <div className="flex lg:grid lg:grid-cols-3 gap-4 sm:gap-5 snap-scroll-x lg:overflow-visible">
           {bundles.map((bundle, i) => (
             <Link
               key={i}
@@ -62,20 +61,20 @@ export function BundlesSection({ data }: SectionProps) {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/80 via-transparent to-transparent" />
 
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-                <h3 className="font-bold text-[#FFFFFF] font-poppins tracking-tight mb-1" style={{ fontSize: "var(--text-sm)" }}>
+              <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 lg:p-7">
+                <h3 className="font-medium text-[#FFFFFF] font-poppins tracking-normal mb-1.5" style={{ fontSize: "16px" }}>
                   {bundle.name}
                 </h3>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-bold text-[#B8860B] font-poppins" style={{ fontSize: "var(--text-base)" }}>{bundle.bundlePrice}</span>
+                <div className="flex items-baseline gap-2.5">
+                  <span className="font-semibold text-[#B8860B] font-poppins" style={{ fontSize: "16px" }}>{bundle.bundlePrice}</span>
                   {bundle.originalPrice && (
-                    <span className="text-[#FFFFFF]/30 line-through font-poppins" style={{ fontSize: "var(--text-2xs)" }}>{bundle.originalPrice}</span>
+                    <span className="text-[#FFFFFF]/30 line-through font-poppins" style={{ fontSize: "13px" }}>{bundle.originalPrice}</span>
                   )}
                 </div>
               </div>
 
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#121212]/40">
-                <span className="bg-[#FFFFFF] text-[#121212] px-6 py-2.5 rounded-full font-bold uppercase tracking-[0.15em] font-poppins" style={{ fontSize: "var(--text-2xs)" }}>
+                <span className="bg-[#FFFFFF] text-[#121212] px-7 py-3 rounded-full font-medium uppercase tracking-[0.1em] font-poppins" style={{ fontSize: "13px" }}>
                   Shop This Look
                 </span>
               </div>

@@ -7,7 +7,7 @@ import type { SectionProps } from "@/types/section";
 /**
  * Product Grid — tight grid with name + price only.
  * IMAGE: 1000×1250 (4:5 portrait) per card
- * FONT: Poppins --text-sm for names, --text-xs for prices
+ * Nike-aligned: 15px names, 15px prices, clean grid, generous padding
  */
 export function ProductGridSection({ data }: SectionProps) {
   const title = (data.title as string) || "";
@@ -22,33 +22,32 @@ export function ProductGridSection({ data }: SectionProps) {
 
   return (
     <section className="bg-[#FFFFFF]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-8 sm:py-12">
-        {/* Header row */}
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-12 lg:py-14">
+        {/* Header row — Nike style */}
         {title && (
-          <div className="flex items-center justify-between mb-5 sm:mb-6">
+          <div className="flex items-baseline justify-between mb-6 sm:mb-8">
             <h2
-              className="font-atmospheric text-[#121212] tracking-[0.06em] uppercase"
-              style={{ fontSize: "var(--atm-h2)" }}
+              className="font-atmospheric text-[#121212] tracking-[0.04em] uppercase leading-[1.1]"
+              style={{ fontSize: "clamp(1.375rem, 2.5vw, 1.75rem)" }}
             >
-              <span className="sm:hidden">{title}</span>
-              <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{title}</span>
+              {title}
             </h2>
             <Link
               href={ctaHref}
-              className="font-bold uppercase tracking-[0.12em] text-[#121212] border-b border-[#121212] pb-0.5 hover:text-[#B8860B] hover:border-[#B8860B] transition-colors font-poppins"
-              style={{ fontSize: "var(--text-xs)" }}
+              className="font-medium text-[#121212] border-b border-[#121212] pb-0.5 hover:text-[#B8860B] hover:border-[#B8860B] transition-colors font-poppins"
+              style={{ fontSize: "15px" }}
             >
               {ctaLabel}
             </Link>
           </div>
         )}
 
-        {/* Product grid — 4:5 cards */}
+        {/* Product grid — Nike uses 4:5 cards with clean gaps */}
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             {products.map((product, i) => (
               <Link key={i} href={product.href || "/shop"} className="group block">
-                <div className="relative aspect-[4/5] overflow-hidden bg-[#F8F8F8] mb-2">
+                <div className="relative aspect-[4/5] overflow-hidden bg-[#F5F5F5] mb-3">
                   <Image
                     src={product.image}
                     alt={product.name}
@@ -59,14 +58,14 @@ export function ProductGridSection({ data }: SectionProps) {
                   />
                 </div>
                 <h3
-                  className="font-bold text-[#121212] font-poppins tracking-tight truncate"
-                  style={{ fontSize: "var(--text-sm)" }}
+                  className="font-medium text-[#121212] font-poppins tracking-normal"
+                  style={{ fontSize: "15px" }}
                 >
                   {product.name}
                 </h3>
                 <p
-                  className="text-[#4B5563] font-poppins"
-                  style={{ fontSize: "var(--text-xs)" }}
+                  className="text-[#707072] font-poppins mt-0.5"
+                  style={{ fontSize: "15px" }}
                 >
                   {product.price}
                 </p>
@@ -74,17 +73,17 @@ export function ProductGridSection({ data }: SectionProps) {
             ))}
           </div>
         ) : (
-          <div className="text-center py-10 sm:py-12">
+          <div className="text-center py-14 sm:py-16">
             <h2
-              className="font-atmospheric text-[#121212] tracking-[0.08em] uppercase mb-4"
-              style={{ fontSize: "var(--atm-h2)" }}
+              className="font-atmospheric text-[#121212] tracking-[0.06em] uppercase mb-5"
+              style={{ fontSize: "clamp(1.375rem, 2.5vw, 1.75rem)" }}
             >
               {title || "The Collection"}
             </h2>
             <Link
               href={ctaHref}
-              className="inline-block bg-[#121212] text-[#FFFFFF] px-7 py-3 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-[#2a2a2a] transition-all duration-200 font-poppins"
-              style={{ fontSize: "var(--text-xs)" }}
+              className="inline-block bg-[#121212] text-[#FFFFFF] px-8 py-3.5 rounded-full font-medium uppercase tracking-[0.1em] hover:bg-[#2a2a2a] transition-all duration-200 font-poppins"
+              style={{ fontSize: "15px" }}
             >
               {ctaLabel}
             </Link>

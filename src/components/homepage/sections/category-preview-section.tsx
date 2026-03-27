@@ -7,7 +7,7 @@ import type { SectionProps } from "@/types/section";
 /**
  * Category Preview — edge-to-edge image grid.
  * IMAGE: 900×1200 (3:4 portrait) per tile
- * FONT: Atmospheric atm-sm for labels
+ * Nike-aligned: larger text overlays, bigger padding
  */
 export function CategoryPreviewSection({ data }: SectionProps) {
   const categories = (data.categories as Array<{ name: string; image: string; href: string }>) || [
@@ -36,14 +36,15 @@ export function CategoryPreviewSection({ data }: SectionProps) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/70 via-transparent to-transparent" />
             
-            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex items-end justify-between">
+            {/* Nike-style: bigger bottom padding, larger category name */}
+            <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 lg:p-7 flex items-end justify-between">
               <h3
-                className="font-atmospheric text-[#FFFFFF] tracking-[0.1em] uppercase"
-                style={{ fontSize: "var(--atm-sm)" }}
+                className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] uppercase"
+                style={{ fontSize: "clamp(0.8125rem, 1.5vw, 1rem)" }}
               >
                 {cat.name}
               </h3>
-              <span className="text-[#FFFFFF]/50 group-hover:text-[#B8860B] transition-colors font-poppins" style={{ fontSize: "var(--text-xs)" }}>
+              <span className="text-[#FFFFFF]/50 group-hover:text-[#B8860B] transition-colors font-poppins text-[16px]">
                 →
               </span>
             </div>

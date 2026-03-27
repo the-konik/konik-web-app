@@ -6,8 +6,7 @@ import type { SectionProps } from "@/types/section";
 
 /**
  * Lifestyle Grid — asymmetric 4-image magazine layout.
- * Mixed ratios: large 1:1, tall 3:4, wide 16:10, square 1:1
- * Mobile: 2-column simplified. Desktop: 3-column asymmetric.
+ * Nike-aligned: taller grid, minimal gap
  */
 export function LifestyleGridSection({ data }: SectionProps) {
   const images = (data.images as Array<{
@@ -52,9 +51,9 @@ export function LifestyleGridSection({ data }: SectionProps) {
         </div>
       </div>
 
-      {/* Desktop: Asymmetric magazine grid */}
+      {/* Desktop: Asymmetric magazine grid — Nike-aligned taller */}
       <div className="hidden lg:block">
-        <div className="grid grid-cols-3 grid-rows-2 gap-[2px]" style={{ height: "85vh" }}>
+        <div className="grid grid-cols-3 grid-rows-2 gap-[2px]" style={{ height: "90vh" }}>
           {/* Position 1: Large — spans col 1, rows 1-2 */}
           {images[0] && (
             <Link

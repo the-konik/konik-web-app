@@ -12,8 +12,7 @@ const ICON_MAP: Record<string, typeof Wrench> = {
 
 /**
  * Systems Section — tool cards with name, user count, and transformation benefit.
- * WARM stage: labelled "Usage" for familiar users.
- * Shows current tools with engagement stats.
+ * Nike-aligned: bigger cards, larger text, more padding
  */
 export function SystemsSection({ data }: SectionProps) {
   const title = (data.title as string) || "Digital Systems";
@@ -31,49 +30,48 @@ export function SystemsSection({ data }: SectionProps) {
 
   return (
     <section className="bg-[#FFFFFF]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-8 sm:py-12">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-12 lg:py-14">
         <h2
-          className="font-atmospheric text-[#121212] tracking-[0.06em] uppercase mb-5 sm:mb-6"
-          style={{ fontSize: "var(--atm-h2)" }}
+          className="font-atmospheric text-[#121212] tracking-[0.04em] uppercase mb-6 sm:mb-8 leading-[1.1]"
+          style={{ fontSize: "clamp(1.375rem, 2.5vw, 1.75rem)" }}
         >
-          <span className="sm:hidden">{title}</span>
-          <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{title}</span>
+          {title}
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
           {systems.map((system, i) => {
             const Icon = ICON_MAP[system.icon || "wrench"] || Wrench;
             return (
               <Link
                 key={i}
                 href={system.href || "/tools"}
-                className="group bg-[#121212] p-5 sm:p-6 rounded-lg hover:bg-[#1a1a1a] transition-colors duration-200"
+                className="group bg-[#121212] p-6 sm:p-7 lg:p-8 rounded-lg hover:bg-[#1a1a1a] transition-colors duration-200"
               >
                 {/* Header: icon + name */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-[#B8860B]/10 flex items-center justify-center flex-shrink-0">
+                <div className="flex items-center gap-3.5 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-[#B8860B]/10 flex items-center justify-center flex-shrink-0">
                     <Icon className="w-5 h-5 text-[#B8860B]" strokeWidth={1.5} />
                   </div>
-                  <h3 className="font-bold text-[#FFFFFF] font-poppins tracking-tight" style={{ fontSize: "var(--text-sm)" }}>
+                  <h3 className="font-medium text-[#FFFFFF] font-poppins tracking-normal" style={{ fontSize: "16px" }}>
                     {system.name}
                   </h3>
                 </div>
 
                 {/* Benefit */}
                 <p
-                  className="text-[#FFFFFF]/40 font-poppins leading-relaxed mb-3"
-                  style={{ fontSize: "var(--text-xs)" }}
+                  className="text-[#FFFFFF]/40 font-poppins leading-relaxed mb-4"
+                  style={{ fontSize: "14px" }}
                 >
                   {system.benefit}
                 </p>
 
                 {/* User count */}
                 {system.userCount && (
-                  <div className="flex items-center gap-1.5 pt-3 border-t border-[#FFFFFF]/5">
-                    <Users className="w-3.5 h-3.5 text-[#B8860B]/60" strokeWidth={1.5} />
+                  <div className="flex items-center gap-2 pt-4 border-t border-[#FFFFFF]/5">
+                    <Users className="w-4 h-4 text-[#B8860B]/60" strokeWidth={1.5} />
                     <span
-                      className="text-[#FFFFFF]/25 font-poppins font-bold"
-                      style={{ fontSize: "var(--text-2xs)" }}
+                      className="text-[#FFFFFF]/25 font-poppins font-medium"
+                      style={{ fontSize: "12px" }}
                     >
                       {system.userCount}
                     </span>

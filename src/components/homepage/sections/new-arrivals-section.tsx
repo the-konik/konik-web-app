@@ -7,7 +7,7 @@ import type { SectionProps } from "@/types/section";
 /**
  * New Arrivals — 2 large cards side by side (stacked on mobile).
  * IMAGE: 1000×1250 (4:5 portrait) per card
- * Mobile: full-width stacked. Desktop: 2 columns.
+ * Nike-aligned: generous section padding, 15-16px product names, clean layout
  */
 export function NewArrivalsSection({ data }: SectionProps) {
   const items = (data.items as Array<{
@@ -23,34 +23,33 @@ export function NewArrivalsSection({ data }: SectionProps) {
 
   return (
     <section className="bg-[#FFFFFF]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-8 sm:py-10">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-5 sm:mb-6">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-12 lg:py-14">
+        {/* Header — Nike-style: left title + right link */}
+        <div className="flex items-baseline justify-between mb-6 sm:mb-8">
           <h2
-            className="font-atmospheric text-[#121212] tracking-[0.06em] uppercase"
-            style={{ fontSize: "var(--atm-h2)" }}
+            className="font-atmospheric text-[#121212] tracking-[0.04em] uppercase leading-[1.1]"
+            style={{ fontSize: "clamp(1.375rem, 2.5vw, 1.75rem)" }}
           >
-            <span className="sm:hidden">New Arrivals</span>
-            <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>New Arrivals</span>
+            New Arrivals
           </h2>
           <Link
             href="/shop"
-            className="font-bold uppercase tracking-[0.12em] text-[#121212] border-b border-[#121212] pb-0.5 hover:text-[#B8860B] hover:border-[#B8860B] transition-colors font-poppins"
-            style={{ fontSize: "var(--text-xs)" }}
+            className="font-medium text-[#121212] border-b border-[#121212] pb-0.5 hover:text-[#B8860B] hover:border-[#B8860B] transition-colors font-poppins"
+            style={{ fontSize: "15px" }}
           >
             Shop New
           </Link>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        {/* Cards — Nike uses larger gaps */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
           {items.map((item, i) => (
             <Link
               key={i}
               href={item.href || "/shop"}
               className="group relative block overflow-hidden"
             >
-              <div className="relative aspect-[4/5] bg-[#F8F8F8] overflow-hidden">
+              <div className="relative aspect-[4/5] bg-[#F5F5F5] overflow-hidden">
                 <Image
                   src={item.image}
                   alt={item.name}
@@ -60,26 +59,26 @@ export function NewArrivalsSection({ data }: SectionProps) {
                   loading="lazy"
                 />
 
-                {/* "New" tag */}
+                {/* "New" tag — Nike-style positioning */}
                 {item.tag && (
                   <span
-                    className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-[#121212] text-[#FFFFFF] px-2.5 py-1 uppercase tracking-[0.15em] font-bold font-poppins"
-                    style={{ fontSize: "var(--text-2xs)" }}
+                    className="absolute top-4 left-4 sm:top-5 sm:left-5 bg-[#121212] text-[#FFFFFF] px-3 py-1.5 uppercase tracking-[0.1em] font-semibold font-poppins"
+                    style={{ fontSize: "11px" }}
                   >
                     {item.tag}
                   </span>
                 )}
               </div>
 
-              <div className="mt-2.5 sm:mt-3">
+              <div className="mt-3 sm:mt-4">
                 <h3
-                  className="font-bold text-[#121212] font-poppins tracking-tight"
-                  style={{ fontSize: "var(--text-sm)" }}
+                  className="font-medium text-[#121212] font-poppins tracking-normal"
+                  style={{ fontSize: "15px" }}
                 >
                   {item.name}
                 </h3>
                 {item.price && (
-                  <p className="text-[#4B5563] font-poppins mt-0.5" style={{ fontSize: "var(--text-xs)" }}>
+                  <p className="text-[#707072] font-poppins mt-0.5" style={{ fontSize: "15px" }}>
                     {item.price}
                   </p>
                 )}

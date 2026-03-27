@@ -13,7 +13,7 @@ const ICON_MAP: Record<string, typeof Gift> = {
 
 /**
  * Membership CTA — benefits grid + register CTA.
- * COLD only. Admin-editable benefits.
+ * Nike-aligned: bigger padding, larger icons, more spacing
  */
 export function MembershipCtaSection({ data }: SectionProps) {
   const headline = (data.headline as string) || "Become a Member";
@@ -31,29 +31,28 @@ export function MembershipCtaSection({ data }: SectionProps) {
 
   return (
     <section className="bg-[#0A0A0A]">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-16 py-12 sm:py-16">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-14 sm:py-20 lg:py-24">
         <div className="flex flex-col items-center text-center">
-          {/* Headline */}
+          {/* Headline — Nike-sized */}
           <h2
-            className="font-atmospheric text-[#FFFFFF] tracking-[0.08em] uppercase mb-8 sm:mb-10"
-            style={{ fontSize: "var(--atm-h1)" }}
+            className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] uppercase mb-10 sm:mb-12 leading-[1.1]"
+            style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
           >
-            <span className="sm:hidden" style={{ fontSize: "var(--atm-h2)" }}>{headline}</span>
-            <span className="hidden sm:inline">{headline}</span>
+            {headline}
           </h2>
 
-          {/* Benefits grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 mb-10 sm:mb-12 w-full max-w-3xl">
+          {/* Benefits grid — Nike-style larger icons + text */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-10 mb-12 sm:mb-14 w-full max-w-3xl">
             {benefits.map((benefit, i) => {
               const Icon = ICON_MAP[benefit.icon || "star"] || Star;
               return (
-                <div key={i} className="flex flex-col items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[#B8860B]/10 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-[#B8860B]" strokeWidth={1.5} />
+                <div key={i} className="flex flex-col items-center gap-3.5">
+                  <div className="w-14 h-14 rounded-full bg-[#B8860B]/10 flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-[#B8860B]" strokeWidth={1.5} />
                   </div>
                   <p
-                    className="text-[#FFFFFF]/60 font-poppins text-center leading-snug max-w-[140px]"
-                    style={{ fontSize: "var(--text-xs)" }}
+                    className="text-[#FFFFFF]/60 font-poppins text-center leading-snug max-w-[160px]"
+                    style={{ fontSize: "14px" }}
                   >
                     {benefit.text}
                   </p>
@@ -62,11 +61,11 @@ export function MembershipCtaSection({ data }: SectionProps) {
             })}
           </div>
 
-          {/* CTA */}
+          {/* CTA — Nike-style pill button */}
           <Link
             href={ctaHref}
-            className="bg-[#FFFFFF] text-[#121212] px-10 sm:px-12 py-3.5 sm:py-4 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
-            style={{ fontSize: "var(--text-xs)" }}
+            className="bg-[#FFFFFF] text-[#121212] px-10 sm:px-12 py-4 sm:py-[18px] rounded-full font-medium uppercase tracking-[0.1em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
+            style={{ fontSize: "15px" }}
           >
             {cta}
           </Link>

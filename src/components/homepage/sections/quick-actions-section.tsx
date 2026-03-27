@@ -13,8 +13,7 @@ const ICON_MAP: Record<string, typeof ShoppingBag> = {
 
 /**
  * Quick Actions — 4-tile shortcut grid for HOT users.
- * ICON: 200×200 (1:1) SVG/PNG
- * FONT: Poppins --text-2xs for labels
+ * Nike-aligned: bigger tiles, larger icons, more padding
  */
 export function QuickActionsSection({ data }: SectionProps) {
   const actions = (data.actions as Array<{
@@ -28,20 +27,20 @@ export function QuickActionsSection({ data }: SectionProps) {
 
   return (
     <section className="bg-[#FFFFFF]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-6 sm:py-8">
-        <div className="grid grid-cols-4 gap-2 sm:gap-3">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-8 sm:py-10">
+        <div className="grid grid-cols-4 gap-3 sm:gap-4">
           {actions.map((action, i) => {
             const Icon = ICON_MAP[action.icon || "shop"] || ShoppingBag;
             return (
               <Link
                 key={i}
                 href={action.href}
-                className="group flex flex-col items-center gap-2 p-4 bg-[#F8F8F8] rounded-lg hover:bg-[#121212] transition-colors duration-200"
+                className="group flex flex-col items-center gap-2.5 p-5 sm:p-6 bg-[#F5F5F5] rounded-lg hover:bg-[#121212] transition-colors duration-200"
               >
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#121212] group-hover:text-[#B8860B] transition-colors" strokeWidth={1.5} />
+                <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-[#121212] group-hover:text-[#B8860B] transition-colors" strokeWidth={1.5} />
                 <span
-                  className="font-bold uppercase tracking-[0.08em] text-[#121212] group-hover:text-[#FFFFFF] font-poppins transition-colors"
-                  style={{ fontSize: "var(--text-2xs)" }}
+                  className="font-medium uppercase tracking-[0.06em] text-[#121212] group-hover:text-[#FFFFFF] font-poppins transition-colors"
+                  style={{ fontSize: "12px" }}
                 >
                   {action.label}
                 </span>

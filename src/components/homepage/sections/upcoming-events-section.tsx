@@ -6,7 +6,7 @@ import type { SectionProps } from "@/types/section";
 
 /**
  * Upcoming Events — timeline/card list of upcoming releases.
- * Can be tools, clothes, shoes, jewelry, gatherings, competitions.
+ * Nike-aligned: bigger cards, larger text, more padding
  */
 export function UpcomingEventsSection({ data }: SectionProps) {
   const title = (data.title as string) || "Coming Soon";
@@ -30,16 +30,15 @@ export function UpcomingEventsSection({ data }: SectionProps) {
 
   return (
     <section className="bg-[#121212]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 py-8 sm:py-10">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-12 lg:py-14">
         <h2
-          className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] uppercase mb-5 sm:mb-6"
-          style={{ fontSize: "var(--atm-h2)" }}
+          className="font-atmospheric text-[#FFFFFF] tracking-[0.04em] uppercase mb-6 sm:mb-8 leading-[1.1]"
+          style={{ fontSize: "clamp(1.375rem, 2.5vw, 1.75rem)" }}
         >
-          <span className="sm:hidden">{title}</span>
-          <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{title}</span>
+          {title}
         </h2>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           {events.map((event, i) => {
             const colorClass = typeColors[event.type?.toLowerCase()] || typeColors.event;
             const Wrapper = event.href ? Link : "div";
@@ -49,17 +48,17 @@ export function UpcomingEventsSection({ data }: SectionProps) {
               <Wrapper
                 key={i}
                 {...(wrapperProps as any)}
-                className="group flex items-center gap-4 bg-[#FFFFFF]/[0.03] hover:bg-[#FFFFFF]/[0.06] p-4 sm:p-5 rounded-lg transition-colors duration-200"
+                className="group flex items-center gap-5 bg-[#FFFFFF]/[0.03] hover:bg-[#FFFFFF]/[0.06] p-5 sm:p-6 rounded-lg transition-colors duration-200"
               >
                 {/* Image preview */}
                 {event.image && (
-                  <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden flex-shrink-0 bg-[#FFFFFF]/5">
+                  <div className="relative w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-lg overflow-hidden flex-shrink-0 bg-[#FFFFFF]/5">
                     <Image
                       src={event.image}
                       alt={event.title}
                       fill
                       className="object-cover"
-                      sizes="64px"
+                      sizes="72px"
                       loading="lazy"
                     />
                   </div>
@@ -67,20 +66,20 @@ export function UpcomingEventsSection({ data }: SectionProps) {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`px-2 py-0.5 rounded-sm uppercase tracking-[0.1em] font-bold font-poppins ${colorClass}`} style={{ fontSize: "9px" }}>
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <span className={`px-2.5 py-0.5 rounded-sm uppercase tracking-[0.08em] font-semibold font-poppins ${colorClass}`} style={{ fontSize: "10px" }}>
                       {event.type}
                     </span>
                   </div>
-                  <h3 className="font-bold text-[#FFFFFF] font-poppins tracking-tight truncate" style={{ fontSize: "var(--text-sm)" }}>
+                  <h3 className="font-medium text-[#FFFFFF] font-poppins tracking-normal truncate" style={{ fontSize: "16px" }}>
                     {event.title}
                   </h3>
                 </div>
 
                 {/* Date */}
                 <span
-                  className="text-[#FFFFFF]/25 font-poppins font-bold flex-shrink-0"
-                  style={{ fontSize: "var(--text-2xs)" }}
+                  className="text-[#FFFFFF]/25 font-poppins font-medium flex-shrink-0"
+                  style={{ fontSize: "13px" }}
                 >
                   {event.date}
                 </span>

@@ -6,8 +6,7 @@ import type { SectionProps } from "@/types/section";
 
 /**
  * Tool Transformation — video/image split with headline + CTA.
- * IMAGE/VIDEO: 1200×750 (16:10) or MP4 video
- * Mobile: stacked (image on top). Desktop: 60/40 split.
+ * Nike-aligned: taller section, bigger text, more padding
  */
 export function ToolTransformationSection({ data, media }: SectionProps) {
   const headline = (data.headline as string) || "Transform Your Life";
@@ -19,7 +18,7 @@ export function ToolTransformationSection({ data, media }: SectionProps) {
 
   return (
     <section className="bg-[#121212]">
-      <div className="grid grid-cols-1 lg:grid-cols-5 min-h-[45vh] sm:min-h-[50vh]">
+      <div className="grid grid-cols-1 lg:grid-cols-5 min-h-[50vh] sm:min-h-[55vh] lg:min-h-[60vh]">
         {/* Media — 3/5 on desktop */}
         <div className="relative aspect-[16/10] lg:aspect-auto lg:col-span-3 overflow-hidden">
           {videoUrl ? (
@@ -44,34 +43,33 @@ export function ToolTransformationSection({ data, media }: SectionProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#121212]/30 hidden lg:block" />
         </div>
 
-        {/* Content — 2/5 on desktop */}
-        <div className="lg:col-span-2 flex flex-col justify-center px-5 sm:px-10 lg:px-12 py-8 sm:py-10 lg:py-0">
+        {/* Content — 2/5 on desktop, Nike-aligned */}
+        <div className="lg:col-span-2 flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-10 sm:py-12 lg:py-0">
           <span
-            className="font-bold uppercase tracking-[0.15em] text-[#B8860B] font-poppins mb-3"
-            style={{ fontSize: "var(--text-2xs)" }}
+            className="font-semibold uppercase tracking-[0.12em] text-[#B8860B] font-poppins mb-4"
+            style={{ fontSize: "12px" }}
           >
             Legacy Systems
           </span>
 
           <h2
-            className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] leading-tight uppercase mb-3"
-            style={{ fontSize: "var(--atm-h2)" }}
+            className="font-atmospheric text-[#FFFFFF] tracking-[0.04em] leading-[1.1] uppercase mb-4"
+            style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
           >
-            <span className="sm:hidden">{headline}</span>
-            <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{headline}</span>
+            {headline}
           </h2>
 
           <p
-            className="text-[#FFFFFF]/40 font-poppins mb-6 leading-relaxed max-w-sm"
-            style={{ fontSize: "var(--text-sm)" }}
+            className="text-[#FFFFFF]/40 font-poppins mb-8 leading-relaxed max-w-sm"
+            style={{ fontSize: "15px" }}
           >
             {description}
           </p>
 
           <Link
             href={ctaHref}
-            className="inline-block w-fit bg-[#FFFFFF] text-[#121212] px-7 sm:px-9 py-3 sm:py-3.5 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
-            style={{ fontSize: "var(--text-xs)" }}
+            className="inline-block w-fit bg-[#FFFFFF] text-[#121212] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-medium uppercase tracking-[0.1em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
+            style={{ fontSize: "15px" }}
           >
             {cta}
           </Link>

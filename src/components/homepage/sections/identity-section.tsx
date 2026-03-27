@@ -6,8 +6,7 @@ import type { SectionProps } from "@/types/section";
 
 /**
  * Identity Section — split layout: large image + headline + CTA.
- * IMAGE: 1200×750 (16:10) desktop
- * FONT: Atmospheric atm-h2 mobile → atm-h1 desktop
+ * Nike-aligned: taller section, bigger text, more padding
  */
 export function IdentitySection({ data, media }: SectionProps) {
   const headline = (data.title as string) || "This Is Not Fashion.";
@@ -17,7 +16,7 @@ export function IdentitySection({ data, media }: SectionProps) {
 
   return (
     <section className="bg-[#121212]">
-      <div className="grid grid-cols-1 lg:grid-cols-5 min-h-[40vh] sm:min-h-[45vh]">
+      <div className="grid grid-cols-1 lg:grid-cols-5 min-h-[45vh] sm:min-h-[50vh] lg:min-h-[55vh]">
         {/* Image — 16:10 ratio, 3/5 on desktop */}
         <div className="relative aspect-[16/10] lg:aspect-auto lg:col-span-3 overflow-hidden">
           <Image
@@ -30,19 +29,18 @@ export function IdentitySection({ data, media }: SectionProps) {
           />
         </div>
 
-        {/* Content */}
-        <div className="lg:col-span-2 flex flex-col justify-center px-5 sm:px-10 lg:px-12 py-8 sm:py-10 lg:py-0">
+        {/* Content — Nike-aligned bigger padding */}
+        <div className="lg:col-span-2 flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-10 sm:py-12 lg:py-0">
           <h2
-            className="font-atmospheric text-[#FFFFFF] tracking-[0.08em] leading-tight mb-5 sm:mb-6 uppercase"
-            style={{ fontSize: "var(--atm-h2)" }}
+            className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] leading-[1.1] mb-6 sm:mb-8 uppercase"
+            style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
           >
-            <span className="sm:hidden">{headline}</span>
-            <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{headline}</span>
+            {headline}
           </h2>
           <Link
             href={ctaHref}
-            className="inline-block w-fit bg-[#FFFFFF] text-[#121212] px-7 sm:px-9 py-3 sm:py-3.5 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
-            style={{ fontSize: "var(--text-xs)" }}
+            className="inline-block w-fit bg-[#FFFFFF] text-[#121212] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-medium uppercase tracking-[0.1em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
+            style={{ fontSize: "15px" }}
           >
             {cta}
           </Link>

@@ -13,7 +13,7 @@ const TIER_ICONS: Record<string, typeof Crown> = {
 
 /**
  * Loyalty & About KONIK — brand story + tier progression.
- * Shows loyalty program tiers with discounts and perks.
+ * Nike-aligned: bigger padding, larger text, more spacing
  */
 export function LoyaltyAboutSection({ data, media }: SectionProps) {
   const headline = (data.headline as string) || "The Legacy Program";
@@ -31,7 +31,7 @@ export function LoyaltyAboutSection({ data, media }: SectionProps) {
 
   return (
     <section className="bg-[#121212]">
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[50vh]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[55vh]">
         {/* Image */}
         <div className="relative aspect-[16/10] lg:aspect-auto overflow-hidden">
           <Image
@@ -44,48 +44,47 @@ export function LoyaltyAboutSection({ data, media }: SectionProps) {
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <h2
-              className="font-atmospheric text-[#FFFFFF] tracking-[0.1em] text-center uppercase px-5"
-              style={{ fontSize: "var(--atm-h1)" }}
+              className="font-atmospheric text-[#FFFFFF] tracking-[0.08em] text-center uppercase px-6"
+              style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
             >
-              <span className="sm:hidden" style={{ fontSize: "var(--atm-h2)" }}>{headline}</span>
-              <span className="hidden sm:inline">{headline}</span>
+              {headline}
             </h2>
           </div>
         </div>
 
-        {/* Tiers */}
-        <div className="flex flex-col justify-center px-5 sm:px-10 lg:px-12 py-8 sm:py-10 lg:py-0">
+        {/* Tiers — Nike-aligned bigger padding */}
+        <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-10 sm:py-12 lg:py-0">
           <p
-            className="text-[#FFFFFF]/40 font-poppins leading-relaxed mb-6 sm:mb-8 max-w-md"
-            style={{ fontSize: "var(--text-sm)" }}
+            className="text-[#FFFFFF]/40 font-poppins leading-relaxed mb-8 sm:mb-10 max-w-md"
+            style={{ fontSize: "15px" }}
           >
             {description}
           </p>
 
-          <div className="space-y-3">
+          <div className="space-y-3.5">
             {tiers.map((tier, i) => {
               const TierIcon = TIER_ICONS[tier.name.toLowerCase()] || Star;
               return (
                 <div
                   key={i}
-                  className="flex items-center gap-4 bg-[#FFFFFF]/[0.03] p-4 rounded-lg border border-[#FFFFFF]/5"
+                  className="flex items-center gap-4 bg-[#FFFFFF]/[0.03] p-5 rounded-lg border border-[#FFFFFF]/5"
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
                     i === 0 ? "bg-[#FFFFFF]/10" : i === 1 ? "bg-[#B8860B]/15" : "bg-[#B8860B]/25"
                   }`}>
                     <TierIcon className={`w-5 h-5 ${i === 0 ? "text-[#FFFFFF]/50" : "text-[#B8860B]"}`} strokeWidth={1.5} />
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-[#FFFFFF] font-poppins" style={{ fontSize: "var(--text-sm)" }}>
+                    <div className="flex items-center gap-2.5">
+                      <h3 className="font-medium text-[#FFFFFF] font-poppins" style={{ fontSize: "16px" }}>
                         {tier.name}
                       </h3>
-                      <span className="font-bold text-[#B8860B] font-poppins" style={{ fontSize: "var(--text-xs)" }}>
+                      <span className="font-semibold text-[#B8860B] font-poppins" style={{ fontSize: "14px" }}>
                         {tier.discount} off
                       </span>
                     </div>
-                    <p className="text-[#FFFFFF]/30 font-poppins truncate" style={{ fontSize: "var(--text-2xs)" }}>
+                    <p className="text-[#FFFFFF]/30 font-poppins truncate mt-0.5" style={{ fontSize: "13px" }}>
                       {tier.perks}
                     </p>
                   </div>
@@ -96,8 +95,8 @@ export function LoyaltyAboutSection({ data, media }: SectionProps) {
 
           <Link
             href="/auth/register"
-            className="inline-block w-fit mt-6 bg-[#B8860B] text-[#FFFFFF] px-7 sm:px-9 py-3 sm:py-3.5 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-[#9a7209] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
-            style={{ fontSize: "var(--text-xs)" }}
+            className="inline-block w-fit mt-8 bg-[#B8860B] text-[#FFFFFF] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-medium uppercase tracking-[0.1em] hover:bg-[#9a7209] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
+            style={{ fontSize: "15px" }}
           >
             Join Now
           </Link>

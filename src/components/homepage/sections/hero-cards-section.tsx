@@ -8,7 +8,7 @@ import type { SectionProps } from "@/types/section";
  * Hero Cards Section — 4 cards (3 product + 1 tool with gold accent).
  * IMAGE: 900×1200 (3:4 portrait) per card
  * Mobile: 2×2 grid. Desktop: 4×1 row.
- * Shared across COLD, WARM, HOT — content differs per stage.
+ * Nike-aligned: edge-to-edge, taller cards, bigger text overlay
  */
 export function HeroCardsSection({ data }: SectionProps) {
   const cards = (data.cards as Array<{
@@ -54,22 +54,22 @@ export function HeroCardsSection({ data }: SectionProps) {
                 <div className="absolute inset-0 border-2 border-[#B8860B]/40 pointer-events-none z-10" />
               )}
 
-              {/* Content */}
-              <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 lg:p-6 z-10">
+              {/* Content — Nike uses larger bottom padding & bigger text */}
+              <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 lg:p-8 z-10">
                 {/* Category tag */}
                 <span
-                  className={`inline-block px-2.5 py-0.5 rounded-sm text-[#FFFFFF] uppercase tracking-[0.15em] font-bold font-poppins mb-2 ${
+                  className={`inline-block px-3 py-1 rounded-sm text-[#FFFFFF] uppercase tracking-[0.12em] font-semibold font-poppins mb-3 ${
                     isTool ? "bg-[#B8860B]/80" : "bg-[#FFFFFF]/10"
                   }`}
-                  style={{ fontSize: "var(--text-2xs)" }}
+                  style={{ fontSize: "11px" }}
                 >
                   {isTool ? "Systems" : "Shop"}
                 </span>
 
-                {/* Title */}
+                {/* Title — Nike-sized: 24px mobile, 28px desktop */}
                 <h2
-                  className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] leading-tight"
-                  style={{ fontSize: "var(--atm-h2)" }}
+                  className="font-atmospheric text-[#FFFFFF] tracking-[0.04em] leading-[1.1]"
+                  style={{ fontSize: "clamp(1.25rem, 2vw, 1.625rem)" }}
                 >
                   {card.title}
                 </h2>
@@ -77,15 +77,15 @@ export function HeroCardsSection({ data }: SectionProps) {
                 {/* Subtitle */}
                 {card.subtitle && (
                   <p
-                    className="text-[#FFFFFF]/50 font-poppins mt-1"
-                    style={{ fontSize: "var(--text-xs)" }}
+                    className="text-[#FFFFFF]/50 font-poppins mt-1.5"
+                    style={{ fontSize: "14px" }}
                   >
                     {card.subtitle}
                   </p>
                 )}
 
                 {/* CTA arrow */}
-                <span className="inline-block mt-3 text-[#FFFFFF]/40 group-hover:text-[#B8860B] transition-all duration-300 group-hover:translate-x-1 font-poppins" style={{ fontSize: "var(--text-sm)" }}>
+                <span className="inline-block mt-4 text-[#FFFFFF]/40 group-hover:text-[#B8860B] transition-all duration-300 group-hover:translate-x-1.5 font-poppins text-[16px]">
                   &#8594;
                 </span>
               </div>

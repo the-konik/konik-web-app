@@ -6,8 +6,7 @@ import type { SectionProps } from "@/types/section";
 
 /**
  * CTA Section — tight dark banner.
- * IMAGE (optional): 1920×822 (21:9) with heavy overlay
- * FONT: Atmospheric atm-h2 mobile → atm-h1 desktop
+ * Nike-aligned: bigger padding, larger text, beefier button
  */
 export function CTASection({ data, media }: SectionProps) {
   const title = (data.title as string) || "Join The Legacy";
@@ -23,19 +22,18 @@ export function CTASection({ data, media }: SectionProps) {
         </div>
       )}
 
-      <div className="relative max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-16 py-10 sm:py-12">
-        <div className="flex flex-col items-center text-center gap-5 sm:gap-6">
+      <div className="relative max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-14 sm:py-20 lg:py-24">
+        <div className="flex flex-col items-center text-center gap-6 sm:gap-8">
           <h2
-            className="font-atmospheric text-[#FFFFFF] tracking-[0.08em] uppercase"
-            style={{ fontSize: "var(--atm-h2)" }}
+            className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] uppercase leading-[1.1]"
+            style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
           >
-            <span className="sm:hidden">{title}</span>
-            <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{title}</span>
+            {title}
           </h2>
           <Link
             href={href}
-            className="bg-[#FFFFFF] text-[#121212] px-8 sm:px-10 py-3 sm:py-3.5 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
-            style={{ fontSize: "var(--text-xs)" }}
+            className="bg-[#FFFFFF] text-[#121212] px-9 sm:px-11 py-3.5 sm:py-4 rounded-full font-medium uppercase tracking-[0.1em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins"
+            style={{ fontSize: "15px" }}
           >
             {button}
           </Link>

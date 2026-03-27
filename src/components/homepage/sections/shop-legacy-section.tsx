@@ -7,7 +7,7 @@ import type { SectionProps } from "@/types/section";
 /**
  * Shop Legacy — compact dark banner with lifestyle image + headline + CTA.
  * IMAGE: 1920×822 (21:9) banner
- * Shows full lifestyle (tools + clothing combined).
+ * Nike-aligned: taller banner, bigger text, more padding
  */
 export function ShopLegacySection({ data, media }: SectionProps) {
   const headline = (data.headline as string) || "Shop Legacy Life";
@@ -30,20 +30,19 @@ export function ShopLegacySection({ data, media }: SectionProps) {
         />
       </div>
 
-      {/* Content */}
-      <div className="relative max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-16 py-10 sm:py-14 lg:py-16">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 sm:gap-8">
+      {/* Content — Nike-aligned bigger padding */}
+      <div className="relative max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 py-14 sm:py-20 lg:py-24">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-10">
           <div>
             <h2
-              className="font-atmospheric text-[#FFFFFF] tracking-[0.06em] leading-tight uppercase mb-2"
-              style={{ fontSize: "var(--atm-h2)" }}
+              className="font-atmospheric text-[#FFFFFF] tracking-[0.04em] leading-[1.1] uppercase mb-3"
+              style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
             >
-              <span className="sm:hidden">{headline}</span>
-              <span className="hidden sm:inline" style={{ fontSize: "var(--atm-h1)" }}>{headline}</span>
+              {headline}
             </h2>
             <p
               className="text-[#FFFFFF]/40 font-poppins max-w-md"
-              style={{ fontSize: "var(--text-sm)" }}
+              style={{ fontSize: "15px", lineHeight: "1.5" }}
             >
               {description}
             </p>
@@ -51,8 +50,8 @@ export function ShopLegacySection({ data, media }: SectionProps) {
 
           <Link
             href={ctaHref}
-            className="inline-block w-fit bg-[#FFFFFF] text-[#121212] px-7 sm:px-9 py-3 sm:py-3.5 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins flex-shrink-0"
-            style={{ fontSize: "var(--text-xs)" }}
+            className="inline-block w-fit bg-[#FFFFFF] text-[#121212] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-medium uppercase tracking-[0.1em] hover:bg-[#F8F8F8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-poppins flex-shrink-0"
+            style={{ fontSize: "15px" }}
           >
             {cta}
           </Link>
